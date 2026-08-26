@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A low-effort AI study quick start for Katie's USC Fall 2026 courses using NotebookLM.">
+<title>Katie's AI Study Quick Start</title>
+<style>
+:root{--bg:#f7f8fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e5e7eb;--accent:#7b1e2b;--accent2:#f6e9ec;--gold:#b8942f;--green:#177245;--shadow:0 12px 36px rgba(30,40,60,.08);--radius:20px;--max:940px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at top right,rgba(123,30,43,.09),transparent 30rem),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.62}.wrap{width:min(var(--max),calc(100% - 30px));margin:auto}a{color:var(--accent);text-underline-offset:3px}header{padding:56px 0 34px;background:linear-gradient(135deg,#fff,#fbf5f6 62%,#fffaf0);border-bottom:1px solid var(--line)}.eyebrow{font-size:.78rem;font-weight:850;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}h1{font-size:clamp(2.25rem,7vw,4.35rem);line-height:1.02;letter-spacing:-.045em;margin:0 0 16px;max-width:840px}.lead{font-size:clamp(1.05rem,2.3vw,1.28rem);color:var(--muted);max-width:780px;margin:0}.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.btn{display:inline-block;padding:11px 15px;border-radius:12px;text-decoration:none;font-weight:800;border:1px solid var(--line);background:#fff;color:var(--text)}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}main{padding:28px 0 70px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(20px,4vw,30px);margin:20px 0}.callout{border-left:5px solid var(--accent);background:#fbf5f6;padding:16px 18px;border-radius:13px;margin:16px 0}.gold{border-color:var(--gold);background:#fffaf0}.green{border-color:var(--green);background:#f1faf5}h2{font-size:clamp(1.45rem,3vw,2.05rem);letter-spacing:-.025em;margin:0 0 12px}h3{font-size:1.1rem;margin:0 0 8px}.small{font-size:.9rem;color:var(--muted)}.steps{counter-reset:step;display:grid;gap:13px}.step{position:relative;padding:17px 18px 17px 58px;border:1px solid var(--line);border-radius:15px;background:#fff}.step:before{counter-increment:step;content:counter(step);position:absolute;left:16px;top:15px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#fff;font-weight:900}.step strong{display:block;margin-bottom:3px}.checkline{display:flex;gap:11px;align-items:flex-start;margin:10px 0}.checkline input{margin-top:.35rem;transform:scale(1.25);accent-color:var(--accent)}.grid{display:grid;gap:15px;grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:780px){.grid{grid-template-columns:1fr}.hero-actions{display:grid}.btn{text-align:center}}.course{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff}.tag{display:inline-block;font-size:.74rem;font-weight:850;padding:4px 9px;border-radius:999px;background:var(--accent2);color:var(--accent);margin-bottom:10px}.prompt{background:#121826;color:#edf2f7;border-radius:15px;padding:16px;margin:12px 0;position:relative;white-space:pre-wrap;font-size:.93rem}.copy{margin-top:10px;border:0;background:#fff;color:#172033;border-radius:9px;padding:8px 10px;font-weight:800;cursor:pointer}.source-order{display:grid;gap:8px}.source-row{display:flex;gap:12px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid var(--line)}.rank{font-weight:900;color:var(--accent);min-width:30px}.links{display:grid;gap:9px}.links a{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;text-decoration:none;font-weight:750}.links a:hover{background:#fafafa}footer{padding:28px 0 50px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">USC • Fall 2026 • 15-minute setup</div>
+<h1>Katie's AI Study Quick Start</h1>
+<p class="lead">Use AI to spend less time reviewing material already understood and more time practicing what is still weak. Start with one class and one week — not the whole semester.</p>
+<div class="hero-actions"><a class="btn primary" href="https://notebooklm.google.com/">Open NotebookLM</a><a class="btn" href="/katie/usc-ai/">Katie's USC AI tools guide</a><a class="btn" href="#try">Try it with CHEM 115A</a></div>
+</div></header>
+<main class="wrap">
+<section class="card">
+<h2>The idea in one sentence</h2>
+<div class="callout"><strong>Diagnose → target → practice → retest.</strong><br>Don't ask AI to do the learning. Ask it to identify what is weak, teach only what is needed, and then test whether the material can be recalled without help.</div>
+<p>This is a trial, not a new homework system. If it doesn't save time or improve retention, stop using it.</p>
+</section>
+
+<section id="try" class="card">
+<h2>Try this once with CHEM 115A</h2>
+<p class="small">Estimated setup: about 15 minutes. Use only this week's material.</p>
+<div class="steps">
+<div class="step"><strong>Download 2–5 current course files.</strong>Start with the CHEM 115A syllabus, this week's lecture slides, assigned reading or problem set from Brightspace.</div>
+<div class="step"><strong>Create one NotebookLM notebook.</strong>Name it <code>CHEM 115A — Fall 2026</code>.</div>
+<div class="step"><strong>Upload only the current authoritative material.</strong>Professor slides and assignments come before outside websites or old syllabi.</div>
+<div class="step"><strong>Take a cold diagnostic.</strong>Before rereading the slides, ask NotebookLM to quiz you on the week's learning objectives.</div>
+<div class="step"><strong>Study only the misses.</strong>Ask for explanations, worked examples, and progressively harder problems on the concepts that were weak.</div>
+<div class="step"><strong>Retest without hints.</strong>Solve a fresh set of questions. Don't let NotebookLM show the answer until after committing to an answer.</div>
+<div class="step"><strong>Do a 10-minute recall check tomorrow.</strong>If the concept is still retrievable a day later, move on. If not, target it again.</div>
+</div>
+<div class="callout green"><strong>Success test:</strong> after a week, ask: “Did this improve retained mastery per minute?” Not “Did the AI make nice notes?”</div>
+</section>
+
+<section class="card">
+<h2>Three prompts to copy</h2>
+<h3>1. Diagnostic</h3>
+<div class="prompt" id="p1">Using only the selected course sources, identify the learning objectives for this week's material. Then give me a 10-question diagnostic quiz that tests understanding and problem solving, not simple recognition. Do not show answers until I submit all responses.<button class="copy" onclick="copyText('p1',this)">Copy prompt</button></div>
+<h3>2. Target the weak spots</h3>
+<div class="prompt" id="p2">Based on my diagnostic answers, rank my weak areas from most important to least important. Teach only the top weak area first. Use a short explanation, one worked example, then one problem for me to solve without hints. Do not move on until I can solve it correctly.<button class="copy" onclick="copyText('p2',this)">Copy prompt</button></div>
+<h3>3. Retest</h3>
+<div class="prompt" id="p3">Create 5 new questions on the concepts I previously missed. Make them different from the earlier questions and slightly harder. Do not reveal answers or hints until I commit to each answer. Afterward, explain the reasoning behind every error.<button class="copy" onclick="copyText('p3',this)">Copy prompt</button></div>
+</section>
+
+<section class="card">
+<h2>Use AI differently for each class</h2>
+<div class="grid">
+<article class="course"><span class="tag">CHEM 115A</span><h3>Problem-solving tutor</h3><p>Prioritize calculations, reasoning, worked examples, error diagnosis, and fresh practice problems. Summaries are secondary.</p></article>
+<article class="course"><span class="tag">BISC 121</span><h3>Retrieval + concept maps</h3><p>Use compare/contrast questions, evolution relationships, mechanism explanations, diagrams, terminology retrieval, and lab reasoning.</p></article>
+<article class="course"><span class="tag">MDA 100A</span><h3>Synthesis + career exploration</h3><p>Use tables and Q&A to compare health professions, training paths, roles, ethics, speakers, and healthcare-team responsibilities.</p></article>
+</div>
+</section>
+
+<section class="card">
+<h2>What should go into the notebook?</h2>
+<div class="source-order">
+<div class="source-row"><div class="rank">1</div><div><strong>Current professor material</strong><br><span class="small">Fall 2026 syllabus, lecture slides, assignments, study guides, lab instructions.</span></div></div>
+<div class="source-row"><div class="rank">2</div><div><strong>Assigned readings</strong><br><span class="small">Textbook chapters, papers, handouts and course-linked resources.</span></div></div>
+<div class="source-row"><div class="rank">3</div><div><strong>Course-aligned references</strong><br><span class="small">Older USC syllabi or official program material, used only as supplemental context.</span></div></div>
+<div class="source-row"><div class="rank">4</div><div><strong>Open external resources</strong><br><span class="small">Use only when the course material doesn't explain a concept clearly enough.</span></div></div>
+</div>
+<div class="callout gold"><strong>Rule:</strong> if an outside source conflicts with the professor's material, the current professor material wins.</div>
+</section>
+
+<section class="card">
+<h2>First-week setup checklist</h2>
+<label class="checkline"><input type="checkbox" data-key="chem"><span>Create <strong>CHEM 115A — Fall 2026</strong> notebook and add current syllabus + Week 1 material.</span></label>
+<label class="checkline"><input type="checkbox" data-key="bisc"><span>Create <strong>BISC 121 — Fall 2026</strong> notebook and add current syllabus + Week 1 material.</span></label>
+<label class="checkline"><input type="checkbox" data-key="mda"><span>Create <strong>MDA 100A — Fall 2026</strong> notebook and add current syllabus + Week 1 material.</span></label>
+<label class="checkline"><input type="checkbox" data-key="policy"><span>Check each professor's AI-use policy before using AI for anything submitted for credit.</span></label>
+<label class="checkline"><input type="checkbox" data-key="trial"><span>Run the full diagnose → target → retest loop once before deciding whether to use it routinely.</span></label>
+<p class="small">This checklist saves locally in this browser.</p>
+</section>
+
+<section class="card">
+<h2>Useful links</h2>
+<div class="links">
+<a href="https://notebooklm.google.com/">NotebookLM →</a>
+<a href="https://www.brightspacehelp.usc.edu/students/navigate-brightspace-as-a-student/">USC Brightspace student guide →</a>
+<a href="/katie/usc-ai/">Katie's USC AI tools & student offers guide →</a>
+<a href="https://web-app.usc.edu/soc/syllabus/20233/17340.pdf">Historical USC CHEM 115A syllabus — reference only →</a>
+<a href="https://chem.libretexts.org/Courses/Rutgers_University/General_Chemistry">LibreTexts General Chemistry →</a>
+<a href="https://www.hhmi.org/programs/science-education-alliance">HHMI SEA-PHAGES →</a>
+<a href="https://www.bls.gov/ooh/healthcare/">BLS Healthcare Careers →</a>
+</div>
+</section>
+
+<section class="card">
+<h2>What not to do</h2>
+<p><strong>Don't</strong> upload the entire internet, spend hours making perfect AI notes, trust old syllabi over the current class, or let AI solve graded work that the professor expects you to do.</p>
+<p><strong>Do</strong> use AI as a tutor that makes you retrieve, explain, solve, and correct mistakes.</p>
+</section>
+</main>
+<footer><div class="wrap">Built as a lightweight experiment for Fall 2026. The goal is better learning with less wasted study time — not more tools.</div></footer>
+<script>
+function copyText(id,btn){const el=document.getElementById(id);let text='';el.childNodes.forEach(n=>{if(n.nodeType===Node.TEXT_NODE)text+=n.textContent});navigator.clipboard.writeText(text.trim()).then(()=>{const old=btn.textContent;btn.textContent='Copied';setTimeout(()=>btn.textContent=old,1200)})}
+document.querySelectorAll('input[type=checkbox][data-key]').forEach(cb=>{const k='katie-ai-study-'+cb.dataset.key;cb.checked=localStorage.getItem(k)==='1';cb.addEventListener('change',()=>localStorage.setItem(k,cb.checked?'1':'0'))});
+</script>
+</body>
+</html>
