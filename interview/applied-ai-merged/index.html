@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Combined Applied AI + Agent Engineering Interview Workspace</title>
+<style>
+:root{--bg:#0f172a;--panel:#111827;--line:#334155;--text:#e5e7eb;--muted:#94a3b8;--accent:#60a5fa;--active:#1d4ed8}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+body{display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:10px max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left));display:flex;gap:8px;align-items:center;flex-wrap:wrap;z-index:5}
+.brand{font-weight:850;margin-right:auto;min-width:210px}.brand small{display:block;color:var(--muted);font-weight:500;font-size:.75rem;margin-top:1px}
+button,a.link{font:inherit;border:1px solid var(--line);border-radius:10px;background:#fff;color:#172033;padding:9px 12px;cursor:pointer;text-decoration:none;min-height:40px}
+button.active{background:var(--active);border-color:var(--active);color:white}.framewrap{position:relative;min-height:0}.frame{display:none;border:0;width:100%;height:100%;background:#f5f7fb}.frame.active{display:block}.help{position:absolute;right:14px;bottom:14px;background:rgba(15,23,42,.92);color:white;border:1px solid #475569;border-radius:10px;padding:8px 10px;font-size:.78rem;max-width:300px;z-index:3}.help b{color:#93c5fd}
+@media(max-width:760px){header{padding-top:max(8px,env(safe-area-inset-top));gap:6px}.brand{width:100%;margin-bottom:2px}button,a.link{padding:8px 10px;font-size:.9rem}.help{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Applied AI Interview Workspace — Combined Edition<small>Preserves the original foundation and adds the Senior Agent Engineering deep dive.</small></div>
+  <button id="foundationBtn" class="active" type="button">1. Foundation / Previous</button>
+  <button id="agentBtn" type="button">2. Agent Deep Dive / New</button>
+  <a class="link" href="../applied-ai-v1/" target="_blank">Open Previous ↗</a>
+  <a class="link" href="../applied-ai/" target="_blank">Open Agent Guide ↗</a>
+</header>
+<div class="framewrap">
+  <iframe id="foundationFrame" class="frame active" title="Previous Applied AI interview workspace" src="../applied-ai-v1/"></iframe>
+  <iframe id="agentFrame" class="frame" title="Senior AI Agent Engineer study guide" data-src="../applied-ai/?v=20260829-3"></iframe>
+  <div class="help"><b>Why tabs instead of one giant page?</b> This keeps both study systems fully editable and preserves their separate progress/state while giving you one combined workspace.</div>
+</div>
+<script>
+const fBtn=document.getElementById('foundationBtn'),aBtn=document.getElementById('agentBtn'),f=document.getElementById('foundationFrame'),a=document.getElementById('agentFrame');
+function show(which){const foundation=which==='foundation';f.classList.toggle('active',foundation);a.classList.toggle('active',!foundation);fBtn.classList.toggle('active',foundation);aBtn.classList.toggle('active',!foundation);if(!foundation&&!a.src)a.src=a.dataset.src;location.hash=foundation?'foundation':'agent'}
+fBtn.onclick=()=>show('foundation');aBtn.onclick=()=>show('agent');if(location.hash==='#agent')show('agent');
+</script>
+</body>
+</html>
