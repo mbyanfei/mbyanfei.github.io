@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python API Engineer — Interview Guide v3</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #141720;
+    --surface2: #181c28;
+    --border: #1e2230;
+    --accent: #4af0a0;
+    --accent-dim: #1a3d2e;
+    --warn: #f0a04a;
+    --warn-dim: #3d2a10;
+    --text: #d4dae8;
+    --text-muted: #5a6275;
+    --text-bright: #eef2ff;
+    --q-border: #2a3045;
+    --depth0: #4af0e0;
+    --depth1: #4a9ef0;
+    --depth2: #a04af0;
+    --depth3: #f04a7a;
+    --followup: #f0d44a;
+    --followup-bg: rgba(240,212,74,0.05);
+    --followup-border: rgba(240,212,74,0.2);
+    --followup-hover: rgba(240,212,74,0.08);
+    --fqa-bg: rgba(240,212,74,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(74,240,160,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74,240,160,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+
+  .header-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-tag::before { content: ''; width: 20px; height: 1px; background: var(--accent); }
+
+  h1 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: var(--text-bright);
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .header-sub { color: var(--text-muted); font-size: 14px; max-width: 620px; }
+
+  /* ── Instructions ── */
+  .instructions {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+  .instructions strong { color: var(--accent); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 40px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .depth-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .depth-0 { background: rgba(74,240,224,0.15); color: var(--depth0); border: 1px solid rgba(74,240,224,0.3); }
+  .depth-1 { background: rgba(74,158,240,0.15); color: var(--depth1); border: 1px solid rgba(74,158,240,0.3); }
+  .depth-2 { background: rgba(160,74,240,0.15); color: var(--depth2); border: 1px solid rgba(160,74,240,0.3); }
+  .depth-3 { background: rgba(240,74,122,0.15); color: var(--depth3); border: 1px solid rgba(240,74,122,0.3); }
+
+  .section-title { font-size: 16px; font-weight: 600; color: var(--text-bright); }
+  .section-desc { font-size: 12px; color: var(--text-muted); font-style: italic; margin-left: auto; }
+
+  /* ── Question cards ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--q-border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: var(--accent-dim); }
+  .q-card.open { border-color: rgba(74,240,160,0.3); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .q-header:hover { background: rgba(255,255,255,0.02); }
+
+  .q-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    min-width: 24px;
+    padding-top: 2px;
+  }
+
+  .q-text { flex: 1; font-size: 14px; font-weight: 500; color: var(--text-bright); line-height: 1.5; }
+
+  .q-toggle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.2s, color 0.2s;
+    min-width: 20px;
+    text-align: center;
+  }
+  .q-card.open .q-toggle { transform: rotate(45deg); color: var(--accent); }
+
+  .q-answer {
+    display: none;
+    padding: 16px 18px 18px 56px;
+    border-top: 1px solid var(--border);
+  }
+  .q-card.open .q-answer { display: block; }
+
+  .answer-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .answer-text { font-size: 13.5px; color: var(--text); line-height: 1.75; }
+  .answer-text p { margin-bottom: 10px; }
+  .answer-text p:last-child { margin-bottom: 0; }
+  .answer-text ul { padding-left: 18px; margin: 8px 0; }
+  .answer-text ul li { margin-bottom: 5px; color: var(--text); }
+  .answer-text code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: rgba(74,240,160,0.08);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  /* ── Flag blocks ── */
+  .flag {
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 5px;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .flag-red  { background: rgba(240,74,74,0.08);  border-left: 3px solid #f04a4a; color: #e88; }
+  .flag-green{ background: var(--accent-dim);      border-left: 3px solid var(--accent); color: #8de8b8; }
+  .flag-warn { background: var(--warn-dim);        border-left: 3px solid var(--warn); color: #d4a060; }
+  .flag-icon { font-size: 14px; }
+
+  /* ── Follow-up probes container ── */
+  .followups {
+    margin-top: 16px;
+    border: 1px solid var(--followup-border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .followups-header {
+    background: var(--followup-bg);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .followups-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--followup);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .followups-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ── Individual follow-up probe ── */
+  .fq-item {
+    border-top: 1px solid var(--followup-border);
+    overflow: hidden;
+  }
+
+  .fq-item:first-child { border-top: none; }
+
+  .fq-trigger {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--followup-bg);
+    transition: background 0.15s;
+  }
+  .fq-trigger:hover { background: var(--followup-hover); }
+
+  .fq-bullet {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--followup);
+    min-width: 16px;
+    padding-top: 1px;
+    opacity: 0.7;
+  }
+
+  .fq-question {
+    flex: 1;
+    font-size: 13px;
+    color: #d4c070;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .fq-toggle {
+    font-size: 14px;
+    color: rgba(240,212,74,0.4);
+    transition: transform 0.2s, color 0.2s;
+    min-width: 16px;
+    text-align: center;
+  }
+
+  .fq-item.fq-open .fq-toggle { transform: rotate(45deg); color: var(--followup); }
+  .fq-item.fq-open .fq-trigger { background: var(--followup-hover); }
+
+  .fq-answer {
+    display: none;
+    padding: 12px 14px 12px 40px;
+    background: var(--fqa-bg);
+    border-top: 1px solid var(--followup-border);
+  }
+  .fq-item.fq-open .fq-answer { display: block; }
+
+  .fq-answer-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: rgba(240,212,74,0.5);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .fq-answer-text {
+    font-size: 13px;
+    color: #c8bfa8;
+    line-height: 1.75;
+  }
+  .fq-answer-text p { margin-bottom: 8px; }
+  .fq-answer-text p:last-child { margin-bottom: 0; }
+  .fq-answer-text ul { padding-left: 16px; margin: 6px 0; }
+  .fq-answer-text ul li { margin-bottom: 4px; }
+  .fq-answer-text code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: rgba(240,212,74,0.08);
+    color: #d4c070;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .fq-answer-text strong { color: #e8d898; }
+
+  /* ── Summary ── */
+  .summary {
+    margin-top: 48px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .summary h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  .signals { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  @media (max-width: 600px) {
+    .signals { grid-template-columns: 1fr; }
+    .section-desc { display: none; }
+  }
+
+  .signal-box { border-radius: 6px; padding: 14px 16px; }
+  .signal-box h4 { font-size: 12px; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.05em; }
+  .signal-box ul { padding-left: 16px; font-size: 13px; line-height: 1.65; }
+
+  .pass-box { background: rgba(74,240,160,0.06); border: 1px solid rgba(74,240,160,0.2); }
+  .pass-box h4 { color: var(--accent); }
+  .pass-box ul li { color: #8de8b8; }
+
+  .fail-box { background: rgba(240,74,74,0.06); border: 1px solid rgba(240,74,74,0.2); }
+  .fail-box h4 { color: #f06060; }
+  .fail-box ul li { color: #e88; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-tag">First Round · Filter Interview</div>
+    <h1>Python API Engineer<br>Interview Question Guide</h1>
+    <p class="header-sub">18 questions across four tiers — from API lifecycle to deep production expertise. Each question includes the expected answer, evaluation signals, and expandable follow-up probes with answers so you can dig deeper without needing API expertise yourself.</p>
+  </div>
+
+  <div class="instructions">
+    <strong>How to use:</strong> Click a question card to open it. Inside, click any follow-up probe (in yellow) to reveal the answer you should expect from that probe.
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4af0a0;"></div><span style="color:#8de8b8;">Green = strong signal</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f04a4a;"></div><span style="color:#e88;">Red = warning signal</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f0a04a;"></div><span style="color:#d4a060;">Orange = borderline</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f0d44a;"></div><span style="color:#d4c070;">Yellow = follow-up probes (click to see expected answer)</span></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       FOUNDATION — Lifecycle & Architecture
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="depth-badge depth-0">Foundation</span>
+      <span class="section-title">API Lifecycle &amp; Architecture</span>
+      <span class="section-desc">Big-picture thinking before diving technical</span>
+    </div>
+
+    <!-- F1 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">F1</span>
+        <span class="q-text">Walk me through the full lifecycle of an API you built — from the initial design conversation all the way to it running in production and being maintained.</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>A strong candidate describes a structured lifecycle, not just "I wrote some code and deployed it." Phases they should cover:</p>
+          <ul>
+            <li><strong>Requirements &amp; contract design</strong> — working with stakeholders to define what the API needs to do, who will consume it, and what the data contract looks like. Often produces an OpenAPI spec as the design artifact before any code is written.</li>
+            <li><strong>API design</strong> — deciding on resource naming, endpoint structure, versioning strategy, authentication model. Good engineers do this on paper first.</li>
+            <li><strong>Implementation</strong> — writing code with proper validation, error handling, logging, and tests. Not just the happy path.</li>
+            <li><strong>Documentation</strong> — generating or writing API docs (Swagger UI, Redoc, Postman collections) so consumers can self-serve.</li>
+            <li><strong>Deployment &amp; CI/CD</strong> — containerizing (Docker), deployment config (Kubernetes, ECS, Lambda), CI pipelines that run tests on every PR.</li>
+            <li><strong>Observability</strong> — monitoring (latency, error rates, request volume), alerting, and log aggregation.</li>
+            <li><strong>Versioning &amp; deprecation</strong> — managing API evolution without breaking consumers over time.</li>
+          </ul>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Walks through all phases naturally with concrete examples. Treats API design as a design activity, not just a coding one.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Jumps straight to "I coded the endpoints" — skips design, documentation, and observability. Signals someone who writes scripts, not maintains systems.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"You mentioned the design phase — what does that actually look like before any code is written? What artifacts come out of it?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>The main artifact is an <strong>OpenAPI (formerly Swagger) spec</strong> — a structured document (YAML or JSON) that defines every endpoint, its inputs, outputs, and error responses. This becomes a contract between the API team and consumers <em>before</em> a single line of code is written.</p>
+                <p>Other design artifacts include: an <strong>API design document</strong> covering versioning strategy, auth model, and naming conventions; a <strong>data model diagram</strong> showing the resources and their relationships; and often a <strong>sequence diagram</strong> for complex flows (e.g., OAuth handshake, async job pattern). Strong candidates may also mention running the spec through a mock server so consumers can start building against it immediately.</p>
+                <p>A red flag: "I just started coding and documented it afterward" — this usually produces poorly designed APIs that are hard to evolve.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"How do you know when the API is ready to ship — what does your definition of done look like?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>A strong definition of done covers: all endpoints implemented and tested (including error paths), integration tests passing in CI, documentation published and reviewed by at least one consumer, security review completed (auth, input validation, no secrets in logs), monitoring and alerting configured, and a rollback plan documented.</p>
+                <p>Bonus: they mention a <strong>staging environment smoke test</strong> — running a real end-to-end call against staging before any production deploy. Or a <strong>load test</strong> to verify the API handles expected peak traffic before launch.</p>
+                <p>A weak answer: "when the code works" — no mention of observability, docs, or consumer readiness.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"What happens to the API six months after launch? Who owns it, and how do you handle change requests from consumers?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>Strong candidates treat post-launch maintenance as a normal, expected part of ownership — not an afterthought. Key practices: a designated owner or team responsible for on-call, monitoring dashboards, and SLAs; a process for handling consumer change requests (feature requests go through a backlog, bug reports go through an issue tracker); and a clear policy for what counts as a breaking vs non-breaking change.</p>
+                <p>Non-breaking changes (additive) can be deployed without versioning — e.g., adding a new optional field. Breaking changes (removing a field, changing a type, changing behavior) require a version bump and deprecation timeline communicated to all consumers.</p>
+                <p>A weak answer: "I hand it off to another team and move on." Someone who has truly owned a production API understands that long-term maintenance is where most of the real work lives.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F2 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">F2</span>
+        <span class="q-text">What components typically sit in front of or around a production API — beyond just the application code itself?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>A production API is never just a Python process. Key components:</p>
+          <ul>
+            <li><strong>API Gateway</strong> — sits in front of all APIs, handles routing, rate limiting, auth enforcement, SSL termination. Examples: AWS API Gateway, Kong, NGINX, Apigee.</li>
+            <li><strong>Load Balancer</strong> — distributes traffic across multiple instances. Enables horizontal scaling and zero-downtime deployments.</li>
+            <li><strong>Cache layer</strong> — Redis or Memcached for frequently-requested, expensive-to-compute responses.</li>
+            <li><strong>Message queue</strong> — Kafka, SQS, RabbitMQ for async work handed off from the API.</li>
+            <li><strong>Database layer</strong> — with connection pooling (PgBouncer) to prevent exhausting DB connections under load.</li>
+            <li><strong>Observability stack</strong> — logging (CloudWatch, Datadog, ELK), metrics (Prometheus/Grafana), distributed tracing (Jaeger, X-Ray).</li>
+            <li><strong>Secret management</strong> — AWS Secrets Manager, Vault — never hardcoded credentials.</li>
+          </ul>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Describes the API as one component in a larger system. Mentions API Gateway and understands why offloading cross-cutting concerns matters.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Only thinks about the app code — no awareness of surrounding infrastructure. Likely has never deployed to a real cloud environment.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"What specific things would you configure at the API Gateway vs keeping in the application code? Why?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p><strong>At the API Gateway:</strong> rate limiting, IP allowlisting/blocklisting, SSL/TLS termination, request/response logging at the edge, basic API key validation, routing to different backend services, CORS headers, and DDoS protection. These are <em>cross-cutting concerns</em> — they apply to every API in the organization and don't belong in individual application code.</p>
+                <p><strong>In the application code:</strong> business logic, fine-grained authorization (which user can see which record), request body validation, domain-specific error handling, and anything that requires database context. The rule of thumb: if the logic requires knowing <em>what the request contains</em>, it belongs in the app. If it applies regardless of content, consider the gateway.</p>
+                <p>A strong candidate understands this boundary clearly and has made these decisions on real systems.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"If your API suddenly gets 10x the normal traffic, what in this architecture absorbs that, and what breaks first?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>The load balancer and API Gateway typically handle the traffic surge gracefully — they're designed to scale horizontally. The API application instances can also scale horizontally (auto-scaling groups, Kubernetes HPA) with a short lag.</p>
+                <p>The component most likely to break first is the <strong>database</strong> — specifically the connection pool. Each API instance holds a pool of DB connections, and 10x instances means 10x connections. If the DB has a connection limit (Postgres default is 100), it gets exhausted quickly. This is why PgBouncer or RDS Proxy are essential in production — they multiplex many application connections into a smaller number of real DB connections.</p>
+                <p>After the DB, the cache layer (Redis) could become a bottleneck if it's a single node and all cache misses suddenly hit the DB. A well-designed system adds cache replicas and uses read-through caching to absorb this.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"How do you manage secrets like DB passwords and API keys across different environments?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>The cardinal rule: <strong>secrets never go in source code, config files, or environment variable files that get committed</strong>. Common production approaches:</p>
+                <ul>
+                  <li><strong>AWS Secrets Manager / Parameter Store</strong> — secrets are stored encrypted in AWS, fetched by the application at startup or request time using IAM roles. No secrets in code or deployment scripts.</li>
+                  <li><strong>HashiCorp Vault</strong> — dedicated secrets management platform, supports dynamic credentials (short-lived DB passwords generated on demand).</li>
+                  <li><strong>Kubernetes Secrets</strong> — base64-encoded secrets injected as environment variables into pods (though this is considered weaker without additional encryption at rest).</li>
+                </ul>
+                <p>Per environment (dev/staging/prod), separate secret stores or namespaces are used. Developers should never have access to production secrets. Rotation policies should be automated. A strong candidate mentions secret rotation and access auditing as part of the practice.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F3 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">F3</span>
+        <span class="q-text">How do you approach API documentation — who writes it, when, and what tools do you use?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <ul>
+            <li><strong>OpenAPI / Swagger spec</strong> — the industry standard for describing REST API contracts. FastAPI generates this automatically from type hints; Flask/Django requires libraries like <code>flask-smorest</code> or <code>drf-spectacular</code>.</li>
+            <li><strong>Design-first approach</strong> — some teams write the OpenAPI spec before any code, then use it to generate stubs. Creates a shared contract before implementation begins.</li>
+            <li><strong>Swagger UI / Redoc</strong> — render the OpenAPI spec into interactive documentation that consumers can use to test the API.</li>
+            <li><strong>Changelogs and deprecation notices</strong> — production engineers document what changed between versions and communicate timelines to consumers.</li>
+          </ul>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Treats docs as part of the build, not an afterthought. Mentions OpenAPI and auto-generation from code.</div>
+          <div class="flag flag-warn"><span class="flag-icon">△</span> "I wrote a README" — adequate for internal scripts, not sufficient for a maintained API with real consumers.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"If a developer from another team needs to integrate with your API, what do you hand them and what does onboarding look like?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>A well-run API onboarding delivers: a link to the live Swagger UI or Redoc documentation where they can read all endpoints and try them interactively; a Postman or Insomnia collection they can import and run immediately; sandbox/staging credentials so they can test without touching production data; and a getting-started guide covering auth setup, base URL, and the first working request.</p>
+                <p>Strong candidates also mention a <strong>developer experience review</strong> — where a member of the consuming team is walked through the API by the builder before it goes live, to catch confusing design decisions early. The goal is that a developer should be able to make their first successful API call within 15–30 minutes of receiving documentation.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"Have you had a situation where your documentation was wrong or out of date and a consumer built against it incorrectly?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>Honest candidates who have shipped real APIs will have a story here. The key is what they learned: the root cause is almost always docs that are written separately from code and allowed to drift. The fix is documentation that is <strong>generated from code</strong> (auto-generated OpenAPI spec) or tightly coupled to code via tests — so when the code changes, the docs either update automatically or the CI pipeline fails.</p>
+                <p>A strong candidate mentions <strong>contract testing</strong> as a preventive measure: the consuming team's tests run against the API spec, and if the spec changes in a breaking way, their tests catch it before deployment. Tools like Pact or schemathesis enable this.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"What's the difference between documentation for internal developers vs external API consumers?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p><strong>Internal documentation</strong> can assume shared context — it can reference internal systems, use org-specific terminology, and assume the reader knows the general architecture. It focuses on implementation details: where the code lives, how to run it locally, deployment procedures, and architecture decisions.</p>
+                <p><strong>External documentation</strong> must assume zero context. It needs: a clear description of what the API does and why someone would use it; complete auth setup instructions from scratch; working code examples in multiple languages; error code reference; rate limit details; SLA commitments; and a support/contact path. The bar is much higher because external consumers can't just ask a colleague.</p>
+                <p>A strong candidate may mention the concept of a <strong>developer portal</strong> (like Stripe's or Twilio's docs) as the gold standard for external API documentation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F4 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">F4</span>
+        <span class="q-text">How do you think about API security at a high level — not just authentication, but the broader threat surface?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>Authentication is the entry-level answer. A production API engineer thinks in layers:</p>
+          <ul>
+            <li><strong>Input validation</strong> — validate all inputs with Pydantic. Reject oversized payloads. Prevents injection attacks.</li>
+            <li><strong>Transport security</strong> — TLS/HTTPS everywhere, never HTTP in production.</li>
+            <li><strong>OWASP API Security Top 10</strong> — key items: Broken Object Level Authorization (BOLA), Excessive Data Exposure, Security Misconfiguration, Mass Assignment.</li>
+            <li><strong>Rate limiting &amp; DDoS protection</strong> — preventing abuse even from authenticated users.</li>
+            <li><strong>Dependency security</strong> — scanning Python packages for CVEs (<code>pip-audit</code>, Dependabot).</li>
+            <li><strong>Principle of least privilege</strong> — each service only has the permissions it needs.</li>
+            <li><strong>Audit logging</strong> — logging who did what to sensitive resources.</li>
+          </ul>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Mentions OWASP or BOLA — a very common real-world vulnerability that data engineers don't typically consider.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Security = "just add authentication." No awareness of object-level authorization, input validation, or common API attack patterns.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"What's Broken Object Level Authorization — can you give me a concrete example of how it happens?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>BOLA (also called IDOR — Insecure Direct Object Reference) is the most common API vulnerability. It happens when an API uses predictable IDs to access objects without verifying the requesting user owns that object.</p>
+                <p><strong>Example:</strong> A user logs in and sees their order at <code>GET /orders/1042</code>. They change the URL to <code>GET /orders/1043</code> — and get someone else's order, because the API only checks "is the user authenticated?" but not "does this user own order 1043?"</p>
+                <p><strong>The fix:</strong> every object access must include an ownership check. In code: after fetching the order from the DB, verify <code>order.user_id == current_user.id</code> before returning it. If not, return <code>404</code> (not <code>403</code> — returning 403 confirms the object exists, which is an information leak). This check must happen in every endpoint, not just some.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"Say your API endpoint returns a user profile. What security checks happen before that data is returned?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>A complete sequence of checks: (1) <strong>Authentication</strong> — is there a valid token in the request header? If not, return 401. (2) <strong>Token validation</strong> — is the JWT signature valid, not expired, and issued by the correct issuer? (3) <strong>Object-level authorization</strong> — is the requesting user the owner of this profile, or do they have an admin role that permits viewing others' profiles? If not, return 404. (4) <strong>Field-level filtering</strong> — strip any sensitive fields from the response that the caller shouldn't see (e.g., hashed password, internal flags, payment details). Only return what this caller is authorized to see. (5) <strong>Rate limiting check</strong> — has this client exceeded their allowed request rate?</p>
+                <p>A weak answer stops at step 1. A strong answer covers all five and ideally mentions that these checks should be enforced in a centralized dependency, not copy-pasted into each endpoint.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"If a security audit flagged your API, what are the three most common things you'd expect to see?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>The three most common findings in real API security audits:</p>
+                <ul>
+                  <li><strong>BOLA / IDOR</strong> — missing object-level ownership checks. Incredibly common even in mature systems because it requires a check on every single data access, not just the endpoint entry point.</li>
+                  <li><strong>Excessive data exposure</strong> — endpoints returning full database objects (all fields) when the consumer only needs a subset. Sensitive fields get leaked unintentionally. Fix: use response schemas that explicitly define what fields are returned, rather than serializing entire ORM objects.</li>
+                  <li><strong>Missing rate limiting or no throttling on sensitive endpoints</strong> — login endpoints with no brute-force protection, password reset endpoints that can be hammered, or data export endpoints with no volume limits.</li>
+                </ul>
+                <p>Bonus findings they might mention: JWT algorithm confusion attacks (accepting "none" as a valid algorithm), verbose error messages leaking stack traces, or hardcoded credentials found in source history.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F5 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">F5</span>
+        <span class="q-text">How do you monitor a production API — what metrics do you track, and how do you know something is wrong before users complain?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>Observability has three pillars:</p>
+          <ul>
+            <li><strong>Metrics</strong> — the "four golden signals": Latency, Traffic (req/sec), Errors (error rate), Saturation (CPU/memory). Track p95 and p99 latency — not averages.</li>
+            <li><strong>Logs</strong> — structured JSON logs capturing: timestamp, request ID, endpoint, status code, response time, user ID. Tools: CloudWatch, Datadog, ELK.</li>
+            <li><strong>Distributed tracing</strong> — tracks a request across multiple services. Tools: AWS X-Ray, Jaeger, OpenTelemetry.</li>
+          </ul>
+          <p>Alerting triggers: error rate spike above threshold, p95 latency exceeds SLA, sudden drop in request volume (upstream failure), and memory/CPU saturation.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Mentions the four golden signals, p95/p99 vs. averages, and structured logging. Bonus: OpenTelemetry or distributed tracing.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> "I look at the logs when something goes wrong" — purely reactive. No proactive alerting. Hallmark of someone who hasn't operated a production service.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"Why is p95 latency more useful than average latency? Can you give me an example?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>The average (mean) can be misleading because it's heavily influenced by the majority of fast requests and masks the tail. <strong>Example:</strong> if 95% of requests complete in 50ms but 5% take 2 seconds, the average might be 150ms — which sounds fine. But 5% of your users are having a terrible experience, and those are often your heaviest users (whose requests trigger more complex processing).</p>
+                <p><strong>p95</strong> means "95% of requests are faster than this value." <strong>p99</strong> is even more sensitive to outliers. SLAs are typically defined at p95 or p99 — "99% of requests will complete in under 200ms" — not at the average, because the average hides the worst user experiences.</p>
+                <p>The classic failure mode: a team monitors average latency, sees it's fine, and doesn't notice that a small percentage of users are timing out — until a major customer complains.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"Tell me about a time an alert fired and you had to investigate — what was your process from alert to root cause?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>This is another "story" question — the answer quality varies, but the investigation <em>process</em> is what you're evaluating. A strong process: (1) Acknowledge the alert and check the dashboard to understand the scope — which endpoints? which regions? since when? (2) Check recent deployments — did anything go out in the last hour? If yes, that's the first suspect. (3) Drill into error logs filtered to the affected time window — look for patterns in error messages, user IDs, or request paths. (4) Check downstream dependencies — is the database healthy? Are any dependent services timing out? (5) Form a hypothesis, test it, and either roll back the deployment or apply a targeted fix.</p>
+                <p>A strong candidate can tell this story from memory with specifics. Someone who hasn't been on-call or operated production systems will give a vague, theoretical answer.</p>
+              </div>
+            </div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger">
+              <span class="fq-bullet">›</span>
+              <span class="fq-question">"If you had to set up monitoring for a brand new API from scratch, what are the first three things you'd instrument?"</span>
+              <span class="fq-toggle">+</span>
+            </div>
+            <div class="fq-answer">
+              <div class="fq-answer-label">Expected Answer</div>
+              <div class="fq-answer-text">
+                <p>Priority order for a new API: (1) <strong>Error rate</strong> — a spike in 5xx errors is the most critical signal; instrument this first and set an immediate alert. (2) <strong>Request latency at p95/p99</strong> — alerts when the API becomes slow for real users; set baseline during initial load testing. (3) <strong>Request volume with anomaly detection</strong> — alerts on both sudden spikes (possible abuse or upstream misbehavior) and sudden drops (possible upstream failure or deployment issue).</p>
+                <p>After those three, the next priorities are database query latency, memory and CPU utilization, and cache hit rate. Strong candidates also mention adding a <strong>synthetic monitor</strong> — an automated test that calls a health-check endpoint every minute from outside the system, so you know the API is reachable from the consumer's perspective, not just internally healthy.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       LEVEL 1 — Baseline
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="depth-badge depth-1">Level 1</span>
+      <span class="section-title">Baseline — Core API Concepts</span>
+      <span class="section-desc">Anyone claiming API experience should nail these</span>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">01</span>
+        <span class="q-text">Can you walk me through the difference between REST and RPC-style APIs? When would you choose one over the other?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p><strong>REST</strong> is resource-oriented — model around nouns (<code>/users/42</code>), use HTTP verbs (GET, POST, PUT, DELETE), stateless responses. Standard for public-facing APIs.</p>
+          <p><strong>RPC-style</strong> (gRPC, JSON-RPC) is action-oriented — call functions directly (<code>GetUser(id=42)</code>). Faster, binary protocol (Protocol Buffers), preferred for internal microservice communication where performance matters more than discoverability.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Mentions trade-offs: REST = discoverability, RPC = speed and tight contracts. Bonus if they mention GraphQL as a third model.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Can only define REST and has never considered alternatives — suggests shallow experience.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Have you personally used gRPC or GraphQL on a real project? What was the use case?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Strong candidates have a real story. gRPC use cases: internal microservice communication where performance matters and both sides are under the same team's control — e.g., a recommendation engine calling a user service thousands of times per second. GraphQL use cases: client-driven queries where different consumers (mobile vs desktop) need different subsets of data and you want to avoid over-fetching — popularized by Facebook.</p><p>A weaker but acceptable answer: they haven't used either but can explain the theory and give the right use cases for each. The red flag is claiming expertise on a CV and then being unable to describe a real scenario.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"In REST, what's the difference between PUT and PATCH — when would you use each?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p><strong>PUT</strong> is a full replacement — you send the complete representation of the resource, and the server replaces it entirely. If you omit a field, it gets overwritten with null/default. Use PUT when you always send the full object.</p><p><strong>PATCH</strong> is a partial update — you send only the fields you want to change, and everything else stays the same. Use PATCH when clients typically update one or two fields at a time (e.g., changing a user's email without resending their entire profile). PATCH is more network-efficient and harder to accidentally corrupt data with, which is why it's preferred for most update operations in practice.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What does 'stateless' mean in REST, and why does it matter for scaling?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Stateless means each HTTP request must contain all the information needed to process it — the server doesn't remember anything about previous requests from the same client. Session state, if needed, is stored client-side (in a JWT or cookie) or in a shared external store (Redis), not in the server process's memory.</p><p>This matters enormously for scaling: if the server held session state in memory, every request from a user would have to go to the same server instance ("sticky sessions"). With stateless design, any instance in the load balancer pool can handle any request — you can freely add or remove instances without affecting users. This is what makes horizontal scaling straightforward in REST APIs.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">02</span>
+        <span class="q-text">What HTTP status codes do you use most often in an API, and what's the difference between a 400 and a 422?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>Common codes: <code>200</code> OK, <code>201</code> Created, <code>204</code> No Content, <code>400</code> Bad Request, <code>401</code> Unauthorized, <code>403</code> Forbidden, <code>404</code> Not Found, <code>409</code> Conflict, <code>422</code> Unprocessable Entity, <code>429</code> Too Many Requests, <code>500</code> Internal Server Error, <code>503</code> Service Unavailable.</p>
+          <p><strong>400 vs 422:</strong> 400 = malformed at the syntax level (invalid JSON). 422 = syntactically valid but semantically wrong (age field contains -5). FastAPI uses 422 for Pydantic validation failures.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Distinguishes 400 vs 422 confidently and mentions 429 — signals production scale experience.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Only knows 200/400/500 and treats all errors as 400.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's the difference between 401 and 403 — when would you return each?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p><strong>401 Unauthorized</strong> means the request has no valid authentication — there's no token, the token is expired, or the token signature is invalid. The name is a bit misleading; it actually means "unauthenticated." The client should re-authenticate and retry.</p><p><strong>403 Forbidden</strong> means the request is authenticated (we know who you are) but you don't have permission to perform this action. You're logged in but trying to access an admin endpoint or another user's data. Unlike 401, re-authenticating won't help — you simply don't have the required role or ownership.</p><p>A common mistake is returning 403 when you should return 404 — for example, when a user tries to access a resource they don't own. Returning 403 confirms the resource exists, which is an information leak. Returning 404 is safer in those cases.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"When should you use 204 vs 200 for a successful operation?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p><strong>200 OK</strong> is used when there's a response body — the request succeeded and here is the data you asked for. <strong>204 No Content</strong> is used when the operation succeeded but there is no response body — the most common case is a successful DELETE operation. You deleted the resource; there's nothing to return.</p><p>Using 204 correctly signals to clients that they should not try to parse a response body (which would fail). It's also slightly more efficient since no body is transmitted. A well-designed API uses 201 + Location header for POST (created a resource, here's where it lives), 200 for GET/PUT/PATCH (here's the updated data), and 204 for DELETE.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Have you ever had a disagreement with a teammate about which status code to use?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>This is a collaborative culture question as much as a technical one. Common real disputes: whether to return 404 or 403 when a user accesses a resource they don't own (security vs. transparency debate); whether an idempotent POST should return 200 or 201 when the resource already exists; whether validation errors should be 400 or 422.</p><p>A strong candidate has a genuine story, demonstrates that they care about getting it right, and resolved it by referencing the HTTP spec or an established API design guide (like Google's or Stripe's). The quality of the answer shows whether they engage thoughtfully with API design or just write what works and moves on.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">03</span>
+        <span class="q-text">Which Python frameworks have you used to build APIs, and how do you choose between them?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <ul>
+            <li><strong>FastAPI</strong> — async-native, automatic OpenAPI docs, Pydantic validation. Best choice for new production APIs today.</li>
+            <li><strong>Flask</strong> — lightweight, synchronous. Good for simpler or legacy APIs.</li>
+            <li><strong>Django REST Framework</strong> — excellent for CRUD-heavy APIs with complex data models.</li>
+            <li><strong>Falcon / Starlette</strong> — lower-level, high-performance.</li>
+          </ul>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Has strong opinions from direct production experience and can compare frameworks.</div>
+          <div class="flag flag-warn"><span class="flag-icon">△</span> Only knows Flask from a data pipeline script — the data engineer profile.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Can you walk me through how Pydantic models work in FastAPI and why they matter?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Pydantic models are Python classes that define the expected shape and types of data. In FastAPI, you define a Pydantic model as a request body schema, and FastAPI automatically: validates incoming request JSON against the model, raises a 422 with detailed field-level errors if validation fails, and generates the OpenAPI spec for that endpoint — all from the same class definition.</p><p>Example: a <code>CreateUserRequest</code> model with <code>email: EmailStr</code>, <code>age: int</code>, <code>name: str</code>. If a client sends <code>age: "banana"</code>, FastAPI returns a 422 with a message explaining that <code>age</code> must be an integer — without you writing any validation code. This replaces a lot of boilerplate that Flask developers write manually (checking if fields exist, validating types, returning error messages).</p><p>Pydantic v2 (used in newer FastAPI versions) is also significantly faster than v1 due to a Rust-based core.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Have you ever had to migrate an API from one framework to another? What drove that decision?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Common real-world migration scenarios: Flask to FastAPI for async support and automatic documentation (the most common migration today); Django monolith to a microservices architecture because the team needed independent scaling and deployment; Flask to DRF when the data model complexity grew beyond what plain Flask handled cleanly.</p><p>What matters is the decision-making process: they identified a concrete limitation (sync bottleneck, missing validation, poor docs), evaluated the migration cost, and made a deliberate trade-off. A strong candidate will also describe how they handled the migration without downtime — typically by running both versions in parallel, gradually routing traffic to the new service, then deprecating the old one.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What does FastAPI give you out of the box that you'd have to build yourself in Flask?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>FastAPI provides out of the box: automatic request validation via Pydantic (Flask requires marshmallow or WTForms); automatic OpenAPI/Swagger UI docs generated from type hints (Flask requires flask-smorest or similar); native async support with <code>async def</code> route handlers (Flask's async support is bolted on); dependency injection system for sharing logic like auth, DB sessions, and configuration across routes; and automatic serialization of Pydantic response models. In Flask, all of these require separate libraries, manual wiring, and are often inconsistently implemented across a codebase.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">04</span>
+        <span class="q-text">How do you handle authentication and authorization in an API you've built — not consumed?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p><strong>Authentication</strong> (who are you?) vs <strong>Authorization</strong> (what are you allowed to do?). A true API engineer has implemented both:</p>
+          <ul>
+            <li><strong>JWT</strong> — stateless tokens validated on every request. Common in FastAPI with <code>python-jose</code>.</li>
+            <li><strong>API Keys</strong> — for service-to-service. Stored hashed in DB, validated via <code>X-API-Key</code> header.</li>
+            <li><strong>OAuth2</strong> — delegated auth for third-party access.</li>
+            <li><strong>RBAC</strong> — check user role against required permissions per endpoint.</li>
+          </ul>
+          <p>In FastAPI, implemented via dependency injection — a <code>get_current_user</code> dependency applied per-route or globally.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Describes implementing JWT or API keys themselves, mentions token expiry and refresh tokens.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Only describes how to pass an API key when calling someone else's API — that's the consumer, not the builder.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What happens when a JWT expires — what's the flow from the client's perspective, and how did you handle refresh tokens?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A JWT has an <code>exp</code> (expiration) claim. When it expires, the server rejects the request with a 401. Without refresh tokens, the user would have to log in again every time — a bad experience if the access token has a short lifetime.</p><p>The standard pattern: issue two tokens at login — a short-lived <strong>access token</strong> (e.g., 15 minutes) used on every API call, and a long-lived <strong>refresh token</strong> (e.g., 7–30 days) stored securely. When the access token expires, the client silently calls <code>POST /auth/refresh</code> with the refresh token to get a new access token — without interrupting the user. The refresh token is stored in an HttpOnly cookie (not accessible to JavaScript) to reduce XSS risk. On logout, the refresh token is revoked in the database.</p><p>The short lifetime of access tokens limits damage if one is stolen — it expires quickly. The refresh token is the higher-value credential and should be treated accordingly.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"How do you store API keys securely — what would be wrong with putting them in plain text in a database?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Storing API keys in plain text means a database breach immediately exposes all keys — an attacker can use every key without any further work. The same principle applies to passwords.</p><p>The correct approach: store only a <strong>one-way hash</strong> of the API key (using a secure algorithm like <code>bcrypt</code> or <code>SHA-256</code> with a salt). When a client sends a key, hash the incoming value and compare it to the stored hash. You never store the original. This way, even if the database is compromised, the attacker gets hashes that can't be reversed into working keys.</p><p>The implication: once issued, an API key cannot be "viewed again" by the owner — it can only be regenerated. This is standard practice (Stripe, GitHub, AWS all work this way). Display the key only once at creation time and instruct the user to save it.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Can you give me a concrete example of authorization logic — not just 'is the user logged in,' but 'can this user see this specific record'?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A concrete example: a loan document API where users can only access documents belonging to their own account. After authentication confirms the user identity, the authorization check is: fetch the document from the DB, then verify <code>document.account_id == current_user.account_id</code>. If not, return 404 (not 403 — returning 403 confirms the document exists). Admins bypass this check via a role check first.</p><p>This must be implemented per endpoint — there's no global shortcut. A common mistake is checking permissions at the route level ("does this user have the 'view_documents' role?") but forgetting to check at the object level ("does this user own this specific document?"). Object-level authorization must happen after the DB fetch, every time.</p><p>In FastAPI, this is typically done in a service layer function that takes the current user as a parameter and raises an exception if the check fails — keeping authorization logic centralized rather than scattered across route handlers.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       LEVEL 2 — Production Depth
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="depth-badge depth-2">Level 2</span>
+      <span class="section-title">Production Depth — Design &amp; Reliability</span>
+      <span class="section-desc">Where data engineers typically start to struggle</span>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">05</span>
+        <span class="q-text">Walk me through how you design API versioning. What problems does it solve and what are the trade-offs between URL vs header versioning?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <ul>
+            <li><strong>URL versioning</strong> (<code>/v1/users</code>) — most common, visible, easy to route. Trade-off: URLs accumulate over time.</li>
+            <li><strong>Header versioning</strong> (<code>Accept: application/vnd.api+json;version=2</code>) — clean URLs. Trade-off: harder to test, less discoverable.</li>
+            <li><strong>Query param versioning</strong> (<code>?version=2</code>) — simplest, but bad practice.</li>
+          </ul>
+          <p>Production engineer also mentions: support timeline for old versions, deprecation strategy (sunset headers), communicating breaking changes.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Has a clear opinion from real experience. Mentions deprecation and consumer communication.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Never thought about versioning — suggests internal one-off scripts only.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"How do you communicate to consumers that a version is being retired? What's the process and timeline?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A structured deprecation process: first, add a <code>Sunset</code> HTTP response header to all responses from the deprecated version — this is an RFC standard header containing the date after which the endpoint will be removed, allowing automated tooling on the client side to detect it. Second, add a <code>Deprecation</code> header pointing to the migration documentation.</p><p>Beyond headers: email or Slack notification to all registered API consumers with a clear migration guide and timeline (typically 3–6 months minimum for external consumers, shorter for internal). Monitor usage of the deprecated version and follow up with teams that are still calling it as the sunset date approaches. After the sunset date, return a 410 Gone status (not 404) for a grace period before fully removing the route.</p><p>A weak answer: "I just delete the old version" — this breaks consumers without warning and is a serious trust violation for an API product.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What counts as a 'breaking change'? Give me one obvious and two subtle examples."</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p><strong>Obvious breaking change:</strong> Removing a field from the response — any consumer reading that field will get a null or key error.</p><p><strong>Subtle breaking change 1:</strong> Changing a field's type — e.g., changing <code>user_id</code> from an integer to a UUID string. The JSON still comes back, it still has the field, but consumer code that does arithmetic or integer comparisons on it will silently break.</p><p><strong>Subtle breaking change 2:</strong> Changing the behavior of an existing endpoint — e.g., a search endpoint that previously returned all results now returns paginated results with a different response structure. Technically the field names might be the same but consumers that expected a flat array now get a paged object and break.</p><p>Non-breaking changes (safe to deploy without versioning): adding new optional fields to a response, adding new optional request parameters, adding new endpoints entirely.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Have you supported two active API versions simultaneously? How did you manage that in the codebase?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Supporting multiple versions is one of the more painful parts of API engineering. Common strategies: (1) <strong>Separate route modules</strong> — <code>routers/v1/users.py</code> and <code>routers/v2/users.py</code> with shared business logic in a service layer that both call. Changes in v2 don't touch v1 code. (2) <strong>Response transformers</strong> — a single backend with version-specific serializers that transform the same data into v1 or v2 response shapes. (3) <strong>Feature flags</strong> — route to different code paths based on the version header or URL prefix.</p><p>The shared service layer approach is cleanest: both versions call the same underlying business logic, and versioning only affects the API contract (input/output shapes). This avoids duplicating business logic. The risk to watch for is "version creep" — where v1 and v2 business logic diverges over time because developers take shortcuts. Strong candidates mention code review discipline and integration tests for both versions in CI to prevent this.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">06</span>
+        <span class="q-text">How do you implement rate limiting in a Python API, and why does it matter?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <ul>
+            <li><strong>Redis-backed sliding window / token bucket</strong> — store request counts per client in Redis with TTL. Works across multiple instances.</li>
+            <li><strong>slowapi</strong> — FastAPI library using <code>@limiter.limit("100/minute")</code> decorator.</li>
+            <li><strong>API Gateway layer</strong> — handle outside the app (AWS API Gateway, Kong). Senior candidates know this option.</li>
+          </ul>
+          <p>Response to rate-limited requests: <code>429 Too Many Requests</code> with a <code>Retry-After</code> header.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Mentions Redis, knows 429 and Retry-After, considers gateway vs. app layer.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Suggests an in-memory counter — breaks in any multi-instance deployment.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Why does an in-memory rate limiter fail when you run more than one instance?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>If you store request counts in the application process's memory, each instance has its own independent counter. With a load balancer distributing traffic across 3 instances and a limit of 100 requests/minute, a single client could actually make 300 requests/minute — 100 to each instance — because each instance only sees one-third of their traffic and thinks the client is under the limit.</p><p>The fix is a shared, external store that all instances read from and write to atomically — Redis is the standard choice. Redis supports atomic increment-and-expire operations (using INCR + EXPIRE or the more sophisticated Lua scripting for sliding windows) that ensure the count is consistent across all instances regardless of which instance handles each request.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's the difference between rate limiting by IP vs by API key — when would each be the right choice?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p><strong>Rate limiting by IP</strong> is useful before authentication — for login endpoints, signup, and public endpoints where API keys don't exist yet. It protects against brute-force attacks and unauthenticated abuse. Weakness: IP addresses can be spoofed or shared (corporate networks with NAT put thousands of users behind one IP), so IP-based limiting can be too coarse.</p><p><strong>Rate limiting by API key</strong> is the right choice for authenticated endpoints. It's fair (each client gets their own quota regardless of where they connect from), auditable (you know exactly which client is hitting limits), and tier-able (different clients can have different limits based on their plan). Most production APIs combine both: IP-based limits for unauthenticated paths, API key-based limits for everything else, with a fallback to IP limiting for authenticated requests if the API key is somehow absent.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What does a good 429 response look like — what information do you include?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A well-designed 429 response includes: the <code>Retry-After</code> header with the number of seconds until the client can retry (so they can back off intelligently rather than hammering the API); <code>X-RateLimit-Limit</code> — the total allowed requests in the window; <code>X-RateLimit-Remaining</code> — how many requests remain (ideally included on every response, not just 429s, so clients can proactively slow down); and <code>X-RateLimit-Reset</code> — Unix timestamp when the window resets.</p><p>The response body should explain what happened and how to resolve it: <code>{"error": "rate_limit_exceeded", "message": "Too many requests. Retry after 30 seconds.", "retry_after": 30}</code>. This is the information a developer needs to implement a proper backoff strategy rather than just seeing an opaque error.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">07</span>
+        <span class="q-text">How do you handle errors and exceptions in your API in a way that's useful for consumers but doesn't leak internal details?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>Three layers: (1) <strong>Structured error response schema</strong> — consistent JSON like <code>{"error": "validation_error", "message": "...", "field": "email"}</code>. (2) <strong>Global exception handler</strong> — catches unhandled errors, returns generic 500 with error ID, logs full traceback internally. (3) <strong>Custom exception classes</strong> — domain-specific exceptions mapped to HTTP status codes centrally.</p>
+          <p>Logs capture: request ID, endpoint, user ID, and full exception — for correlating a client's error ID to a specific log entry.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Mentions request IDs, internal logging vs. external response separation, structured error schemas.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Returns raw Python exception text to the client — consumers would see DB connection strings.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's a request ID and why is it useful — how do both the client and server benefit from it?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A request ID is a unique identifier (typically a UUID) generated at the start of each API request and included in every log line for that request. It's returned to the client in a response header (e.g., <code>X-Request-ID</code>) and in the error response body when something goes wrong.</p><p><strong>Server benefit:</strong> when an error occurs, all log lines for that specific request — across the entire processing chain — can be retrieved by filtering on the request ID. Without it, finding the relevant logs in a high-traffic API is extremely difficult.</p><p><strong>Client benefit:</strong> when a consumer gets a 500 error, they can send the request ID to the API support team, who can immediately pull all logs for exactly that request without needing to know the user, endpoint, or approximate time. It transforms "something went wrong" into a specific, diagnosable event. In distributed systems with multiple services, the same request ID should propagate through all downstream calls — this is the foundation of distributed tracing.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Show me what a well-designed error response JSON looks like — what fields does it have and why?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A well-designed error response has: <code>error</code> — a machine-readable error code (snake_case string like <code>validation_error</code>, <code>resource_not_found</code>, <code>rate_limit_exceeded</code>) that client code can switch on; <code>message</code> — a human-readable description of what went wrong; <code>request_id</code> — the unique ID for this request for support correlation; optionally <code>field</code> or <code>details</code> for validation errors (which specific field failed and why); and optionally a <code>docs_url</code> linking to relevant documentation.</p><p>Example: <code>{"error": "validation_error", "message": "Invalid request body", "request_id": "req_abc123", "details": [{"field": "email", "message": "not a valid email address"}, {"field": "age", "message": "must be a positive integer"}]}</code>. The key principle: the <code>error</code> code is for machines, <code>message</code> is for developers, <code>details</code> is for form validation UIs, and <code>request_id</code> is for support. No internal stack traces, no DB query strings, no file paths.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's the risk of returning a detailed Python exception message to an API consumer?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Leaking exception details is a serious security vulnerability called <strong>information disclosure</strong>. A Python exception message can expose: the database host and port (from a connection error), table and column names (from a SQL error), file paths on the server (from a FileNotFoundError), library versions (from import errors), internal variable values, and the structure of the internal codebase. Each piece of information helps an attacker map the system and find exploitable weaknesses.</p><p>A specific real example: if your API returns <code>psycopg2.OperationalError: could not connect to server: Connection refused — Is the server running on host "prod-db-internal.company.com" and accepting TCP/IP connections on port 5432?</code> — you've just told an attacker your internal DB hostname and port. They now know you use PostgreSQL, the port, and the internal hostname, which can be used to probe the network from inside a compromised server.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">08</span>
+        <span class="q-text">Explain async vs sync endpoints in FastAPI — when would you use one over the other, and what mistake do people make with async?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p><strong>async def</strong> — runs on the event loop. Best for I/O-bound work using async libraries. Event loop serves other requests while waiting.</p>
+          <p><strong>def</strong> (sync) — FastAPI runs these in a thread pool automatically. Use when calling synchronous libraries.</p>
+          <p><strong>The classic mistake:</strong> Using <code>async def</code> but calling blocking synchronous code inside (<code>time.sleep()</code>, sync ORM, <code>requests.get()</code>). Blocks the entire event loop — severe performance degradation under load.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Immediately identifies the "async with blocking calls" trap — only someone who has hit this bug knows it.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> "Always use async, it's faster" — this misunderstanding causes serious production bugs.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"If you have no choice but to call a blocking synchronous library inside an async endpoint, what's the right way to do that?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>The correct approach is to use <code>asyncio.run_in_executor()</code>, which runs the blocking function in a thread pool executor — offloading it from the event loop so it doesn't block other requests.</p><p>In FastAPI specifically, you can use <code>await asyncio.get_event_loop().run_in_executor(None, blocking_function, arg1, arg2)</code>. The <code>None</code> uses the default thread pool executor. For CPU-bound work (not just I/O-bound), you'd use a <code>ProcessPoolExecutor</code> instead to get true parallelism (since Python's GIL prevents real multi-threading for CPU work).</p><p>The cleaner long-term solution is to find an async equivalent of the library — e.g., replace <code>psycopg2</code> (sync) with <code>asyncpg</code> (async), or replace <code>requests</code> (sync) with <code>httpx</code> (async). This eliminates the overhead of context switching to a thread pool entirely.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What happens to your API's throughput if one async endpoint accidentally calls a blocking function that takes 2 seconds?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>The event loop in Python is single-threaded. While a blocking call is executing inside an <code>async def</code> handler, the entire event loop is frozen — no other async requests can be processed, no timers fire, no I/O can complete. This means during those 2 seconds, all concurrent requests to <em>any</em> endpoint on that server instance are stalled and queuing up.</p><p>Under load, this creates a cascade: new requests arrive faster than the blocked event loop can process them, the request queue grows, connection timeouts start occurring, and the API appears completely unresponsive. A single misbehaving async endpoint can bring down an entire instance's throughput to near zero. This is why async Python code requires discipline — one mistake affects everyone using that server, not just the one request that caused it.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's the difference between concurrency and parallelism, and which one does async/await give you?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p><strong>Concurrency</strong> means handling many tasks by switching between them — interleaving progress on multiple tasks, but only actually working on one at any given instant. <strong>Parallelism</strong> means actually doing multiple things simultaneously on multiple CPU cores.</p><p>Async/await gives you <strong>concurrency, not parallelism</strong>. The event loop switches between tasks at every <code>await</code> point — so while one request is waiting for a database query to return, another request can be served. But only one Python coroutine runs at any instant (due to the GIL). This is extremely efficient for I/O-bound work (where most time is spent waiting, not computing), but provides no benefit for CPU-bound work (image processing, ML inference, heavy computation) — for that you need multiple processes or a C extension that releases the GIL.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">09</span>
+        <span class="q-text">How do you write tests for an API? What types of tests do you write, and what tools do you use in Python?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <ul>
+            <li><strong>Unit tests</strong> — test functions and business logic in isolation with <code>pytest</code>.</li>
+            <li><strong>Integration tests</strong> — test endpoints end-to-end using FastAPI's <code>TestClient</code> or <code>httpx.AsyncClient</code>.</li>
+            <li><strong>Contract tests</strong> — verify schema hasn't changed. <code>schemathesis</code> auto-generates tests from OpenAPI specs.</li>
+            <li><strong>Load tests</strong> — <code>locust</code> or <code>k6</code> to verify performance under expected traffic.</li>
+          </ul>
+          <p>Key: use <code>pytest fixtures</code> for DB setup/teardown, isolate test data with rollbacks, always test error paths.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Mentions TestClient, tests error paths, uses fixtures for DB isolation. Bonus: CI/CD integration.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> "I test manually in Postman" — not the same as automated integration testing.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"How do you handle the database in integration tests — do you use a real DB, a test DB, or mock it?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Strong candidates use a <strong>real database in a test environment</strong> — not a mock — because mocking the database hides real bugs like wrong queries, missing indexes, and constraint violations. The test DB is either a local instance or a Dockerized container spun up in CI (using <code>docker-compose</code> or a pytest plugin like <code>pytest-docker</code>).</p><p>Isolation strategy: use <strong>database transactions that roll back after each test</strong> — the test starts a transaction, runs the test, then the teardown rolls it back so the next test starts with a clean state. This is fast (no DB recreation needed) and reliable. In SQLAlchemy this is done by overriding the session fixture to use a nested transaction.</p><p>Mocking the DB is acceptable for pure unit tests of business logic, but integration tests should always use a real database. The rule: if you want to test that the endpoint works end-to-end, don't mock the thing the endpoint is built around.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's a pytest fixture and how do you use it to avoid repeating setup code?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A pytest fixture is a reusable setup function that pytest automatically injects into test functions that declare it as a parameter. It handles setup before the test and teardown after, without the test itself needing to manage that lifecycle.</p><p>Example: a <code>db_session</code> fixture that creates a test database session and rolls it back after each test. Any test that needs a DB session just lists <code>db_session</code> as a parameter — pytest handles the rest. A <code>client</code> fixture creates a FastAPI <code>TestClient</code> configured to use the test DB. A <code>auth_headers</code> fixture creates a test user and returns a valid JWT header. Tests compose these: <code>def test_get_user(client, auth_headers, db_session)</code> — clean, readable, no repeated setup code.</p><p>Fixtures have scope: <code>function</code> (default, run fresh for each test), <code>module</code> (once per file), <code>session</code> (once per entire test run). Use session-scoped fixtures for expensive setup like creating the test DB schema; use function-scoped for per-test state like creating test data.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What percentage of test cases should test error paths vs the happy path, and why?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>There's no universal ratio, but in practice error paths often outnumber happy paths 2:1 or more — because there are many ways for something to go wrong and only one way for it to go right. For a single endpoint like <code>POST /users</code>, the happy path is one test. Error paths include: missing required fields (each field), invalid field types, duplicate email, expired auth token, missing auth token, insufficient permissions, request body too large, and malformed JSON. That's already 8+ error tests for 1 happy path test.</p><p>The business reason: users and attackers don't follow the happy path. Security vulnerabilities and data corruption usually happen through edge cases and error conditions. An API that only tests the success scenario can pass all tests and still be insecure or crash in production. Strong candidates often say they think of error path coverage as their primary quality signal — if a bug was found in production, it was almost always in a code path that had no test.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       LEVEL 3 — Expert Signal
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="depth-badge depth-3">Level 3</span>
+      <span class="section-title">Expert Signal — Scale, Operations &amp; Design</span>
+      <span class="section-desc">Only strong candidates will have fluent answers here</span>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">10</span>
+        <span class="q-text">Your API endpoint starts getting slow under load. Walk me through how you diagnose and resolve the bottleneck.</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p><strong>Step 1 — Observe:</strong> APM tools (Datadog, X-Ray). p95/p99 latency, not averages. Identify affected endpoints and traffic patterns.</p>
+          <p><strong>Step 2 — Profile:</strong> <code>py-spy</code> (live, no restart) or <code>cProfile</code> + <code>snakeviz</code>. Enable query logging to detect N+1 queries.</p>
+          <p><strong>Common root causes:</strong> N+1 DB queries → eager loading; missing DB index → analyze slow query log; blocking call in async endpoint; payload too large → add pagination; no caching → Redis.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Mentions APM, N+1 queries, profiling tools. Shows they've been paged about a slow API.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> "Add more servers" without diagnosing — horizontal scaling fixes capacity, not efficiency.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's an N+1 query problem — can you give me a concrete example?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>The N+1 problem occurs when code fetches a list of objects (1 query), then makes an additional DB query for each object in the list (N queries) — resulting in N+1 total queries instead of 1 or 2.</p><p><strong>Concrete example:</strong> An endpoint returns a list of loan documents with their associated borrower names. The naive implementation: (1) <code>SELECT * FROM documents LIMIT 100</code> — 1 query returning 100 documents. Then for each document: (2–101) <code>SELECT name FROM borrowers WHERE id = ?</code> — 100 individual queries. Total: 101 DB round-trips instead of 1 JOIN.</p><p><strong>Fix:</strong> use a JOIN or eager loading — <code>SELECT documents.*, borrowers.name FROM documents JOIN borrowers ON documents.borrower_id = borrowers.id LIMIT 100</code> — fetches everything in 1 query. In SQLAlchemy ORM: use <code>joinedload()</code> or <code>selectinload()</code> rather than lazy loading. N+1 is extremely common and can turn a 50ms endpoint into a 5-second endpoint as the data grows.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Why is 'add more servers' not a complete solution to a performance problem?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Adding more server instances increases capacity — the ability to handle more concurrent requests — but it doesn't reduce the time any individual request takes. If a single request is slow because it makes 100 DB queries, adding 3x more servers means 3x more slow requests can run concurrently, not that each request is faster. The DB is now getting 3x more load from those N+1 queries, which makes it slower for everyone.</p><p>Horizontal scaling solves saturation — you're running out of server capacity to handle the volume. It doesn't solve inefficiency — a request that's slow because of bad code stays slow regardless of how many servers you add. Worse, some inefficiencies get amplified by adding servers (more DB connections, more cache misses if not properly partitioned). Fix the code first; scale when the fixed code still can't keep up with legitimate traffic volume.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Say you add a Redis cache to a slow endpoint. What risks does that introduce, and how do you manage them?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Caching introduces <strong>stale data</strong> as the primary risk — the cache serves an old version of the data after the underlying record has been updated. Management strategies: (1) <strong>TTL (time-to-live)</strong> — data expires automatically after N seconds; accept some staleness in exchange for simplicity. (2) <strong>Cache invalidation</strong> — explicitly delete or update the cache entry whenever the underlying data changes. More complex but keeps data fresh. (3) <strong>Cache-aside pattern</strong> — the app checks the cache first; if miss, fetches from DB and populates the cache. Gives the app full control.</p><p>Additional risks: <strong>cache stampede</strong> — when a popular cache entry expires, many requests simultaneously hit the DB before the cache is repopulated. Fix with mutex locks or probabilistic early expiration. <strong>Cache inconsistency in multi-instance deploys</strong> — if cache is in-memory, different instances serve different data. Fix by using a shared external Redis. <strong>Redis becoming a single point of failure</strong> — if Redis goes down and your code doesn't have a cache-miss fallback, the API fails entirely. Always code defensively: treat a cache miss as normal, fall back to the DB.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">11</span>
+        <span class="q-text">How do you design an API that needs to handle long-running operations — for example, a request that triggers a job taking 30+ seconds?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>The <strong>async job pattern:</strong> Client POSTs → API returns <code>202 Accepted</code> + <code>job_id</code> immediately → work dispatched to task queue (Celery + Redis, SQS) → client polls <code>GET /jobs/{job_id}</code> for status. Alternatively: webhooks (API POSTs result to client URL) or WebSockets/SSE for real-time streaming.</p>
+          <p>Job state persisted in Redis or DB with TTL-based cleanup. Error handling: retry logic, timeout handling, dead letter queues.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Immediately proposes 202 + job ID, mentions task queue, discusses polling vs. webhooks vs. SSE trade-offs.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> Suggests increasing the request timeout — anti-pattern that signals no production async experience.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's the difference between polling and webhooks from the consumer's perspective — when is each better?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p><strong>Polling</strong> — the client repeatedly calls <code>GET /jobs/{id}</code> until the status is complete. Simple for the consumer to implement (just a loop with a sleep), works behind firewalls, and doesn't require the consumer to expose any endpoints. Downside: wastes requests during the waiting period, and the polling interval creates latency (if you poll every 5 seconds, you may not know the job is done for up to 5 seconds after completion).</p><p><strong>Webhooks</strong> — the API calls back to the consumer's provided URL when the job is done. More efficient (zero wasted requests), real-time notification, but requires the consumer to run an HTTP server that can receive POST requests — which may not be possible behind firewalls or from CLI tools. Also requires the consumer to handle webhook security (verify the request came from your API, not a spoofed source) and implement retry handling if their webhook endpoint was temporarily down.</p><p>Rule of thumb: use polling for simple integrations, internal tooling, and cases where consumers may not have a public endpoint. Use webhooks for consumer-facing APIs with SLA requirements and where real-time notification has real value (payment confirmations, document processing results).</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What happens to a queued job if your worker crashes halfway through?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>This is where task queue reliability design matters. The key concept is <strong>message acknowledgment</strong>: a message in the queue is not deleted until the worker explicitly acknowledges successful completion. If the worker crashes, the message stays in the queue (or returns to it after a visibility timeout) and gets picked up by another worker instance — providing at-least-once delivery.</p><p>Design implications: jobs must be <strong>idempotent</strong> — running the same job twice must produce the same result as running it once. This is non-trivial if the job writes to a DB or calls an external API. Techniques: store a job completion flag in the DB and check it before processing; use idempotency keys when calling external APIs.</p><p>For permanently failing jobs (exceeded max retries), they go to a <strong>dead letter queue (DLQ)</strong> — a separate queue where failed messages accumulate for manual inspection and potential reprocessing. Monitoring the DLQ size is an important operational metric: a growing DLQ means jobs are systematically failing and needs investigation.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"How do you set up a task queue — what are the moving parts?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>The main components: (1) <strong>Message broker</strong> — stores the queue of pending jobs. Options: Redis (simple, fast, built-in Celery support), RabbitMQ (more robust, supports complex routing), AWS SQS (managed, integrates with AWS ecosystem). (2) <strong>Worker processes</strong> — separate Python processes that run independently of the API server. They pull jobs from the queue and execute them. Run with Celery (<code>celery -A app worker</code>). Can be scaled horizontally by running more worker instances. (3) <strong>Task definitions</strong> — Python functions decorated with <code>@celery.task</code> that define what happens when a job runs. (4) <strong>Result backend</strong> — stores job status and results (Redis or DB) so the API can answer status poll requests. (5) <strong>Monitoring</strong> — Flower (Celery's web UI) or custom metrics to watch queue depth, worker health, and job failure rates.</p><p>The API server and workers are completely separate processes — the API's only job is to enqueue tasks and read their status; it never executes long-running work itself.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">12</span>
+        <span class="q-text">How do you handle database migrations in a live production API without downtime?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>The <strong>expand/contract pattern:</strong> (1) <strong>Expand</strong> — add new columns/tables without removing old ones, deploy code that writes to both. (2) <strong>Migrate</strong> — backfill data in batches (never one <code>UPDATE</code> on millions of rows — locks the table). (3) <strong>Contract</strong> — once all instances use the new column, deploy the follow-up removing the old one.</p>
+          <p><strong>Alembic</strong> (SQLAlchemy) is the standard Python migration tool. Never auto-run on startup in production. Always test rollback scripts. Use <code>--sql</code> mode to review raw SQL before executing.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Knows expand/contract, mentions batching large migrations, uses Alembic.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> "Just run alembic upgrade head on deploy" — how production tables get locked during peak traffic.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Why does a large UPDATE on a table cause downtime, even if the API is still running?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>When PostgreSQL (or most relational databases) executes a large <code>UPDATE</code> or <code>ALTER TABLE ... ADD COLUMN NOT NULL</code> operation, it acquires a lock on the table for the duration. Other transactions that need to write to (or in some cases read from) that table must wait until the lock is released. For a migration that touches millions of rows, this lock can be held for seconds or minutes.</p><p>During that time, API requests that try to read or write the affected table either queue up (causing latency spikes and timeouts) or fail outright. This looks like a full API outage from the user's perspective even though the application server is running fine.</p><p>The safe alternative for large data changes: add the column as nullable first (no lock needed for nullable columns in Postgres), backfill in batches of a few thousand rows at a time using a background script, then add the NOT NULL constraint after all rows are populated (Postgres can often do this without a full table scan if the column has been populated). This spreads the load over minutes or hours rather than causing one concentrated lock event.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What's a rollback script and why do you need one before running a migration?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A rollback script is the reverse of the migration — the SQL or Alembic commands that undo the schema change if something goes wrong after deployment. In Alembic, each migration file has both an <code>upgrade()</code> function (apply the change) and a <code>downgrade()</code> function (reverse it).</p><p>You need a tested rollback because: deployments fail. If you run a migration, discover the new API version has a bug, and need to roll back to the previous code version — the database schema and the code version must be compatible. If you rolled back the code but can't roll back the schema, you're stuck with a schema the old code doesn't understand.</p><p>Critical practice: test the downgrade path in staging before every production migration. Many teams only write the upgrade and discover the downgrade is broken only when they urgently need it at 2am. A rollback that doesn't work is the same as no rollback.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Have you ever had a migration go wrong in production? What happened?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>Anyone who has run migrations in production long enough will have a story. The most common scenarios: a migration that was fast in staging (small table) but locked for 10 minutes in production (millions of rows); a NOT NULL column added without a default value causing all new inserts to fail immediately; a renamed column breaking existing API instances that deployed before the migration ran (deployment ordering issue); or a rollback that had never been tested and turned out to be incorrect.</p><p>What you want to hear is specifics, ownership, and the lesson learned. Generic "I always test migrations now" without a story suggests they haven't operated production databases under real conditions. The best engineers have detailed, sometimes painful stories and clear process changes they made afterward — better staging environments that match production data volumes, required downgrade testing in CI, migration checklists, or deployment sequencing rules.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="q-card" onclick="toggleQ(this)">
+      <div class="q-header">
+        <span class="q-num">13</span>
+        <span class="q-text">Tell me about a time your API caused an incident in production. What happened, what did you do, and what did you change afterward?</span>
+        <span class="q-toggle">+</span>
+      </div>
+      <div class="q-answer">
+        <div class="answer-label">Expected Answer</div>
+        <div class="answer-text">
+          <p>Real production engineers have caused incidents. What to listen for: <strong>Specificity</strong> (clear failure mode), <strong>Ownership</strong> (says "I" not just "the team"), <strong>Structured response</strong> (alert → investigation → mitigation → root cause), <strong>Lasting change</strong> (concrete improvement resulted).</p>
+          <p>Common real incidents: missing index caused DB overload as data grew; migration locked production table; memory leak from misused connection pool; breaking API change without versioning.</p>
+          <div class="flag flag-green"><span class="flag-icon">✓</span> Specific, detailed story with a concrete before/after. Shows genuine growth from the experience.</div>
+          <div class="flag flag-red"><span class="flag-icon">✗</span> "I've never caused an incident" — everyone who's operated production systems long enough has a story.</div>
+        </div>
+        <div class="followups" onclick="event.stopPropagation()">
+          <div class="followups-header">
+            <span class="followups-label">Follow-Up Probes</span>
+            <span class="followups-hint">Click any probe to see the expected answer</span>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"How did you find out there was a problem — was it an alert, a user report, or did you discover it yourself?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>How an engineer learns about incidents reveals the maturity of their observability practice. The ideal answer is "an alert fired" — meaning they had proactive monitoring in place that caught the issue before users reported it. This is the goal of good observability.</p><p>"A user reported it" is common and honest — many real incidents are caught this way, especially early in a product's life or for edge cases that monitoring didn't anticipate. It's not a failure, but it's a signal that monitoring coverage should be improved.</p><p>"I noticed it myself while looking at the logs" is a weak signal — it means there was no automated alerting and the engineer was doing manual surveillance. This doesn't scale and means incidents can go undetected overnight or over weekends.</p><p>What matters is what they did with that information: did they then add alerts so the same type of issue would be caught automatically in the future? That's the professional response. Fixing the incident without improving detection is just repeating the same pattern.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"Walk me through the exact steps you took from 'something is wrong' to 'the incident is resolved.'"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>A mature incident response follows a clear sequence: (1) <strong>Acknowledge</strong> — confirm who is the incident commander, post in the incident Slack channel so others know it's being handled. (2) <strong>Scope</strong> — how many users are affected? Is it all traffic or specific endpoints/regions? Since when? Is it getting worse? (3) <strong>Mitigate first, diagnose second</strong> — if rolling back the last deployment will restore service, do that immediately before spending time on root cause analysis. Restoring service is the priority; understanding why comes after. (4) <strong>Root cause analysis</strong> — once mitigated, dig into logs, metrics, and traces to understand exactly what caused it. (5) <strong>Write the postmortem</strong> — document what happened, the timeline, contributing factors, and action items. Blameless postmortems focus on process failures, not individual mistakes. The action items from the postmortem (adding tests, fixing the underlying bug, adding monitoring) are what prevent recurrence.</p></div></div>
+          </div>
+          <div class="fq-item" onclick="toggleFQ(this)">
+            <div class="fq-trigger"><span class="fq-bullet">›</span><span class="fq-question">"What did you put in place afterward to make sure the same thing couldn't happen again?"</span><span class="fq-toggle">+</span></div>
+            <div class="fq-answer"><div class="fq-answer-label">Expected Answer</div><div class="fq-answer-text"><p>The quality of the "what did you change" answer is the real signal. Weak answer: "I was more careful." This doesn't scale — relying on individual vigilance means the same type of mistake will happen again with a different person or under pressure.</p><p>Strong answers add systemic safeguards: a new automated test that would have caught the specific bug; a CI check that prevents the bad pattern from being deployed; a monitoring alert that would have detected the issue earlier; a deployment runbook that adds a manual check for the class of problem; or a code review rule added to the team's standards. The principle is <strong>making the right thing easy and the wrong thing impossible</strong> (or at least immediately detectable).</p><p>Examples of strong systemic fixes: "I added a load test that runs in CI before every deploy, which would have caught the N+1 query issue at scale." Or "I added a Datadog alert on DB connection pool exhaustion, which is what caused the incident, so now we'd know within 2 minutes instead of waiting for user reports."</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <h3>// OVERALL SIGNAL GUIDE</h3>
+    <div class="signals">
+      <div class="signal-box pass-box">
+        <h4>PASS SIGNALS — True API Engineer</h4>
+        <ul>
+          <li>Describes the full API lifecycle unprompted</li>
+          <li>Knows the infrastructure around an API (Gateway, LB, cache)</li>
+          <li>Built and shipped FastAPI or Flask in production</li>
+          <li>Implemented auth (JWT/API keys) from scratch</li>
+          <li>Has production incident stories with ownership</li>
+          <li>Knows 422 vs 400, 202, 429 and when to use each</li>
+          <li>Understands async correctly — including the pitfalls</li>
+          <li>Has designed versioning, error schemas, deprecation</li>
+          <li>Knows Alembic and the expand/contract migration pattern</li>
+          <li>Treats documentation and monitoring as first-class concerns</li>
+          <li>Knows BOLA / IDOR as an API security concern</li>
+          <li>Understands p95/p99 latency and structured logging</li>
+        </ul>
+      </div>
+      <div class="signal-box fail-box">
+        <h4>FAIL SIGNALS — Data Engineer Repackaged</h4>
+        <ul>
+          <li>Skips design phase — jumps straight to "I coded endpoints"</li>
+          <li>No awareness of API Gateway, load balancer, or cache layer</li>
+          <li>Only built internal scripts, never consumer-facing APIs</li>
+          <li>Auth experience = "passing API keys to call APIs"</li>
+          <li>Never thought about versioning or deprecation</li>
+          <li>Tests = Postman manual runs only</li>
+          <li>"Async is always faster" misconception</li>
+          <li>No production incident experience, or deflects to "the team"</li>
+          <li>Never run DB migrations in production</li>
+          <li>Documentation = a README written after the fact</li>
+          <li>Security = just authentication, nothing about BOLA or OWASP</li>
+          <li>Monitoring = "I look at the logs when something goes wrong"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleQ(card) {
+  card.classList.toggle('open');
+}
+
+function toggleFQ(item) {
+  item.classList.toggle('fq-open');
+}
+</script>
+</body>
+</html>
