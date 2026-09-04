@@ -1,0 +1,41 @@
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant B as Browser
+    participant N as NGINX
+    participant P as OAuth2 Proxy (App 3)
+    participant E as Microsoft Entra ID
+    participant A as App 3 Container
+    rect rgb(232,241,255)
+    U->>B: Open App 3 URL
+    B->>N: HTTPS GET app3.ctcore...
+    N->>P: Route request to App 3 OAuth2 Proxy
+    P->>P: Check session cookie
+    alt No valid session
+        P-->>B: 302 redirect to Entra authorize endpoint
+        B->>E: Authorization request: client_id, redirect_uri, scopes, state
+        E-->>U: Authenticate / SSO / MFA if required
+        U-->>E: Complete authentication
+        E-->>B: 302 redirect to App 3 callback with auth code
+        B->>N: GET /oauth2/callback?code=...
+        N->>P: Route callback to App 3 proxy
+        P->>E: Exchange authorization code for tokens
+        E-->>P: Return tokens / claims
+        P-->>B: Set-Cookie secure session + redirect to original URL
+        B->>N: Repeat original request with session cookie
+        N->>P: Route request
+    else Valid session exists
+        P->>P: Validate session cookie
+    end
+    end
+    rect rgb(232,247,239)
+    P->>A: Forward authenticated request upstream
+    A->>A: Enforce app-specific authorization/business rules
+    A-->>P: Application response
+    P-->>N: Return response
+    N-->>B: HTTPS response
+    B-->>U: Render App 3
+    end
+    Note over P,E: OAuth2 Proxy orchestrates the OIDC/OAuth flow; Entra authenticates.
+    Note over P: Session cookie is created by the proxy and stored by the browser.
+    Note over A: Authentication does not replace application authorization.
