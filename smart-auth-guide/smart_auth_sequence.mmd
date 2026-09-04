@@ -1,0 +1,41 @@
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant B as Browser
+    participant R as SMART React SPA
+    participant M as MSAL React / Browser
+    participant E as Microsoft Entra ID
+    participant G as NGINX / API Gateway
+    participant F as SMART FastAPI
+    rect rgb(232,241,255)
+    U->>B: Open SMART URL
+    B->>R: Load React application
+    R->>M: Check authenticated account / cached tokens
+    alt No authenticated account or usable token
+        R->>M: Start sign-in flow
+        M->>E: Authorization request: client_id, redirect_uri, scopes, PKCE
+        E-->>U: Authenticate / SSO / MFA if required
+        U-->>E: Complete authentication
+        E-->>B: Redirect to registered redirect URI with authorization code
+        B-->>M: Deliver authorization response
+        M->>E: Exchange auth code + PKCE verifier for tokens
+        E-->>M: Return ID token + access token
+        M->>M: Cache account and tokens
+    else Authenticated account and valid token exist
+        M->>M: Use cached account and token
+    end
+    M-->>R: Return SMART API access token
+    end
+    rect rgb(232,247,239)
+    U->>R: User action (e.g. Run Scenario)
+    R->>G: API request with Authorization: Bearer <access_token>
+    G->>F: Forward API request
+    F->>F: Validate token / claims and authorize
+    F-->>G: API response
+    G-->>R: API response
+    R-->>B: Render result
+    B-->>U: Display SMART response
+    end
+    Note over R,M: React itself does not authenticate. MSAL orchestrates the OIDC/OAuth flow.
+    Note over E: Entra ID authenticates the user and issues tokens.
+    Note over G,F: Gateway may validate token; FastAPI still enforces app authorization.
