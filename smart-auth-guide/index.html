@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SMART & CT-Core Authentication Study Guide</title><style>body{font:16px system-ui;max-width:1050px;margin:auto;padding:24px;line-height:1.55}h1,h2{color:#17365d}.card{border:1px solid #ddd;border-radius:12px;padding:18px;margin:16px 0}pre{white-space:pre-wrap;background:#f6f7f9;padding:16px;border-radius:10px;overflow:auto}details{margin:12px 0}code{background:#f2f2f2;padding:2px 4px}textarea{width:100%;min-height:160px}button{padding:8px 12px}</style></head><body>
+<h1>SMART & CT-Core Authentication — Study Guide</h1><p><b>Purpose:</b> clarify Entra ID, MSAL, OAuth2 Proxy, redirects, cookies/tokens, shared registrations, and runtime responsibility.</p>
+<div class="card"><h2>1. Two architectures</h2><p><b>SMART:</b> React SPA + MSAL → Microsoft Entra ID. The SPA obtains tokens and calls FastAPI. A BFF is optional, not required.</p><p><b>CT-Core shared platform:</b> Nginx → per-app OAuth2 Proxy → per-app container. A clean Podman deployment is one proxy container paired with each application container.</p></div>
+<div class="card"><h2>2. SMART sequence — React + MSAL</h2><pre>
+1 User → Browser: open SMART URL
+2 Browser → React SPA: load app
+3 React/MSAL: no authenticated account/token
+4 MSAL → Browser → Entra: authorize request (client_id, redirect_uri, PKCE, scopes)
+5 Entra → User: authenticate / SSO / MFA as policy requires
+6 Entra → Browser: authorization response to registered redirect URI
+7 MSAL: completes code + PKCE flow and obtains tokens
+8 React → SMART FastAPI: API request + Authorization: Bearer &lt;access_token&gt;
+9 API/gateway: validate token as designed; app performs authorization
+10 FastAPI → React → User: response rendered
+
+Key: with a pure SPA, the app normally relies on OAuth tokens rather than an app-created backend session cookie.
+The MSAL configuration chooses the redirect URI; it can be the app root or a dedicated route.</pre></div>
+<div class="card"><h2>3. CT-Core sequence — OAuth2 Proxy</h2><pre>
+1 User → app3.ctcore...: request App 3
+2 Nginx → App 3 OAuth2 Proxy: route request
+3 Proxy: no valid session cookie
+4 Proxy → Browser → Entra: authorize request using shared/per-app client_id + App 3 redirect_uri
+5 Entra: verify client_id and exact redirect URI is registered
+6 Entra → User: authenticate / SSO / MFA
+7 Entra → Browser → App 3 callback: authorization response
+8 App 3 OAuth2 Proxy: complete OAuth/OIDC flow
+9 Proxy → Browser: Set-Cookie (secure session cookie)
+10 Browser → Proxy: subsequent request + cookie
+11 Proxy: validate session; optionally enforce configured identity constraints
+12 Proxy → App 3 container: authenticated request
+13 App 3: enforce application authorization/business rules
+14 App 3 → Proxy → Nginx → Browser: response</pre></div>
+<div class="card"><h2>4. One shared Entra registration: technically feasible</h2><p>One CT-Core registration can contain <b>multiple redirect URIs</b>. Multiple OAuth2 Proxy instances can use the same client ID while each supplies its own registered callback URI. It can also define multiple app roles. Tokens may contain roles assigned to the user/service principal; each application must enforce the roles relevant to it.</p><p><b>But:</b> this creates one shared identity/security and lifecycle boundary. A bad redirect/configuration or broad permission change can affect multiple apps. For critical or independently owned apps, separate registrations are cleaner. Keeping SMART separate is therefore sensible.</p></div>
+<div class="card"><h2>5. Redirect URI / callback URL</h2><p><b>Redirect URI</b> is the OAuth/OIDC term. <b>Callback URL</b> is common informal language for essentially the same endpoint in this context. OAuth2 Proxy commonly uses a dedicated callback path such as <code>/oauth2/callback</code>. MSAL React has no universal callback path: the configured redirect URI controls it.</p><p>URI is the broader identifier concept; URL is a type of URI. In Entra discussions, say <b>redirect URI</b>.</p></div>
+<div class="card"><h2>6. Cookies vs tokens</h2><p>Cookies are stored by the browser. A server/proxy can <i>create</i> the session state and return a <code>Set-Cookie</code> header; the browser stores the cookie and sends it on later requests. OAuth2 Proxy typically works this way. A pure MSAL SPA instead obtains OAuth/OIDC tokens in the browser. A <b>BFF</b> moves token handling to the backend and gives the browser a session cookie.</p></div>
+<div class="card"><h2>7. Podman configuration pattern</h2><pre>Nginx
+ ├─ app2 hostname → oauth2-proxy-app2 container → app2 container
+ ├─ app3 hostname → oauth2-proxy-app3 container → app3 container
+ └─ app4 hostname → oauth2-proxy-app4 container → app4 container
+
+Keep the OAuth2 Proxy image generic.
+Inject per-app configuration at container start using environment variables,
+mounted config files, and an approved secret-management mechanism.
+Typical settings: client ID, redirect URI, issuer, upstream URL, cookie settings,
+allowed groups/claims, and secret references.</pre></div>
+<div class="card"><h2>8. Entra vs SailPoint vs CyberArk</h2><p><b>Entra ID:</b> identity provider/authentication and token issuance. <b>SailPoint:</b> identity governance—access request, approval, provisioning/deprovisioning and lifecycle governance; normally not in the live HTTP login path. <b>CyberArk:</b> privileged credential/secrets management. These solve different problems.</p></div>
+<div class="card"><h2>9. Critical distinction: authentication vs authorization</h2><p>OAuth2 Proxy can establish that a user has authenticated, but that does not automatically make every authenticated user authorized for every hosted app. Groups/app roles/claims and enforcement must be designed deliberately. Treat “who are you?” and “are you allowed into/do this in App 3?” as separate controls.</p></div>
+<div class="card"><h2>10. Questions for M365 Engineering / developer</h2><ol><li>For SMART, what exact MSAL <code>redirectUri</code> will be configured?</li><li>For CT-Core, what exact OAuth2 Proxy callback path and hostname convention will each app use?</li><li>Will CT-Core intentionally use one shared Entra client ID, or separate registrations as apps mature?</li><li>If shared, how are app roles/groups mapped and enforced per app?</li><li>Where are client credentials/cookie secrets stored and injected?</li><li>Are cookies Secure, HttpOnly and appropriately SameSite-scoped?</li><li>Who owns changes to shared redirect URIs, roles and permissions?</li></ol></div>
+<div class="card"><h2>Editable personal notes</h2><p>This box persists in this browser only.</p><textarea id="n" placeholder="Add your notes..."></textarea><br><button onclick="localStorage.setItem('smart-auth-notes',n.value)">Save notes</button></div>
+<script>const n=document.getElementById('n');n.value=localStorage.getItem('smart-auth-notes')||'';</script></body></html>
