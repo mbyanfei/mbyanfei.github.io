@@ -20,7 +20,7 @@ button:hover{background:#f1f5f9}.edit-on{outline:2px dashed #6b8afd;outline-offs
 .steps{margin-top:14px}.step{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;margin:8px 0;padding:10px 12px;border-left:5px solid #8aa4c8;background:#fbfdff;border-radius:8px}.num{font-weight:800;color:#183153}
 .legend{font-size:14px;color:var(--muted)} .callout{padding:12px 14px;border-radius:10px;background:#fff7e8;border-left:5px solid #f0b35a}
 @media(max-width:800px){.notegrid{grid-template-columns:1fr}.seq{grid-template-columns:repeat(5,150px)}}
-</style>
+.mermaid-wrap{overflow-x:auto;background:#fff;border:1px solid #d9e2ec;border-radius:12px;padding:14px;margin:14px 0}.diagram-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.diagram-links a{display:inline-block;padding:8px 12px;border:1px solid #b8c4d1;border-radius:8px;text-decoration:none;color:#183153;background:#f8fafc}.diagram-links a:hover{background:#eef4fb}\n</style>
 </head>
 <body>
 <h1>SMART & CT-Core Authentication — Study Guide</h1>
@@ -40,49 +40,106 @@ button:hover{background:#f1f5f9}.edit-on{outline:2px dashed #6b8afd;outline-offs
 </div>
 
 <div class="card">
-<h2>2. SMART — color sequence diagram (React + MSAL)</h2>
-<div class="seq">
-<div class="actor user">👤 User</div><div class="actor browser">🌐 Browser / React</div><div class="actor entra">🔐 Entra ID</div><div class="actor proxy">🧩 MSAL</div><div class="actor app">⚙️ FastAPI</div>
+<h2>2. SMART — swim-lane sequence diagram (React + MSAL)</h2>
+<p>This is the detailed runtime flow from opening SMART through Entra authentication, token acquisition, API invocation, and response rendering.</p>
+<div class="mermaid-wrap"><pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant B as Browser
+    participant R as SMART React SPA
+    participant M as MSAL React / Browser
+    participant E as Microsoft Entra ID
+    participant G as NGINX / API Gateway
+    participant F as SMART FastAPI
+    rect rgb(232,241,255)
+    U->>B: Open SMART URL
+    B->>R: Load React application
+    R->>M: Check authenticated account / cached tokens
+    alt No authenticated account or usable token
+        R->>M: Start sign-in flow
+        M->>E: Authorization request: client_id, redirect_uri, scopes, PKCE
+        E-->>U: Authenticate / SSO / MFA if required
+        U-->>E: Complete authentication
+        E-->>B: Redirect to registered redirect URI with authorization code
+        B-->>M: Deliver authorization response
+        M->>E: Exchange auth code + PKCE verifier for tokens
+        E-->>M: Return ID token + access token
+        M->>M: Cache account and tokens
+    else Authenticated account and valid token exist
+        M->>M: Use cached account and token
+    end
+    M-->>R: Return SMART API access token
+    end
+    rect rgb(232,247,239)
+    U->>R: User action (e.g. Run Scenario)
+    R->>G: API request with Authorization: Bearer <access_token>
+    G->>F: Forward API request
+    F->>F: Validate token / claims and authorize
+    F-->>G: API response
+    G-->>R: API response
+    R-->>B: Render result
+    B-->>U: Display SMART response
+    end
+    Note over R,M: React itself does not authenticate. MSAL orchestrates the OIDC/OAuth flow.
+    Note over E: Entra ID authenticates the user and issues tokens.
+    Note over G,F: Gateway may validate token; FastAPI still enforces app authorization.
+</pre></div>
+<div class="diagram-links">
+<a href="./smart_auth_sequence.mmd" download>Download Mermaid source</a>
 </div>
-<div class="steps">
-<div class="step"><div class="num">1</div><div><b>User → Browser:</b> opens the SMART URL.</div></div>
-<div class="step"><div class="num">2</div><div><b>Browser:</b> loads the React SPA.</div></div>
-<div class="step"><div class="num">3</div><div><b>React/MSAL:</b> checks whether an authenticated account/token is already available.</div></div>
-<div class="step"><div class="num">4</div><div><b>MSAL → Entra:</b> starts Authorization Code + PKCE with <code>client_id</code>, <code>redirect_uri</code>, scopes, state, and PKCE challenge.</div></div>
-<div class="step"><div class="num">5</div><div><b>Entra → User:</b> sign-in / SSO / MFA / Conditional Access as required.</div></div>
-<div class="step"><div class="num">6</div><div><b>Entra → Browser:</b> redirects the browser to the exact registered SMART redirect URI with the authorization response.</div></div>
-<div class="step"><div class="num">7</div><div><b>MSAL:</b> completes the code + PKCE exchange and obtains tokens.</div></div>
-<div class="step"><div class="num">8</div><div><b>React → FastAPI:</b> calls SMART API with <code>Authorization: Bearer &lt;access_token&gt;</code>.</div></div>
-<div class="step"><div class="num">9</div><div><b>API/Gateway:</b> validates token as designed; application performs authorization checks.</div></div>
-<div class="step"><div class="num">10</div><div><b>FastAPI → React → User:</b> response is returned and rendered.</div></div>
+<div class="callout"><b>Key point:</b> React itself does not authenticate the user. MSAL orchestrates the browser-based OAuth/OIDC flow; Microsoft Entra ID performs authentication and issues tokens.</div>
+</div>\n\n<div class="card">
+<h2>3. CT-Core — swim-lane sequence diagram (OAuth2 Proxy)</h2>
+<p>This shows one application on the shared CT-Core platform: Browser → Nginx → that app's OAuth2 Proxy → Entra ID → application container.</p>
+<div class="mermaid-wrap"><pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant B as Browser
+    participant N as NGINX
+    participant P as OAuth2 Proxy (App 3)
+    participant E as Microsoft Entra ID
+    participant A as App 3 Container
+    rect rgb(232,241,255)
+    U->>B: Open App 3 URL
+    B->>N: HTTPS GET app3.ctcore...
+    N->>P: Route request to App 3 OAuth2 Proxy
+    P->>P: Check session cookie
+    alt No valid session
+        P-->>B: 302 redirect to Entra authorize endpoint
+        B->>E: Authorization request: client_id, redirect_uri, scopes, state
+        E-->>U: Authenticate / SSO / MFA if required
+        U-->>E: Complete authentication
+        E-->>B: 302 redirect to App 3 callback with auth code
+        B->>N: GET /oauth2/callback?code=...
+        N->>P: Route callback to App 3 proxy
+        P->>E: Exchange authorization code for tokens
+        E-->>P: Return tokens / claims
+        P-->>B: Set-Cookie secure session + redirect to original URL
+        B->>N: Repeat original request with session cookie
+        N->>P: Route request
+    else Valid session exists
+        P->>P: Validate session cookie
+    end
+    end
+    rect rgb(232,247,239)
+    P->>A: Forward authenticated request upstream
+    A->>A: Enforce app-specific authorization/business rules
+    A-->>P: Application response
+    P-->>N: Return response
+    N-->>B: HTTPS response
+    B-->>U: Render App 3
+    end
+    Note over P,E: OAuth2 Proxy orchestrates the OIDC/OAuth flow; Entra authenticates.
+    Note over P: Session cookie is created by the proxy and stored by the browser.
+    Note over A: Authentication does not replace application authorization.
+</pre></div>
+<div class="diagram-links">
+<a href="./ctcore_oauth2proxy_sequence.mmd" download>Download Mermaid source</a>
 </div>
-<div class="callout"><b>Key point:</b> React itself does not authenticate the user. MSAL in the React SPA orchestrates the browser-based Entra flow. Entra performs authentication.</div>
-</div>
-
-<div class="card">
-<h2>3. CT-Core — color sequence diagram (OAuth2 Proxy)</h2>
-<div class="seq">
-<div class="actor user">👤 User</div><div class="actor browser">🌐 Browser / Nginx</div><div class="actor entra">🔐 Entra ID</div><div class="actor proxy">🛡️ OAuth2 Proxy</div><div class="actor app">📦 App Container</div>
-</div>
-<div class="steps">
-<div class="step"><div class="num">1</div><div><b>User → App 3 URL:</b> browser requests <code>app3.ctcore...</code>.</div></div>
-<div class="step"><div class="num">2</div><div><b>Nginx → App 3 proxy:</b> Nginx routes by hostname to the OAuth2 Proxy instance paired with App 3.</div></div>
-<div class="step"><div class="num">3</div><div><b>OAuth2 Proxy:</b> checks for a valid session cookie. None exists.</div></div>
-<div class="step"><div class="num">4</div><div><b>Proxy → Entra:</b> redirects the browser to Entra using the configured client ID and App 3 redirect URI.</div></div>
-<div class="step"><div class="num">5</div><div><b>Entra:</b> verifies the client ID and confirms that the exact redirect URI is registered.</div></div>
-<div class="step"><div class="num">6</div><div><b>Entra → User:</b> performs sign-in / SSO / MFA / policy checks.</div></div>
-<div class="step"><div class="num">7</div><div><b>Entra → App 3 callback:</b> browser returns to the registered callback, commonly something such as <code>/oauth2/callback</code>.</div></div>
-<div class="step"><div class="num">8</div><div><b>OAuth2 Proxy:</b> completes the OIDC/OAuth flow and creates its application session.</div></div>
-<div class="step"><div class="num">9</div><div><b>Proxy → Browser:</b> returns <code>Set-Cookie</code>; browser stores the secure session cookie.</div></div>
-<div class="step"><div class="num">10</div><div><b>Browser → Proxy:</b> later requests automatically include that cookie.</div></div>
-<div class="step"><div class="num">11</div><div><b>Proxy:</b> validates the session and optionally enforces configured identity constraints.</div></div>
-<div class="step"><div class="num">12</div><div><b>Proxy → App 3 container:</b> forwards the authenticated request upstream.</div></div>
-<div class="step"><div class="num">13</div><div><b>App 3:</b> enforces its own authorization/business rules.</div></div>
-<div class="step"><div class="num">14</div><div><b>App → Proxy → Nginx → Browser:</b> response returns to the user.</div></div>
-</div>
-</div>
-
-<div class="card">
+<div class="callout"><b>Key point:</b> OAuth2 Proxy orchestrates the sign-in flow and creates the application session cookie. Entra ID authenticates the user. The application still owns application-specific authorization.</div>
+</div>\n\n<div class="card">
 <h2>4. Shared Entra registration — technically feasible</h2>
 <p>One CT-Core registration can contain <b>multiple redirect URIs</b>. Multiple OAuth2 Proxy instances can use the same client ID while each supplies its own registered callback URI. The registration can also define multiple app roles.</p>
 <p><b>Trade-off:</b> this creates one shared identity and lifecycle boundary. That reduces registration friction, but increases coupling and blast radius. Keeping SMART on its own registration is the cleaner boundary for a more critical application.</p>
@@ -166,4 +223,4 @@ function toggleEdit(){editing=!editing;guide.contentEditable=editing?'true':'fal
 function saveGuide(){localStorage.setItem('smart-auth-guide-inline',guide.innerHTML);alert('Inline edits saved in this browser.')}
 function resetGuide(){if(confirm('Reset your local inline edits to the published version?')){localStorage.removeItem('smart-auth-guide-inline');location.reload();}}
 </script>
-</body></html>
+<script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"; mermaid.initialize({startOnLoad:true,theme:"base",sequence:{useMaxWidth:false,wrap:true},themeVariables:{primaryColor:"#e8f1ff",primaryTextColor:"#183153",lineColor:"#64748b",actorBkg:"#f8fafc",actorBorder:"#64748b",actorTextColor:"#183153",signalColor:"#334155",signalTextColor:"#183153",noteBkgColor:"#fff7e8",noteBorderColor:"#f0b35a"}});</script>\n</body></html>
