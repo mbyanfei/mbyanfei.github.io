@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HTTP Status Codes Cheat Sheet</title>
+  <meta name="description" content="A compact cheat sheet for common HTTP status codes, including API, nginx, and gateway debugging tips." />
+  <style>
+    :root{--bg:#0b1020;--card:#121a2b;--muted:#91a0b8;--text:#f4f7fb;--line:#22304a;--accent:#7dd3fc;--ok:#86efac;--warn:#fcd34d;--bad:#fca5a5;--info:#c4b5fd}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#08101d,#0b1020 35%,#0c1322);color:var(--text);line-height:1.55}
+    .wrap{max-width:980px;margin:0 auto;padding:28px 18px 60px}.hero{padding:34px 0 16px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}.hero h1{font-size:clamp(2rem,6vw,3.5rem);line-height:1.05;margin:.35rem 0 .7rem}.hero p{color:var(--muted);font-size:1.08rem;max-width:720px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.pill{border:1px solid var(--line);background:#0f1728;border-radius:14px;padding:14px}.pill b{display:block;font-size:1.1rem}.pill span{color:var(--muted);font-size:.88rem}.card{background:rgba(18,26,43,.88);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:18px;box-shadow:0 16px 40px rgba(0,0,0,.18)}table{width:100%;border-collapse:collapse}th,td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:#0f1728}tr:last-child td{border-bottom:0}.code{font-weight:800;font-variant-numeric:tabular-nums}.s2{color:var(--ok)}.s3{color:var(--info)}.s4{color:var(--warn)}.s5{color:var(--bad)}h2{margin:32px 0 12px;font-size:1.35rem}.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{padding:18px;border:1px solid var(--line);border-radius:16px;background:#0f1728}.box h3{margin:0 0 10px}.box p{margin:.35rem 0;color:#d8e0ec}.tip{margin-top:22px;padding:20px;border-radius:16px;border:1px solid #29405f;background:#0d1b2e;font-size:1.05rem}.tip strong{color:var(--accent)}footer{margin-top:30px;color:var(--muted);font-size:.85rem}@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.compare{grid-template-columns:1fr}th:nth-child(2),td:nth-child(2){display:none}th,td{padding:11px 10px}.wrap{padding-left:12px;padding-right:12px}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Developer Cheat Sheet</div>
+    <h1>HTTP Status Codes</h1>
+    <p>The common codes worth memorizing, plus practical debugging guidance for APIs, nginx, reverse proxies, and gateways.</p>
+  </section>
+
+  <section class="grid" aria-label="HTTP status families">
+    <div class="pill"><b class="s2">2xx</b><span>Success</span></div>
+    <div class="pill"><b class="s3">3xx</b><span>Redirect / Cache</span></div>
+    <div class="pill"><b class="s4">4xx</b><span>Client / Request</span></div>
+    <div class="pill"><b class="s5">5xx</b><span>Server / Upstream</span></div>
+  </section>
+
+  <section class="card">
+    <table>
+      <thead><tr><th>Code</th><th>Meaning</th><th>Mental shortcut</th></tr></thead>
+      <tbody>
+        <tr><td class="code s2">200</td><td>OK</td><td>Request succeeded</td></tr>
+        <tr><td class="code s2">201</td><td>Created</td><td>New resource created</td></tr>
+        <tr><td class="code s2">202</td><td>Accepted</td><td>Accepted; processing may continue</td></tr>
+        <tr><td class="code s2">204</td><td>No Content</td><td>Success, nothing to return</td></tr>
+        <tr><td class="code s3">301</td><td>Moved Permanently</td><td>Permanent redirect</td></tr>
+        <tr><td class="code s3">302</td><td>Found</td><td>Temporary redirect</td></tr>
+        <tr><td class="code s3">304</td><td>Not Modified</td><td>Use cached copy</td></tr>
+        <tr><td class="code s4">400</td><td>Bad Request</td><td>Request itself is wrong</td></tr>
+        <tr><td class="code s4">401</td><td>Unauthorized</td><td>Not authenticated; token/credentials missing or invalid</td></tr>
+        <tr><td class="code s4">403</td><td>Forbidden</td><td>Authenticated, but not allowed</td></tr>
+        <tr><td class="code s4">404</td><td>Not Found</td><td>Resource, route, or mapping not found</td></tr>
+        <tr><td class="code s4">405</td><td>Method Not Allowed</td><td>Wrong HTTP method for endpoint</td></tr>
+        <tr><td class="code s4">409</td><td>Conflict</td><td>State conflict or duplicate</td></tr>
+        <tr><td class="code s4">413</td><td>Payload Too Large</td><td>Request body/file exceeds limit</td></tr>
+        <tr><td class="code s4">415</td><td>Unsupported Media Type</td><td>Wrong Content-Type</td></tr>
+        <tr><td class="code s4">422</td><td>Unprocessable Content</td><td>Syntax okay, validation/business input bad</td></tr>
+        <tr><td class="code s4">429</td><td>Too Many Requests</td><td>Rate limited</td></tr>
+        <tr><td class="code s5">500</td><td>Internal Server Error</td><td>Application/server failed</td></tr>
+        <tr><td class="code s5">502</td><td>Bad Gateway</td><td>Proxy/gateway got a bad upstream response</td></tr>
+        <tr><td class="code s5">503</td><td>Service Unavailable</td><td>Service temporarily unavailable</td></tr>
+        <tr><td class="code s5">504</td><td>Gateway Timeout</td><td>Proxy/gateway waited too long upstream</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <h2>Pairs that matter in real debugging</h2>
+  <section class="compare">
+    <div class="box"><h3><span class="s4">401</span> vs <span class="s4">403</span></h3><p><strong>401:</strong> “Who are you?” Authentication/token problem.</p><p><strong>403:</strong> “I know who you are, but no.” Authorization/policy problem.</p></div>
+    <div class="box"><h3><span class="s5">502</span> vs <span class="s5">504</span></h3><p><strong>502:</strong> Proxy/gateway could not get a valid upstream response.</p><p><strong>504:</strong> Proxy/gateway waited for upstream and timed out.</p></div>
+  </section>
+
+  <section class="tip"><strong>Debugging rule:</strong> 4xx → inspect what the client sent. 5xx → inspect the application, proxy, gateway, and upstream chain.</section>
+
+  <h2>One subtle one: 404</h2>
+  <section class="box"><p>For APIs, <strong>404 does not always mean “the server is down.”</strong> It can mean the wrong route, base path, gateway mapping, nginx <code>location</code> rule, API version, or hostname was used.</p></section>
+
+  <footer>HTTP Status Codes Cheat Sheet · published for quick technical reference</footer>
+</main>
+</body>
+</html>
