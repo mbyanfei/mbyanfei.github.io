@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home NAS → Personal Cloud & AI Lab</title>
+  <meta name="description" content="A practical architecture for turning a home NAS into a secure personal cloud, family photo platform, dynamic app host, and private AI lab." />
+  <style>
+    :root{
+      --bg:#0b1020; --panel:#121a2f; --panel2:#17223d; --text:#eef3ff; --muted:#aab7d4;
+      --accent:#67b7ff; --accent2:#7ee0c6; --warn:#ffd166; --danger:#ff7b7b; --line:#263657;
+      --max:1100px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#0a0f1c 0%,#0d1324 100%);color:var(--text);line-height:1.6}
+    a{color:#8fcbff;text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+    header{padding:70px 0 34px;border-bottom:1px solid var(--line)}
+    .eyebrow{display:inline-block;padding:6px 10px;border:1px solid #31537e;border-radius:999px;color:#9dd1ff;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;background:#10203a}
+    h1{font-size:clamp(2.2rem,5vw,4.3rem);line-height:1.03;margin:16px 0 18px;max-width:900px;letter-spacing:-.035em}
+    .lead{font-size:1.2rem;color:var(--muted);max-width:850px;margin:0 0 24px}
+    .verdict{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+    .verdict>div,.card{background:rgba(18,26,47,.9);border:1px solid var(--line);border-radius:16px;padding:20px}
+    .verdict strong{display:block;margin-bottom:6px}
+    main{padding:34px 0 70px}
+    section{margin:0 0 44px}
+    h2{font-size:1.75rem;margin:0 0 14px;letter-spacing:-.02em}
+    h3{font-size:1.15rem;margin:0 0 8px}
+    p{margin:8px 0 14px;color:#d7e0f3}
+    .muted{color:var(--muted)}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .tag{display:inline-block;font-size:.77rem;padding:3px 8px;border-radius:999px;border:1px solid #375076;color:#b9d8ff;margin-right:6px;margin-bottom:6px}
+    .good{border-left:4px solid var(--accent2)} .warn{border-left:4px solid var(--warn)} .bad{border-left:4px solid var(--danger)}
+    .arch{background:#0b1427;border:1px solid var(--line);border-radius:18px;padding:22px;overflow:auto}
+    .flow{display:flex;align-items:stretch;justify-content:center;gap:10px;min-width:780px}
+    .node{flex:1;min-width:130px;background:var(--panel2);border:1px solid #33496f;border-radius:14px;padding:14px;text-align:center}
+    .node b{display:block;margin-bottom:4px}
+    .arrow{align-self:center;color:#78bfff;font-size:1.5rem}
+    .stack{display:grid;gap:10px;min-width:780px}
+    .lane{display:grid;grid-template-columns:180px 1fr;gap:12px;align-items:stretch}
+    .lane-label{background:#10203a;border:1px solid #31537e;border-radius:12px;padding:12px;font-weight:700}
+    .lane-body{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+    ul{padding-left:1.25rem;margin:8px 0 14px} li{margin:5px 0;color:#d8e2f5}
+    code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    pre{background:#08101f;border:1px solid var(--line);border-radius:14px;padding:16px;overflow:auto;color:#cfe1ff}
+    .checklist{columns:2;column-gap:28px;padding-left:1.3rem}
+    .checklist li{break-inside:avoid;margin-bottom:7px}
+    .priority{display:grid;grid-template-columns:70px 1fr;gap:14px;align-items:start;margin:12px 0}
+    .num{width:46px;height:46px;border-radius:12px;background:#102b43;border:1px solid #31537e;display:flex;align-items:center;justify-content:center;font-weight:800;color:#a9d6ff}
+    .small{font-size:.9rem}
+    footer{border-top:1px solid var(--line);padding:28px 0 50px;color:var(--muted);font-size:.9rem}
+    @media (max-width:780px){
+      .verdict,.grid2,.grid3{grid-template-columns:1fr}.checklist{columns:1}header{padding-top:46px}.lane{grid-template-columns:1fr}.flow{min-width:720px}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="eyebrow">Architecture Guide · Home Lab</span>
+    <h1>Turn an Old NAS into a Secure Personal Cloud & AI Lab</h1>
+    <p class="lead">Use the NAS for what it is uniquely good at—private storage, family photos, dynamic applications, and personal AI—while leaving public static publishing on GitHub Pages or another managed edge platform.</p>
+    <div class="verdict">
+      <div><strong>Public static sites</strong><span class="muted">Keep on GitHub Pages / Cloudflare Pages.</span></div>
+      <div><strong>Private files & photos</strong><span class="muted">NAS + Immich + encrypted remote access.</span></div>
+      <div><strong>Apps & AI experiments</strong><span class="muted">Containers on NAS, or NAS + separate compute node.</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h2>Executive recommendation</h2>
+    <div class="card good">
+      <p><strong>Do not turn the NAS into a generic Internet-facing server.</strong> Treat it as a private data platform and selectively publish only specific applications. This sharply reduces the attack surface while still giving you permanent URLs, remote family photo access, APIs, databases, and AI capabilities.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Recommended target architecture</h2>
+    <div class="arch">
+      <div class="flow">
+        <div class="node"><b>Internet</b><span class="muted small">Family / friends / public</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>Your Domain</b><span class="muted small">photos.example.com<br>lab.example.com</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>Cloudflare</b><span class="muted small">DNS + edge + tunnel</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>Cloudflare Tunnel</b><span class="muted small">Outbound connection<br>No router port-forward</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>NAS Apps</b><span class="muted small">Immich · APIs · lab apps</span></div>
+      </div>
+      <div style="height:18px"></div>
+      <div class="stack">
+        <div class="lane"><div class="lane-label">Private admin path</div><div class="lane-body">Laptop / phone → <strong>Tailscale</strong> → NAS admin, SSH, SMB, databases, dashboards</div></div>
+        <div class="lane"><div class="lane-label">Public static path</div><div class="lane-body">GitHub repository → <strong>GitHub Pages</strong> → public documentation, articles, static portfolios</div></div>
+        <div class="lane"><div class="lane-label">NAS data layer</div><div class="lane-body">Photos · documents · backups · snapshots · container volumes</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What belongs where</h2>
+    <div class="grid3">
+      <div class="card good"><h3>Keep on managed hosting</h3><p class="muted">Public static websites, documentation, lightweight portfolios, articles.</p><span class="tag">GitHub Pages</span><span class="tag">Cloudflare Pages</span></div>
+      <div class="card good"><h3>Move to the NAS</h3><p class="muted">Photos, videos, documents, backups, private family sharing, dynamic personal apps.</p><span class="tag">Immich</span><span class="tag">Docker</span><span class="tag">Tailscale</span></div>
+      <div class="card warn"><h3>Use NAS selectively</h3><p class="muted">Postgres, Redis, FastAPI, local AI, RAG, vector stores. Run them per application, not as one giant shared platform.</p><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">AI</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Photo platform: start with Immich</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>Why it fits</h3>
+        <ul>
+          <li>Google Photos-like timeline and mobile experience.</li>
+          <li>Family albums and sharing links.</li>
+          <li>Face recognition and semantic image search.</li>
+          <li>Can index an existing library instead of forcing a full reorganization.</li>
+        </ul>
+      </div>
+      <div class="card warn">
+        <h3>Important safety choice</h3>
+        <p>Initially mount your existing photo archive into the application <strong>read-only</strong>. Let Immich create its own database, thumbnails, ML indexes, and application-managed data separately.</p>
+      </div>
+    </div>
+    <pre>/photos/originals      # existing master archive
+/photos/immich         # Immich-managed data
+/apps/immich           # compose/config
+/backups               # independent backups
+
+# Conceptual mount
+/photos/originals:/photos:ro</pre>
+  </section>
+
+  <section>
+    <h2>Do you need a static IP?</h2>
+    <div class="card good">
+      <p><strong>No—not with the recommended architecture.</strong> Cloudflare Tunnel creates an outbound connection from your home network to Cloudflare. Your ISP can change your residential IP and your public hostname can remain stable.</p>
+      <pre>photos.example.com
+        ↓
+Cloudflare DNS / Edge
+        ↓
+Cloudflare Tunnel
+        ↓
+NAS → Immich</pre>
+    </div>
+    <p class="muted small">Traditional dynamic DNS and port forwarding are still possible, but they create more operational and security work. They are not the default recommendation here.</p>
+  </section>
+
+  <section>
+    <h2>Nginx, PostgreSQL and Redis</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>Nginx</h3>
+        <p>You may not need it initially. Cloudflare Tunnel can route hostnames directly to local application ports. If you later want a local reverse proxy, Nginx is fine; Caddy is attractive for a small home environment because HTTPS configuration is simpler.</p>
+      </div>
+      <div class="card">
+        <h3>PostgreSQL / Redis</h3>
+        <p>Do not install one giant shared Postgres or Redis instance just because you can. Prefer application-scoped containers and networks. Immich's deployment already includes the supporting services it needs.</p>
+      </div>
+    </div>
+    <pre>Docker / Container Manager
+
+immich stack
+ ├─ immich-server
+ ├─ immich-machine-learning
+ ├─ postgres-immich
+ └─ redis-immich
+
+myapp stack
+ ├─ myapp
+ └─ postgres-myapp</pre>
+  </section>
+
+  <section>
+    <h2>Security model</h2>
+    <div class="card bad">
+      <p><strong>Do not publicly expose:</strong> NAS administration, SMB, SSH, PostgreSQL, Redis, Docker socket, hypervisor/management interfaces, backup repositories, or arbitrary internal dashboards.</p>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="card good"><h3>Private path</h3><p>Use Tailscale for your own admin access and trusted-device access.</p><pre>Laptop / Phone
+     ↓
+ Tailscale
+     ↓
+NAS / SSH / SMB / Admin</pre></div>
+      <div class="card good"><h3>Published path</h3><p>Only publish an explicit web app through Cloudflare Tunnel.</p><pre>Internet
+   ↓
+Cloudflare
+   ↓
+Tunnel
+   ↓
+Specific app only</pre></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Baseline hardening checklist</h2>
+    <ul class="checklist">
+      <li>Update NAS OS and packages before exposing anything.</li>
+      <li>Check SMART health on every disk.</li>
+      <li>Strong unique passwords and MFA where supported.</li>
+      <li>Disable or rename default administrator accounts where possible.</li>
+      <li>No public SMB, SSH, Postgres, Redis, or NAS admin ports.</li>
+      <li>Tailscale for private administration.</li>
+      <li>Cloudflare Tunnel for intentionally published services.</li>
+      <li>Separate containers and networks per application.</li>
+      <li>Read-only mount for irreplaceable master photo archives.</li>
+      <li>Never give ordinary application containers the Docker socket.</li>
+      <li>Keep credentials outside Git repositories.</li>
+      <li>Enable snapshots.</li>
+      <li>Use a UPS if the NAS contains important data.</li>
+      <li>Maintain an independent second backup.</li>
+      <li>Keep an offsite copy of irreplaceable photos/documents.</li>
+      <li>Test restore procedures periodically.</li>
+    </ul>
+    <div class="card warn"><p><strong>RAID is availability, not backup.</strong> It can help survive a disk failure; it does not protect you from deletion, ransomware, corrupted data, bad upgrades, theft, fire, or catastrophic hardware failure.</p></div>
+  </section>
+
+  <section>
+    <h2>Why AI makes the NAS more valuable</h2>
+    <p>The NAS can become the private storage layer for a personal AI system rather than merely a file share.</p>
+    <div class="arch">
+      <div class="flow">
+        <div class="node"><b>Photos</b><span class="muted small">vision embeddings<br>faces · OCR</span></div>
+        <div class="node"><b>Documents</b><span class="muted small">OCR · parsing<br>embeddings</span></div>
+        <div class="node"><b>Videos</b><span class="muted small">transcription<br>scene metadata</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>Indexes</b><span class="muted small">vector + metadata</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>Personal AI</b><span class="muted small">search · RAG · agents</span></div>
+      </div>
+    </div>
+    <div class="grid3" style="margin-top:16px">
+      <div class="card"><h3>Photo intelligence</h3><p class="muted">Search semantically: “Shanghai at night,” “beach photos with a dog,” or people across decades.</p></div>
+      <div class="card"><h3>Personal RAG</h3><p class="muted">Search contracts, receipts, manuals, notes, travel records, and scanned archives conversationally.</p></div>
+      <div class="card"><h3>Media intelligence</h3><p class="muted">Transcribe old video/audio, extract metadata, and make the archive searchable.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>AI introduces a new trust boundary</h2>
+    <div class="card bad">
+      <p>An AI process with <strong>read + write + shell + Internet access</strong> is effectively a privileged user. The risk is no longer only “can a hacker reach my files?” but also “what can an agent read, modify, execute, or send elsewhere?”</p>
+    </div>
+    <pre>Personal AI container
+
+READ:
+  /photos:ro
+  /documents:ro
+
+WRITE:
+  /ai-index
+  /ai-cache
+
+NO ACCESS:
+  NAS admin
+  backup repository
+  Docker socket
+  SSH keys</pre>
+    <p>Default AI permissions to <strong>read-only</strong>. Give write access only to dedicated working/index directories. Treat external model APIs as data egress and decide explicitly what is allowed to leave your home network.</p>
+  </section>
+
+  <section>
+    <h2>Older NAS + separate AI compute is often better</h2>
+    <p>Many older NAS devices are excellent storage servers and mediocre AI machines. If yours has limited RAM or an older ARM/Intel CPU, keep storage on the NAS and add a separate Mini PC, NUC, Mac mini, or GPU machine later.</p>
+    <pre>NAS = storage, snapshots, backups
+
+AI compute node = embeddings, OCR, transcription, local LLM
+
+NAS ←── 2.5/10 GbE ──→ AI compute</pre>
+  </section>
+
+  <section>
+    <h2>Recommended rollout</h2>
+    <div class="priority"><div class="num">1</div><div><h3>Resurrect and protect</h3><p>Identify model/CPU/RAM, check drives and RAID, update the NAS, and make an independent backup before experimenting.</p></div></div>
+    <div class="priority"><div class="num">2</div><div><h3>Private remote access</h3><p>Install Tailscale and confirm you can securely administer the NAS without opening router ports.</p></div></div>
+    <div class="priority"><div class="num">3</div><div><h3>Deploy Immich</h3><p>Use containers, start with a subset of photos, then index the master library read-only.</p></div></div>
+    <div class="priority"><div class="num">4</div><div><h3>Publish selectively</h3><p>Use your own domain and Cloudflare Tunnel for selected apps such as <code>photos.example.com</code>.</p></div></div>
+    <div class="priority"><div class="num">5</div><div><h3>Add AI services</h3><p>Build personal search/RAG/media intelligence with constrained permissions; add a separate compute node if the NAS is too weak.</p></div></div>
+  </section>
+
+  <section>
+    <h2>Recommended end state</h2>
+    <pre>PUBLIC
+────────────────────────────────────────
+victorfei.com / articles / docs
+        ↓
+GitHub Pages / managed edge hosting
+
+photos.example.com / lab.example.com
+        ↓
+Cloudflare
+        ↓
+Cloudflare Tunnel
+        ↓
+HOME NAS
+
+HOME NAS
+────────────────────────────────────────
+Photos · Documents · Backups · Snapshots
+Docker / containers
+ ├─ Immich
+ │   ├─ server
+ │   ├─ ML
+ │   ├─ PostgreSQL
+ │   └─ Redis
+ ├─ cloudflared
+ ├─ Tailscale
+ └─ future apps / APIs / personal AI
+
+PRIVATE ADMIN
+────────────────────────────────────────
+Laptop / Phone → Tailscale → NAS</pre>
+  </section>
+
+  <section>
+    <h2>Next hardware check</h2>
+    <div class="card good">
+      <p>The exact recommendation now depends on the NAS model. Record the <strong>brand/model, CPU, RAM, number and size of drives, RAID type, available capacity, network speed, and whether Docker/Container Manager is supported</strong>. That determines whether Immich and AI can run directly on the NAS or whether the NAS should remain primarily the storage tier.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Reference documentation</h2>
+    <ul>
+      <li><a href="https://docs.immich.app/" target="_blank" rel="noopener">Immich documentation</a></li>
+      <li><a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/" target="_blank" rel="noopener">Cloudflare Tunnel documentation</a></li>
+      <li><a href="https://tailscale.com/kb/" target="_blank" rel="noopener">Tailscale documentation</a></li>
+      <li><a href="https://caddyserver.com/docs/" target="_blank" rel="noopener">Caddy documentation</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Home NAS → Personal Cloud & AI Lab · Published September 8, 2026</div>
+</footer>
+</body>
+</html>
