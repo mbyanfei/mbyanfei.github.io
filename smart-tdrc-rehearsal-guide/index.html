@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SMART TDRC Rehearsal Guide</title>
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; line-height: 1.55; margin: 0; background:#f6f7f9; color:#1f2937; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px; }
+  .card { background:#fff; border-radius:14px; padding:28px; margin:18px 0; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+  h1,h2,h3 { color:#0f172a; }
+  h1 { margin-top:0; font-size:32px; }
+  h2 { border-bottom:1px solid #e5e7eb; padding-bottom:8px; margin-top:30px; }
+  .script { background:#f8fafc; border-left:4px solid #64748b; padding:16px 18px; border-radius:8px; }
+  .good { background:#ecfdf5; border-left-color:#10b981; }
+  .warn { background:#fff7ed; border-left-color:#f59e0b; }
+  .bad { background:#fef2f2; border-left-color:#ef4444; }
+  code { background:#eef2f7; padding:2px 5px; border-radius:4px; }
+  ul { padding-left:22px; }
+  .small { color:#64748b; font-size:14px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;} .wrap{padding:14px;} }
+  .q { font-weight:700; margin-top:18px; }
+  .a { margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>SMART TDRC Rehearsal Guide</h1>
+    <p class="small">Prepared for the SMART solution architecture review — September 11, 2026</p>
+    <p>This is the consolidated rehearsal script from our mock TDRC session. It is optimized for concise verbal answers, with deeper technical notes underneath so you can review the concepts before the meeting.</p>
+  </div>
+
+  <div class="card">
+    <h2>1. Two-Minute Architecture Overview</h2>
+    <div class="script good">
+      <p><strong>Use this answer:</strong></p>
+      <p>“SMART has two entry points: the browser UI and PET.</p>
+      <p>For the SMART UI, the path is browser to Nginx as the ingress boundary, then React to FastAPI to SQL Server. Users authenticate with Microsoft Entra using MSAL and Authorization Code Flow with PKCE. The React SPA has no client secret. Entra issues the access token, and the SMART API validates the token and enforces authorization.</p>
+      <p>For PET, the path is PET backend to cNLB to APIC, which is the network and policy boundary, then to the SMART API and SQL Server. PET uses a Cognito-issued workload token. APIC validates the token and applies policy before forwarding the request.</p>
+      <p>The key open dependencies are APIC and network readiness for the PET path, and production/DR operational maturity.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. Authentication and Authorization</h2>
+    <div class="grid">
+      <div>
+        <h3>SMART UI</h3>
+        <ul>
+          <li><strong>Issuer:</strong> Microsoft Entra</li>
+          <li><strong>Client:</strong> React SPA using MSAL</li>
+          <li><strong>Flow:</strong> Authorization Code + PKCE</li>
+          <li><strong>Client secret:</strong> None in the SPA</li>
+          <li><strong>Validator:</strong> SMART API</li>
+          <li><strong>Authorization:</strong> scopes and/or app roles</li>
+        </ul>
+      </div>
+      <div>
+        <h3>PET</h3>
+        <ul>
+          <li><strong>Issuer:</strong> AWS Cognito</li>
+          <li><strong>Identity:</strong> PET workload identity, not the human user</li>
+          <li><strong>Validator:</strong> APIC</li>
+          <li><strong>Authorization:</strong> gateway policy using token claims/scopes</li>
+          <li><strong>User delegation:</strong> not required initially</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Recommended TDRC phrasing</h3>
+    <div class="script">
+      <p>“The identity provider issues the access token. The receiving API or gateway validates it, and then authorizes based on claims such as scopes or roles, depending on the design.”</p>
+    </div>
+
+    <h3>Scopes vs roles</h3>
+    <ul>
+      <li><strong>Scope:</strong> what API access has been granted, e.g. <code>smart.read</code> or <code>smart.write</code>.</li>
+      <li><strong>App role:</strong> what kind of SMART user this is, e.g. Reader, Editor, Admin.</li>
+      <li><strong>Claim:</strong> a general field inside the JWT payload. Scopes and roles are examples of claims.</li>
+    </ul>
+    <div class="script warn">
+      <p>Do not say scopes and roles are the same thing. If all users have identical rights at launch, keep roles simple or defer them until there is a real separation-of-duties requirement.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. JWT Validation — Deep Technical Backup</h2>
+    <div class="script">
+      <p>“The SMART API uses an approved JWT/OIDC validation library integrated with Entra metadata. It verifies the token signature using Entra’s published public keys, checks issuer, audience, expiration, and then enforces scopes or roles. Missing or invalid token returns 401; valid token without permission returns 403.”</p>
+    </div>
+    <ul>
+      <li>The HTTP <code>Authorization</code> header carries <code>Bearer &lt;access_token&gt;</code>.</li>
+      <li>The bearer token is typically a JWT.</li>
+      <li>The JWT contains its own header, payload, and signature.</li>
+      <li>The payload contains claims.</li>
+      <li>Entra signs with its private key.</li>
+      <li>The API validates using Entra’s published public keys/JWKS.</li>
+      <li>The JWT header contains a <code>kid</code> that identifies which public key to use.</li>
+      <li>PKCE happens earlier, when the SPA securely acquires the token. JWT validation happens later, when the API receives it.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>4. Why PET Still Needs Authentication if the PET User Already Logged In</h2>
+    <div class="script good">
+      <p>“PET user login and PET application authentication are two separate things. The user authenticates to PET, but when PET calls SMART, SMART needs to trust the PET application itself. PET therefore uses a workload token from Cognito, which APIC validates. We are not authenticating the PET user twice; we are establishing service-to-service trust.”</p>
+    </div>
+    <p>If SMART later needs PET user identity, that becomes a delegated identity / token exchange / on-behalf-of design, which is more complex and is not required for the initial integration.</p>
+  </div>
+
+  <div class="card">
+    <h2>5. Why SMART UI Does Not Go Through APIC</h2>
+    <div class="script good">
+      <p>“SMART UI is an internal browser application. The browser authenticates with Entra and calls the SMART API within the same application boundary. PET is a separate external system boundary, so it goes through APIC for gateway policy enforcement and workload token validation. We are not bypassing controls; we are applying the appropriate control at each boundary.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>6. TLS and Trust Boundaries</h2>
+    <div class="script">
+      <p>“TLS is enforced on every network leg. Termination and re-encryption may occur at trusted components. For SMART UI, browser-to-Nginx is HTTPS. For PET, encryption is preserved across the cNLB/APIC/SMART path, but not necessarily as one continuous TLS session.”</p>
+    </div>
+    <div class="script warn">
+      <p>Do not claim exact PET TLS termination points unless the infra/APIC team has confirmed them.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>7. Preventing PET from Bypassing APIC</h2>
+    <div class="script good">
+      <p>“We use defense in depth. PET should have no direct network access to the SMART integration endpoint. Firewall and routing controls restrict that endpoint to APIC. APIC is the approved ingress and enforces authentication and policy. SMART also enforces application-level controls.”</p>
+    </div>
+    <p>If firewall or routing restrictions are not yet confirmed, present them as an explicit production dependency.</p>
+  </div>
+
+  <div class="card">
+    <h2>8. Traceability and Failure Handling</h2>
+    <h3>Correlation ID</h3>
+    <div class="script">
+      <p>“We use a correlation ID end-to-end for every PET transaction. PET passes it, APIC preserves it, and SMART logs and stores it with the request and response. That lets us trace one transaction across systems.”</p>
+    </div>
+    <h3>If SQL Server is unavailable</h3>
+    <div class="script">
+      <p>“The application fails safely. No partial result is returned. We return a controlled error, log the correlation ID, generate alerting, and allow PET to handle retry according to the API contract.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>9. Idempotency</h2>
+    <div class="script good">
+      <p>“SMART is analytical, not a high-risk transactional system. Most requests are calculation-oriented and do not create irreversible side effects, so idempotency is not a launch blocker. If we later persist scenarios more aggressively or automate retries, we will revisit duplicate-processing controls.”</p>
+    </div>
+    <div class="script warn">
+      <p>Do not claim an idempotency key exists unless it is actually implemented.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>10. Data Security and Access</h2>
+    <div class="script">
+      <p>“Data in transit is protected by TLS. Data at rest uses the bank-approved SQL Server encryption standard. Access is restricted using least privilege, with an AD service identity and SQL permissions. End users do not directly access the database.”</p>
+    </div>
+    <p>Store only what is needed for traceability and the business requirement. Do not equate “analytics” with “low sensitivity.”</p>
+  </div>
+
+  <div class="card">
+    <h2>11. Authorization Governance</h2>
+    <div class="script">
+      <p>“The business/application owner defines and approves access levels. Provisioning is performed through the bank’s identity governance process using AD or Entra groups, and SMART enforces those entitlements at runtime.”</p>
+    </div>
+    <p>For role changes or departures: removal from the relevant group means newly issued tokens no longer carry SMART entitlements, so access is denied.</p>
+  </div>
+
+  <div class="card">
+    <h2>12. Availability and DR</h2>
+    <div class="script">
+      <p>“SMART has DR at both application and database tiers across separate data centers. Recovery follows the enterprise failover process. The same versioned artifacts are promoted to primary and DR, configurations are version-controlled, environment-specific values and secrets are injected per environment, and automation is used where practical to prevent drift.”</p>
+    </div>
+    <p>If deployment automation is not fully implemented yet, call it the target state rather than implying it is already complete.</p>
+  </div>
+
+  <div class="card">
+    <h2>13. API Lifecycle and Change Management</h2>
+    <div class="script">
+      <p>“The API is contract-first using OpenAPI. We preserve backward compatibility by default. Breaking changes receive a new version, and migration is coordinated with PET through testing and release planning before the old version is retired.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>14. Capacity and Performance</h2>
+    <div class="script good">
+      <p>“SMART is not a high-volume transactional system, but we size it based on expected concurrent users, PET request volume, and SQL workload. We will validate those assumptions with end-to-end performance testing before production.”</p>
+    </div>
+    <p>If asked for precise throughput/latency numbers and they are not yet baselined, say they are an open NFR being finalized. Do not invent numbers.</p>
+  </div>
+
+  <div class="card">
+    <h2>15. Data Retention and Classification</h2>
+    <div class="script">
+      <p>“We persist request and response data for traceability and business use. Retention and classification will align with enterprise data policy and be limited to what is necessary.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>16. Observability and Support</h2>
+    <div class="script">
+      <p>“SMART is monitored with APM and infrastructure alerts. Failures generate alerts with correlation IDs. The support team follows documented runbooks, and severity determines escalation.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>17. Architecture Rationale</h2>
+    <div class="script">
+      <p>“SMART remains on-prem to align with existing QAS data, SQL Server integration, and enterprise control requirements. PET remains in AWS and integrates through APIC using the bank-approved integration pattern. The architecture therefore preserves ownership boundaries while using standard enterprise controls at the integration point.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>18. Top Open Risks</h2>
+    <div class="script good">
+      <p>“The main open risks are APIC and network readiness for the PET path, and production/DR operational maturity. Mitigation is to close delivery dependencies with the APIC and infrastructure teams, confirm network restrictions, and complete and test DR runbooks before production.”</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>19. Rapid-Fire Q&amp;A</h2>
+
+    <p class="q">Q: Who issues the SMART UI token?</p>
+    <p class="a">A: Microsoft Entra.</p>
+
+    <p class="q">Q: Who validates the SMART UI token?</p>
+    <p class="a">A: The SMART API.</p>
+
+    <p class="q">Q: Who issues the PET token?</p>
+    <p class="a">A: AWS Cognito.</p>
+
+    <p class="q">Q: Who validates the PET token?</p>
+    <p class="a">A: APIC, before forwarding to SMART.</p>
+
+    <p class="q">Q: Does the React SPA contain a client secret?</p>
+    <p class="a">A: No. It is a public client and uses Authorization Code Flow with PKCE through MSAL.</p>
+
+    <p class="q">Q: 401 vs 403?</p>
+    <p class="a">A: 401 means missing/invalid authentication. 403 means authenticated but not authorized.</p>
+
+    <p class="q">Q: What prevents APIC bypass?</p>
+    <p class="a">A: Network/routing/firewall restrictions plus application-level controls.</p>
+
+    <p class="q">Q: How do you trace a failed PET request?</p>
+    <p class="a">A: Correlation ID end-to-end across PET, APIC, SMART logs, and persisted request/response records.</p>
+
+    <p class="q">Q: Biggest risks?</p>
+    <p class="a">A: APIC/network readiness and prod/DR operational maturity.</p>
+  </div>
+
+  <div class="card">
+    <h2>20. Final 60-Second Rehearsal Script</h2>
+    <div class="script good">
+      <p>“SMART has two entry points: browser UI and PET. For the UI, users authenticate with Entra through MSAL using Authorization Code Flow with PKCE; the SPA has no client secret. Traffic enters through Nginx, then React calls the SMART FastAPI backend, which validates the Entra access token and enforces authorization before accessing SQL Server.</p>
+      <p>For PET, PET uses a Cognito-issued workload token and reaches SMART only through the approved APIC path. APIC validates the token and applies policy before forwarding the request. Network restrictions should prevent direct bypass.</p>
+      <p>We use TLS in transit, bank-standard controls at rest, correlation IDs for end-to-end traceability, controlled failure behavior, contract-first OpenAPI versioning, monitoring and alerting, and DR across the app and database tiers. The main items to close before production are APIC/network readiness and DR operational maturity.”</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
