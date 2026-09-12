@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A concise walkthrough of the two integration paths into SMART: the browser-based SMART UI path and the server-to-server PET integration path." />
+  <meta name="theme-color" content="#08111f" />
+  <title>SMART — Two API Paths</title>
+  <style>
+    :root{
+      --bg:#07101d;
+      --panel:#0d1829;
+      --panel2:#101f34;
+      --text:#eef4ff;
+      --muted:#9dafc8;
+      --line:#213450;
+      --accent:#63b3ff;
+      --accent2:#75e0c1;
+      --shadow:0 24px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(43,112,184,.22), transparent 32rem),
+        radial-gradient(circle at 90% 8%, rgba(48,160,135,.12), transparent 30rem),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:inherit}
+    .wrap{width:min(1120px,calc(100% - 36px));margin:0 auto}
+    header{padding:30px 0 8px}
+    .topbar{display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .brand{font-weight:800;letter-spacing:.02em}
+    .brand span{color:var(--accent)}
+    .toplink{color:var(--muted);font-size:.92rem;text-decoration:none}
+    .toplink:hover{color:var(--text)}
+    .hero{padding:68px 0 34px;text-align:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 12px;border:1px solid var(--line);border-radius:999px;
+      color:#bdd8f2;background:rgba(12,28,47,.75);font-size:.82rem;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase
+    }
+    h1{font-size:clamp(2.5rem,7vw,5.2rem);line-height:.98;margin:22px auto 22px;max-width:920px;letter-spacing:-.05em}
+    .lead{max-width:780px;margin:0 auto;color:var(--muted);font-size:clamp(1.02rem,2.2vw,1.22rem)}
+    .video-shell{
+      margin:42px auto 0;padding:10px;border-radius:24px;border:1px solid var(--line);
+      background:linear-gradient(145deg,rgba(18,37,61,.96),rgba(8,18,31,.96));box-shadow:var(--shadow)
+    }
+    video{display:block;width:100%;aspect-ratio:16/9;border-radius:16px;background:#000;object-fit:contain}
+    .video-meta{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:14px 8px 4px;color:var(--muted);font-size:.88rem}
+    .button{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid var(--line);text-decoration:none;color:var(--text);background:#13233a;font-weight:700}
+    .button:hover{border-color:#41638f;background:#182c48}
+    section{padding:64px 0}
+    .section-kicker{color:var(--accent2);font-weight:800;text-transform:uppercase;font-size:.78rem;letter-spacing:.1em;margin-bottom:8px}
+    h2{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.12;letter-spacing:-.03em;margin:0 0 14px}
+    .section-intro{color:var(--muted);max-width:780px;margin:0 0 30px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .card{padding:26px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,rgba(16,31,52,.94),rgba(10,22,38,.94))}
+    .card h3{margin:0 0 8px;font-size:1.28rem}
+    .card p{margin:0;color:var(--muted)}
+    .path{margin-top:20px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+    .node{padding:8px 10px;border-radius:9px;background:#142944;border:1px solid #284468;font-size:.85rem;font-weight:700}
+    .arrow{color:#6d8aaa}
+    .notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
+    .note{padding:20px;border:1px solid var(--line);border-radius:15px;background:rgba(10,22,38,.78)}
+    .note strong{display:block;margin-bottom:5px}
+    .note span{color:var(--muted);font-size:.94rem}
+    .callout{margin-top:24px;padding:18px 20px;border-left:3px solid var(--accent2);background:rgba(21,55,56,.25);border-radius:10px;color:#c8dedc}
+    footer{padding:42px 0 58px;color:#8094ad;font-size:.86rem;border-top:1px solid rgba(33,52,80,.65);margin-top:30px}
+    @media (max-width:760px){
+      .hero{padding-top:44px}.grid,.notes{grid-template-columns:1fr}.video-meta{align-items:flex-start;flex-direction:column}.topbar{align-items:flex-start;flex-direction:column;gap:8px}
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <div class="topbar">
+      <div class="brand">SMART <span>Architecture</span></div>
+      <a class="toplink" href="../videos/smart-two-api-paths.mp4">Open direct MP4 ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="eyebrow">Architecture walkthrough</div>
+      <h1>SMART: Two API Paths</h1>
+      <p class="lead">A practical walkthrough of why SMART supports two distinct integration patterns: a browser-driven path for SMART UI users and a server-to-server path for PET.</p>
+
+      <div class="video-shell">
+        <video controls playsinline preload="metadata">
+          <source src="../videos/smart-two-api-paths.mp4" type="video/mp4" />
+          Your browser does not support embedded HTML5 video.
+        </video>
+        <div class="video-meta">
+          <span>Instructional video · architecture, identity, TLS and API flow</span>
+          <a class="button" href="../videos/smart-two-api-paths.mp4">View full video</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-kicker">The core idea</div>
+      <h2>Same SMART capability. Different trust boundaries.</h2>
+      <p class="section-intro">The two paths should not be forced into one identical pattern. Browser users and backend applications have different identities, different token issuers, and different gateway requirements.</p>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Path 1 — SMART UI</h3>
+          <p>A human user accesses the SMART web application. Browser authentication establishes the user session, and the UI calls the SMART backend through the application’s own web tier.</p>
+          <div class="path" aria-label="SMART UI path">
+            <span class="node">Browser</span><span class="arrow">→</span>
+            <span class="node">Web / Auth Layer</span><span class="arrow">→</span>
+            <span class="node">SMART UI</span><span class="arrow">→</span>
+            <span class="node">SMART API</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Path 2 — PET → SMART API</h3>
+          <p>PET is an application-to-application integration. Its backend obtains a service token and calls SMART through the enterprise API path where gateway policy validates the request before it reaches SMART.</p>
+          <div class="path" aria-label="PET integration path">
+            <span class="node">PET Backend</span><span class="arrow">→</span>
+            <span class="node">Cloud Identity</span><span class="arrow">→</span>
+            <span class="node">API Gateway</span><span class="arrow">→</span>
+            <span class="node">SMART API</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-kicker">Design implications</div>
+      <h2>What the distinction changes</h2>
+      <div class="notes">
+        <div class="note"><strong>Identity</strong><span>The UI represents an interactive user. PET represents a calling application/service.</span></div>
+        <div class="note"><strong>Gateway role</strong><span>The external application path benefits from centralized API policy, token validation, routing and observability.</span></div>
+        <div class="note"><strong>TLS</strong><span>Each network hop protects transport independently; termination points depend on the concrete deployment boundary.</span></div>
+        <div class="note"><strong>Authorization</strong><span>Authentication proves who or what is calling. Authorization still determines which SMART capabilities that identity can use.</span></div>
+        <div class="note"><strong>Traceability</strong><span>Correlation identifiers make multi-hop requests easier to trace across gateways, web tiers and backend services.</span></div>
+        <div class="note"><strong>Separation of concerns</strong><span>Browser SSO and machine-to-machine API access solve different problems and should remain architecturally explicit.</span></div>
+      </div>
+      <div class="callout"><strong>Note:</strong> This public page intentionally presents the architecture at a conceptual level. Internal hostnames, credentials, environment-specific endpoints and security-sensitive implementation details are omitted.</div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">SMART Architecture · Two API Paths · Conceptual architecture overview</div>
+  </footer>
+</body>
+</html>
