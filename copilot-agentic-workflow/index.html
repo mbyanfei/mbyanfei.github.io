@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Copilot-Native Agentic Engineering Workflow</title>
+  <meta name="description" content="A concise explanation of the GitHub Copilot agent harness, the lightweight workflow layer built on top of it, and how skills, agents, and persistent artifacts fit together." />
+  <style>
+    :root{
+      --bg:#f6f7fb;--surface:#ffffff;--text:#172033;--muted:#667085;--line:#e5e7eb;
+      --accent:#3559e0;--accent2:#7c3aed;--code:#111827;--good:#087f5b;--shadow:0 18px 45px rgba(20,30,55,.08)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#f4f7ff 0,#f8fafc 28rem,var(--bg) 100%);color:var(--text);line-height:1.62}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 24px 72px}
+    .hero{padding:76px 0 34px}
+    .eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}
+    h1{font-size:clamp(2.45rem,5vw,4.5rem);line-height:1.03;letter-spacing:-.055em;margin:.45rem 0 1.2rem;max-width:900px}
+    .lead{font-size:1.22rem;color:#475467;max-width:810px;margin:0}
+    .callout{margin:30px 0 10px;padding:20px 24px;border-radius:18px;background:linear-gradient(135deg,#edf2ff,#f3eefe);border:1px solid #dbe3ff;font-size:1.08rem}
+    .section{margin-top:64px}
+    h2{font-size:2rem;letter-spacing:-.035em;margin:0 0 18px}
+    h3{font-size:1.2rem;margin:0 0 9px}
+    p{margin:.55rem 0 1rem}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+    .card p{color:#556070;margin-bottom:0}
+    .term{font-size:.8rem;text-transform:uppercase;font-weight:800;letter-spacing:.09em;color:var(--accent2);margin-bottom:7px}
+    pre{white-space:pre-wrap;overflow:auto;background:var(--code);color:#e5e7eb;border-radius:18px;padding:22px 24px;font:500 .95rem/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;box-shadow:0 16px 35px rgba(17,24,39,.13)}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .stack{display:grid;gap:11px;max-width:760px;margin:28px auto}
+    .layer{padding:18px 22px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);position:relative}
+    .layer strong{display:block;font-size:1.05rem}
+    .layer span{display:block;color:var(--muted);font-size:.94rem;margin-top:3px}
+    .arrow{text-align:center;color:#98a2b3;font-size:1.5rem;line-height:.8}
+    .highlight{border-color:#bbc8ff;background:#f7f8ff}
+    .simple-list{padding-left:1.15rem}
+    .simple-list li{margin:.5rem 0}
+    .pill{display:inline-block;padding:5px 10px;border-radius:999px;background:#eef2ff;color:#3b4cca;font-weight:700;font-size:.8rem;margin-right:6px;margin-bottom:6px}
+    .quote{border-left:4px solid var(--accent);padding:7px 0 7px 18px;font-size:1.17rem;font-weight:650;color:#263451;margin:24px 0}
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .footer{margin-top:70px;padding-top:28px;border-top:1px solid var(--line);color:var(--muted);font-size:.92rem}
+    @media(max-width:760px){.grid,.compare{grid-template-columns:1fr}.hero{padding-top:52px}h1{font-size:2.6rem}.wrap{padding-left:18px;padding-right:18px}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Agentic Engineering • GitHub Copilot</div>
+    <h1>What are we actually building?</h1>
+    <p class="lead">A <strong>thin agentic engineering workflow layer</strong> on top of the <strong>GitHub Copilot agent harness</strong>. Copilot supplies the execution machinery; our layer defines how engineering work should be explored, planned, implemented, verified, reviewed, and resumed.</p>
+    <div class="callout"><strong>Short version:</strong> GitHub Copilot is the harness. Our <code>/ship</code>, <code>/design</code>, custom agents, and SPEC/PLAN/STATUS files form the workflow and lightweight orchestration layer.</div>
+  </header>
+
+  <section class="section">
+    <h2>The terminology</h2>
+    <div class="grid">
+      <article class="card"><div class="term">LLM / model</div><h3>The reasoning engine</h3><p>The model interprets the goal, reasons about the code and architecture, proposes changes, and decides which tools to use.</p></article>
+      <article class="card"><div class="term">Agent harness</div><h3>The execution environment</h3><p>The harness turns the model from a chatbot into a working engineering agent by giving it repository context, tools, file editing, shell access, Git operations, subagents, hooks, and integrations.</p></article>
+      <article class="card"><div class="term">Workflow layer</div><h3>How work should proceed</h3><p>Our layer imposes just enough discipline: explore, specify, plan, implement, verify, review, and persist the state needed to resume later.</p></article>
+      <article class="card"><div class="term">Skills + agents</div><h3>Reusable capabilities</h3><p>Skills such as <code>/ship</code> encode repeatable workflows. Specialist agents such as <code>architect</code> and <code>verifier</code> are delegated to only when they add value.</p></article>
+      <article class="card"><div class="term">Artifacts / state</div><h3>Durable engineering memory</h3><p><code>SPEC.md</code>, <code>PLAN.md</code>, and <code>STATUS.md</code> preserve intent, execution plan, decisions, risks, and progress outside a single chat session.</p></article>
+      <article class="card"><div class="term">Repository</div><h3>The actual work surface</h3><p>Source code, tests, configuration, APIs, schemas, documentation, and Git history remain the system of record for the software itself.</p></article>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>The architecture</h2>
+    <div class="stack">
+      <div class="layer"><strong>You</strong><span>Goals, constraints, decisions, review, approval</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer highlight"><strong>Lean Agentic Workflow Layer</strong><span>/ship • /design • /review-change • architect • verifier • SPEC / PLAN / STATUS</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><strong>GitHub Copilot Agent Harness</strong><span>Model loop • repo context • tools • file edits • shell • Git • agents • hooks • MCP</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><strong>Repository + Runtime</strong><span>Code • tests • APIs • databases • infrastructure • deployment targets</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>What exactly is a harness?</h2>
+    <p>The harness is the machinery around the model that lets it <em>act</em>. The model alone can reason and generate text. The harness gives it the controlled ability to inspect and modify a real engineering environment.</p>
+    <pre>Model says: “I need to inspect the authentication code.”
+        ↓
+Harness reads repository files
+        ↓
+Model reasons about the implementation
+        ↓
+Harness edits Python / TypeScript / SQL
+        ↓
+Harness runs tests or shell commands
+        ↓
+Model inspects failures
+        ↓
+Harness applies another change
+        ↓
+Git diff + verification</pre>
+    <p>That model–tool–observation loop is what makes an AI coding agent materially different from a plain chat interface.</p>
+  </section>
+
+  <section class="section">
+    <h2>What we built on top</h2>
+    <div class="compare">
+      <div class="card">
+        <div class="term">Workflow</div>
+        <h3>The /ship lifecycle</h3>
+        <pre>Explore
+  ↓
+Specify
+  ↓
+Plan
+  ↓
+Implement
+  ↓
+Verify
+  ↓
+Review</pre>
+      </div>
+      <div class="card">
+        <div class="term">Persistent state</div>
+        <h3>Only three durable artifacts</h3>
+        <pre>docs/changes/&lt;change&gt;/
+├── SPEC.md
+├── PLAN.md
+└── STATUS.md</pre>
+        <p>Small fixes should create none of these. The artifacts exist only when persistent context is worth the overhead.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Lightweight orchestration, not an orchestration engine</h2>
+    <p>Our main Copilot agent can delegate architecture or independent verification, but we are deliberately not building a scheduler, queue, daemon, worker pool, state machine, or multi-agent runtime.</p>
+    <pre>Main Copilot Agent
+       │
+       ├── architect   → only when architecture decisions matter
+       │
+       ├── implementation stays with the main agent
+       │
+       └── verifier    → independent acceptance check when useful</pre>
+    <p>This is orchestration in the small: selective delegation inside a workflow. GitHub Copilot remains responsible for actual agent execution.</p>
+  </section>
+
+  <section class="section">
+    <h2>Why this is different from GSD, FirstMate, and SPD</h2>
+    <div class="grid">
+      <article class="card"><div class="term">FirstMate</div><h3>Closer to an orchestration layer</h3><p>FirstMate coordinates multiple coding-agent harnesses and adds multi-agent execution behavior. It owns substantially more of the runtime and delegation model.</p></article>
+      <article class="card"><div class="term">GSD</div><h3>Structured workflow system</h3><p>GSD adds a stronger methodology around planning, persistent context, lifecycle phases, verification, and agent orchestration. Powerful, but heavier.</p></article>
+      <article class="card"><div class="term">SPD</div><h3>Specification-driven workflow</h3><p>SPD is closer to Markdown-first process and task structure, with small helpers around planning, implementation, and engineering state.</p></article>
+      <article class="card"><div class="term">Our approach</div><h3>Use the harness we already have</h3><p>Copilot already provides execution. We add only the missing control layer: engineering workflow, selective delegation, explicit acceptance criteria, and compact persistent state.</p></article>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Data-platform analogy</h2>
+    <p>For a data/AI engineer, this mapping is useful:</p>
+    <pre>LLM                         ≈ compute engine
+GitHub Copilot Agent        ≈ execution platform
+/ship workflow              ≈ orchestration DAG
+Skills / custom agents      ≈ reusable operators
+SPEC / PLAN / STATUS        ≈ control + state tables
+Git repository              ≈ working data + system of record</pre>
+    <p>The analogy is not perfect, but it highlights the architectural boundary: we are defining orchestration and state without rebuilding the underlying execution platform.</p>
+  </section>
+
+  <section class="section">
+    <h2>The design principle</h2>
+    <div class="quote">Use Copilot for execution. Add only enough workflow to improve engineering quality and continuity.</div>
+    <div>
+      <span class="pill">Persistent context</span>
+      <span class="pill">Disciplined planning</span>
+      <span class="pill">Architecture when needed</span>
+      <span class="pill">Implementation</span>
+      <span class="pill">Verification</span>
+      <span class="pill">Independent review</span>
+    </div>
+    <p style="margin-top:20px">The main failure mode to avoid is gradually adding enough agents, lifecycle stages, hooks, files, MCP servers, and policies that the “lightweight” layer becomes another full framework.</p>
+  </section>
+
+  <section class="section">
+    <h2>How to describe it at work</h2>
+    <div class="callout">“We built a lightweight agentic engineering workflow layer on top of the GitHub Copilot agent harness. Copilot provides the execution environment and tooling; our layer defines planning, implementation, architecture delegation, verification, review, and persistent engineering state.”</div>
+  </section>
+
+  <footer class="footer">
+    <strong>Copilot-Native Agentic Engineering Workflow</strong><br />
+    Published September 12, 2026 • Architecture note
+  </footer>
+</main>
+</body>
+</html>
