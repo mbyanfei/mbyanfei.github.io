@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Smartphone Photography + AI — Lesson 1: Composition / 手机摄影 + AI — 第一课：构图</title>
+<meta name="description" content="A bilingual English-Chinese lesson on smartphone photography composition: rule of thirds, leading lines, natural framing, backlight, and practice exercises." />
+<style>
+  :root{
+    --bg:#0c0d10; --panel:#15171c; --panel2:#1b1e24; --text:#f4f5f7; --muted:#b8bec9;
+    --accent:#f3c34b; --accent2:#7dd3fc; --line:#2b2f38; --max:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#090a0c 0%,#0f1115 100%);color:var(--text);line-height:1.65}
+  a{color:var(--accent2)}
+  .wrap{max-width:var(--max);margin:auto;padding:0 22px}
+  header{padding:76px 0 48px;border-bottom:1px solid var(--line);background:radial-gradient(circle at 70% 20%,rgba(243,195,75,.14),transparent 34%)}
+  .eyebrow{letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;font-size:.82rem}
+  h1{font-size:clamp(2.3rem,6vw,4.8rem);line-height:1.05;margin:.4rem 0 1rem;max-width:900px}
+  h2{font-size:clamp(1.7rem,3vw,2.6rem);margin:0 0 1rem}
+  h3{font-size:1.25rem;margin:0 0 .6rem}
+  .lead{font-size:1.2rem;color:#d5d9e1;max-width:850px}
+  .note{margin-top:22px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03);color:var(--muted)}
+  nav{position:sticky;top:0;z-index:10;background:rgba(12,13,16,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;gap:18px;overflow:auto;padding-top:12px;padding-bottom:12px;white-space:nowrap}
+  nav a{text-decoration:none;color:#d8dce5;font-size:.92rem}
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+  .card{grid-column:span 6;background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+  .card img{display:block;width:100%;height:360px;object-fit:cover;background:#111}
+  .card .body{padding:20px}
+  .tag{display:inline-block;padding:4px 9px;border:1px solid #3a3f49;border-radius:999px;color:#cbd1db;font-size:.78rem;margin-bottom:8px}
+  .lesson-copy{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+  .lang{background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .lang h3{color:var(--accent)}
+  .quote{border-left:3px solid var(--accent);padding-left:16px;color:#eef0f4;font-size:1.08rem}
+  .diagram{background:#0a0b0e;border:1px solid var(--line);border-radius:14px;padding:18px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre;overflow:auto;color:#d9dee7}
+  ul{padding-left:20px}
+  .combo{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
+  .combo img{width:100%;border-radius:18px;border:1px solid var(--line);max-height:580px;object-fit:cover}
+  .assignment{background:linear-gradient(135deg,rgba(243,195,75,.12),rgba(125,211,252,.08));border:1px solid #4a4330;border-radius:22px;padding:26px}
+  .roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .roadmap div{padding:16px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:#d8dce5}
+  footer{padding:34px 0 60px;color:#9299a6;font-size:.9rem}
+  @media(max-width:800px){.card{grid-column:span 12}.lesson-copy,.combo{grid-template-columns:1fr}.roadmap{grid-template-columns:1fr}.card img{height:260px}header{padding-top:54px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Smartphone Photography + AI / 手机摄影 + AI</div>
+    <h1>Lesson 1: Composition<br/>第一课：构图</h1>
+    <p class="lead">Learn to see before you learn settings. This bilingual lesson uses real-world photography examples to teach rule of thirds, leading lines, natural framing, backlight, and how multiple visual decisions work together.</p>
+    <p class="lead">先学会“看”，再学手机参数。本课用真实摄影案例讲清楚三分法、引导线、框中框、逆光，以及如何让多个视觉元素共同服务于照片。</p>
+    <div class="note">Core idea / 核心：<strong>Think → position yourself → compose → shoot.</strong> / <strong>先想 → 找位置 → 构图 → 再按快门。</strong></div>
+  </div>
+</header>
+<nav>
+  <div class="wrap">
+    <a href="#thirds">1. Rule of Thirds / 三分法</a>
+    <a href="#lines">2. Leading Lines / 引导线</a>
+    <a href="#frames">3. Natural Framing / 框中框</a>
+    <a href="#backlight">4. Backlight / 逆光</a>
+    <a href="#combine">5. Combine Techniques / 综合运用</a>
+    <a href="#practice">Practice / 作业</a>
+  </div>
+</nav>
+
+<main>
+<section id="thirds">
+  <div class="wrap">
+    <h2>1. Rule of Thirds / 三分法</h2>
+    <div class="grid">
+      <article class="card"><img src="https://images.unsplash.com/photo-1518926193355-384108491160?auto=format&fit=crop&w=1400&q=82" alt="Photography composition example"/><div class="body"><span class="tag">Rule of thirds</span><p>The subject does not have to sit in the center. Give the environment room to participate in the story.</p></div></article>
+      <article class="card"><img src="https://images.unsplash.com/photo-1565014464532-46d456b841a3?auto=format&fit=crop&w=1400&q=82" alt="Desert composition example"/><div class="body"><span class="tag">Scale + negative space</span><p>A small subject can still dominate attention when placement, line and empty space work together.</p></div></article>
+    </div>
+    <div class="lesson-copy">
+      <div class="lang"><h3>English</h3><p>Imagine two vertical and two horizontal lines dividing the frame into nine sections. The four intersections are naturally strong positions for important subjects.</p><p class="quote">Do not ask only, “Where should I put the person?” Ask, “How should the person relate to everything else?”</p></div>
+      <div class="lang"><h3>中文</h3><p>把画面想象成横竖各两条线，分成九宫格。四个交叉点通常都是很有力量的位置。</p><p class="quote">不要只问“人物放哪里？”更应该问：“人物和周围环境应该形成什么关系？”</p></div>
+    </div>
+    <div class="diagram">      |      |
+------|------|------
+      |      |
+------|------|------
+      |      |</div>
+  </div>
+</section>
+
+<section id="lines">
+  <div class="wrap">
+    <h2>2. Leading Lines / 引导线</h2>
+    <div class="grid">
+      <article class="card"><img src="https://images.unsplash.com/photo-1535777926899-b0292e3f22b7?auto=format&fit=crop&w=1400&q=82" alt="Road leading line example"/><div class="body"><span class="tag">Road / 道路</span><p>Roads, rails, corridors, bridges and shadows naturally guide the eye into the frame.</p></div></article>
+      <article class="card"><img src="https://images.unsplash.com/photo-1716384278175-eb9d78b1352c?auto=format&fit=crop&w=1400&q=82" alt="Perspective leading line example"/><div class="body"><span class="tag">Perspective / 透视</span><p>Lines that converge toward a vanishing point create depth and direction.</p></div></article>
+    </div>
+    <div class="lesson-copy">
+      <div class="lang"><h3>English</h3><p>Your eyes naturally follow lines. A road that begins wide in the foreground and narrows into the distance gives the viewer a visual path.</p><p><strong>Foreground → line → destination.</strong></p></div>
+      <div class="lang"><h3>中文</h3><p>人的眼睛会自然沿着线条移动。让道路从前景进入画面，再向远方收拢，就会形成非常强的纵深感。</p><p><strong>前景 → 线条 → 目标。</strong></p></div>
+    </div>
+    <div class="diagram">\                         /
+ \                       /
+  \                     /
+   \                   /
+       destination</div>
+  </div>
+</section>
+
+<section id="frames">
+  <div class="wrap">
+    <h2>3. Natural Framing / 天然画框</h2>
+    <div class="grid">
+      <article class="card"><img src="https://images.unsplash.com/photo-1742306239446-0231ebe805cc?auto=format&fit=crop&w=1400&q=82" alt="Arch framing example"/><div class="body"><span class="tag">Frame within a frame</span><p>Doorways, arches, windows and tree branches can turn the environment into a visual frame.</p></div></article>
+      <article class="card"><img src="https://images.unsplash.com/photo-1750607704623-6f2ef51240ba?auto=format&fit=crop&w=1400&q=82" alt="Architectural framing example"/><div class="body"><span class="tag">Depth / 层次</span><p>A strong foreground frame often creates foreground, middle ground and background in a single image.</p></div></article>
+    </div>
+    <div class="lesson-copy">
+      <div class="lang"><h3>English</h3><p>Without a frame, you may simply have “a courtyard.” With a darker arch around it, the viewer receives a much clearer instruction: <strong>look here</strong>.</p><ul><li>Foreground — arch</li><li>Middle ground — courtyard</li><li>Background — architecture / sky</li></ul></div>
+      <div class="lang"><h3>中文</h3><p>没有天然画框时，你可能只是拍到“一个院子”。加上较暗的拱门之后，画面会直接告诉观众：<strong>看这里</strong>。</p><ul><li>前景——拱门</li><li>中景——院子</li><li>背景——建筑 / 天空</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="backlight">
+  <div class="wrap">
+    <h2>4. Backlight / 逆光</h2>
+    <div class="grid">
+      <article class="card"><img src="https://images.unsplash.com/photo-1560564066-a3a5cfc81584?auto=format&fit=crop&w=1400&q=82" alt="Backlit portrait example"/><div class="body"><span class="tag">Rim light / 轮廓光</span><p>Putting the sun behind a subject can create glowing hair, separation and atmosphere.</p></div></article>
+      <article class="card"><img src="https://images.unsplash.com/photo-1526835746352-0b9da4054862?auto=format&fit=crop&w=1400&q=82" alt="Golden hour backlight example"/><div class="body"><span class="tag">Golden hour / 黄金时刻</span><p>Backlight is especially effective near sunrise or sunset, when the light becomes softer and warmer.</p></div></article>
+    </div>
+    <div class="lesson-copy">
+      <div class="lang"><h3>English</h3><p>A beginner often assumes the sun should illuminate the face directly. Not always. Backlight can create glowing hair, rim light, silhouettes, atmosphere, and better separation from the background.</p></div>
+      <div class="lang"><h3>中文</h3><p>初学者常认为太阳一定要照在人物脸上。其实不一定。把太阳放到人物后方，可以形成发丝光、轮廓光、剪影、氛围感，并让主体和背景更容易分离。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="combine">
+  <div class="wrap">
+    <h2>5. Strong Photos Combine Techniques / 好照片不是只靠一个公式</h2>
+    <div class="combo">
+      <img src="https://images.unsplash.com/photo-1565014464532-46d456b841a3?auto=format&fit=crop&w=1400&q=82" alt="Desert composition demonstrating multiple techniques"/>
+      <div>
+        <div class="lang">
+          <h3>English</h3>
+          <p>A strong photograph often combines several visual decisions at once:</p>
+          <ul>
+            <li><strong>Rule of thirds</strong> — the person is away from center.</li>
+            <li><strong>Leading line</strong> — the dune ridge directs the eye.</li>
+            <li><strong>Negative space</strong> — the open sand and sky create scale.</li>
+            <li><strong>Light and shadow</strong> — the terrain becomes more dimensional.</li>
+            <li><strong>Human scale</strong> — the tiny person makes the landscape feel enormous.</li>
+          </ul>
+        </div>
+        <div class="lang" style="margin-top:14px">
+          <h3>中文</h3>
+          <p>真正有力量的照片，通常同时运用了多个视觉决定：</p>
+          <ul>
+            <li><strong>三分法</strong>——人物没有居中。</li>
+            <li><strong>引导线</strong>——沙丘边缘把视线带向人物。</li>
+            <li><strong>留白</strong>——大片沙地和天空制造空间感。</li>
+            <li><strong>光影</strong>——地形更有立体感。</li>
+            <li><strong>比例感</strong>——小人物让沙漠显得更加巨大。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="note"><strong>Photography is not “I used the rule of thirds.”</strong> It is multiple visual decisions working together. / <strong>摄影不是“我用了三分法”。</strong>而是多个视觉决定共同服务于照片。</div>
+  </div>
+</section>
+
+<section id="practice">
+  <div class="wrap">
+    <h2>Practice Assignment / 第一组练习</h2>
+    <div class="assignment">
+      <p><strong>Take only 12 intentional photos / 有意识地只拍 12 张：</strong></p>
+      <ul>
+        <li>3 × Rule of thirds / 三分法</li>
+        <li>3 × Leading lines / 引导线</li>
+        <li>3 × Natural framing / 框中框</li>
+        <li>3 × Backlight near sunset / 接近日落时拍逆光</li>
+      </ul>
+      <p><strong>Before each shot ask / 每次拍照前问自己：</strong></p>
+      <ul>
+        <li>What is my subject? / 我的主体是什么？</li>
+        <li>What did I deliberately exclude? / 我故意去掉了什么？</li>
+        <li>Why did I choose this angle? / 为什么选择这个角度？</li>
+        <li>Where should the viewer look first? / 我希望观众第一眼看哪里？</li>
+      </ul>
+      <p class="quote">Do not shoot 200 random frames and hope one works. Train the decision before the shutter.</p>
+      <p class="quote">不要先拍 200 张再碰运气挑一张。真正要训练的是按快门之前的判断。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Course Roadmap / 课程路线</h2>
+    <div class="roadmap">
+      <div>01 — Composition / 构图</div>
+      <div>02 — Light / 光线</div>
+      <div>03 — Phone Camera Mastery / 手机摄影操作</div>
+      <div>04 — Portraits / 人像</div>
+      <div>05 — Travel / 旅行摄影</div>
+      <div>06 — Everyday Aesthetics / 生活美学</div>
+      <div>07 — Editing / 后期</div>
+      <div>08 — AI Imaging / AI 影像</div>
+      <div>09 — Photography + AI Workflow / 摄影 + AI 工作流</div>
+    </div>
+    <div class="note">Next lesson / 下一课：<strong>Light — front light, side light, backlight, hard light, soft light, golden hour / 顺光、侧光、逆光、硬光、柔光、黄金时刻。</strong></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Teaching examples are loaded from Unsplash and are included here for instructional reference. See the <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash License</a>.</p>
+    <p>Published as part of Victor Fei's bilingual learning materials.</p>
+  </div>
+</footer>
+</body>
+</html>
