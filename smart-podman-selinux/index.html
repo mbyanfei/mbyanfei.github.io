@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMART Podman Deployment & SELinux Notes</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;color:#202124}h1,h2{line-height:1.2}code,pre{background:#f5f5f5;border-radius:6px}code{padding:2px 5px}pre{padding:14px;overflow:auto}.note{border-left:4px solid #777;padding:8px 16px;background:#fafafa}</style></head><body>
+<h1>SMART Podman Deployment &amp; SELinux Notes</h1>
+<p><strong>Context:</strong> SMART currently runs as rootless Podman containers under a personal Linux account. A shared service account is being provisioned so deployments are no longer tied to one developer.</p>
+<h2>1. Why Jake cannot see the current containers</h2><p>Rootless Podman is user-scoped. Containers, images, networks, and storage created under one Linux user are normally not visible as that user's Podman objects to another user.</p>
+<h2>2. Recommended target model</h2><p>Run SMART under the dedicated service account. Let Podman manage that account's local runtime storage, while treating the enterprise container registry as the long-term source of truth for versioned images. Keep deployment definitions in source control and use systemd/Quadlet for repeatable startup and lifecycle management.</p>
+<h2>3. Interim migration without a writable registry</h2><pre><code># Current account
+podman images
+podman save -o smart-api.tar smart-api:TAG
+
+# Service account
+podman load -i smart-api.tar
+podman images</code></pre><p>Recreate the container from a documented Quadlet/container definition rather than copying the existing running container's internal Podman state.</p>
+<h2>4. Where should Podman storage live?</h2><p>Default rootless storage under the service account is acceptable if its home filesystem has sufficient local capacity. If home quotas are small, ask infrastructure for a dedicated local filesystem/path and configure Podman's <code>graphroot</code> for the service account before migrating images.</p>
+<div class="note"><strong>Important:</strong> Do not simply make one Podman storage directory writable by multiple human accounts. Use one runtime identity—the service account—and controlled operational access around it.</div>
+<h2>5. Registry architecture</h2><pre><code>Git source
+   ↓
+CI/build
+   ↓
+Enterprise Registry / Artifactory
+   ↓
+SMART service account pulls versioned image
+   ↓
+Podman + Quadlet/systemd
+   ↓
+SMART API / SMART UI</code></pre>
+<h2>6. SELinux in simple terms</h2><p>Traditional Linux permissions are the first security gate: owner/group/other plus read/write/execute. SELinux is a second, independent security gate. A request must satisfy both.</p><pre><code>Process → Unix permissions → SELinux policy → File/Directory
+              Gate 1             Gate 2</code></pre>
+<h2>7. Check whether SELinux is active</h2><pre><code>getenforce</code></pre><p><strong>Enforcing</strong> means policy blocks violations; <strong>Permissive</strong> logs but does not block; <strong>Disabled</strong> means SELinux is off.</p>
+<h2>8. What is an SELinux label?</h2><p>Files/directories and processes have SELinux security contexts. Inspect a directory with:</p><pre><code>ls -Zd /path/to/directory</code></pre><p>A context may resemble <code>system_u:object_r:container_file_t:s0</code>. For container troubleshooting, the type portion such as <code>container_file_t</code> is especially important.</p><pre><code>ps -eZ</code></pre>
+<h2>9. Podman bind mounts and SELinux</h2><p>For a private bind-mounted directory intended for one container, Podman commonly supports <code>:Z</code>:</p><pre><code>podman run -v /srv/smart/data:/app/data:Z IMAGE</code></pre><p>Lowercase <code>:z</code> is used when content needs to be shared among multiple containers. Do not blindly relabel enterprise/shared system directories.</p>
+<h2>10. Practical troubleshooting sequence</h2><pre><code>getenforce
+ls -ld /srv/smart
+ls -Zd /srv/smart
+podman info
+podman images
+podman ps -a</code></pre><p>If Unix ownership/permissions look correct but access still fails while SELinux is enforcing, inspect SELinux audit/AVC denials rather than disabling SELinux.</p>
+<h2>Recommended next steps for SMART</h2><ol><li>Confirm the new service account and its home/quota.</li><li>Ask infra for dedicated local container storage if home capacity is insufficient.</li><li>Confirm SELinux mode and labeling for the dedicated path.</li><li>Configure Podman storage before migration.</li><li>Use <code>podman save</code>/<code>podman load</code> to migrate existing SMART images.</li><li>Represent SMART API/UI deployments with Quadlet/systemd.</li><li>Request a writable enterprise registry/Artifactory repository.</li><li>Move toward CI → registry → pull/deploy.</li></ol></body></html>
