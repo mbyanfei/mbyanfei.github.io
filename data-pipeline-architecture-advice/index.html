@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Pipeline Reset — Architecture Advice for Luke</title>
+<style>
+:root{--bg:#f5f7fb;--paper:#fff;--ink:#162033;--muted:#5f6b7a;--line:#dfe5ee;--accent:#2448d8;--accent2:#0f766e;--warn:#9a3412;--soft:#eef2ff;--soft2:#ecfdf5;--soft3:#fff7ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.65}.toolbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}button{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 12px;border-radius:9px;font-weight:650;cursor:pointer}button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.status{font-size:13px;color:var(--muted);margin-left:auto}.page{max-width:1080px;margin:34px auto 64px;background:var(--paper);box-shadow:0 16px 50px rgba(22,32,51,.08);border:1px solid var(--line);border-radius:18px;overflow:hidden}.hero{padding:54px 58px 42px;background:linear-gradient(135deg,#101827,#1f2f55)}.eyebrow{font-size:13px;text-transform:uppercase;letter-spacing:.16em;color:#b9c8ff;font-weight:800}h1{font-size:42px;line-height:1.08;margin:10px 0 14px;color:#fff}.subtitle{color:#d8e0ef;font-size:19px;max-width:780px}.meta{margin-top:22px;color:#aebbd2;font-size:14px}.content{padding:46px 58px 62px}h2{font-size:26px;margin:40px 0 12px;line-height:1.2}p{margin:10px 0 16px}.lead{font-size:19px;color:#29364f}.callout{border-left:5px solid var(--accent);background:var(--soft);padding:18px 20px;margin:24px 0;border-radius:0 12px 12px 0}.callout.green{border-color:var(--accent2);background:var(--soft2)}.callout.orange{border-color:var(--warn);background:var(--soft3)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 28px}.card{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff}.card strong{display:block;margin-bottom:6px}.flow{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#0f172a;color:#e2e8f0;padding:22px;border-radius:14px;overflow:auto;white-space:pre;line-height:1.5;margin:18px 0}code{background:#f1f5f9;border:1px solid #e2e8f0;padding:.12em .35em;border-radius:5px;font-size:.94em}pre code{background:transparent;border:none;padding:0}ol{padding-left:1.35rem}li{margin:7px 0}table{border-collapse:collapse;width:100%;margin:18px 0;font-size:15px}th,td{border:1px solid var(--line);padding:11px 12px;vertical-align:top;text-align:left}th{background:#f8fafc}.rule{height:1px;background:var(--line);margin:34px 0}.quote{font-size:22px;font-weight:750;line-height:1.45;padding:22px 26px;border-radius:14px;background:#111827;color:#fff;margin:28px 0}.small{font-size:13px;color:var(--muted)}.editing [data-editable]{outline:1px dashed #93a4ff;outline-offset:4px;border-radius:4px}@media(max-width:760px){.hero,.content{padding:32px 24px}h1{font-size:34px}.grid{grid-template-columns:1fr}.status{width:100%;margin-left:0}}@media print{.toolbar{display:none}.page{box-shadow:none;border:none;margin:0;max-width:none}}
+</style>
+</head>
+<body>
+<div class="toolbar">
+<button class="primary" id="editBtn" onclick="toggleEdit()">Enable Edit Mode</button>
+<button onclick="saveDraft()">Save Browser Draft</button>
+<button onclick="resetDraft()">Reset Draft</button>
+<button onclick="window.print()">Print / PDF</button>
+<span class="status" id="status">View mode</span>
+</div>
+<main class="page">
+<section class="hero">
+<div class="eyebrow">Solution Architecture Review</div>
+<h1 data-editable>Luke — How I Would Reset This Data Pipeline</h1>
+<div class="subtitle" data-editable>Architecture guidance for simplifying the pipeline, restoring data observability, and moving from a code-heavy implementation back to a data-first engineering model.</div>
+<div class="meta" data-editable>Prepared as follow-up to our working session • September 2026</div>
+</section>
+<article class="content">
+<p class="lead" data-editable>Luke, you asked me to look at the situation because the pipeline has become difficult to debug, difficult to validate, and increasingly dependent on a large body of Python that you do not fully trust. My recommendation is not to keep refactoring that code indefinitely. I would reset the design around the data and the business logic.</p>
+
+<div class="callout" data-editable><strong>The principle I want you to work from:</strong><br>This is primarily a data pipeline, not an application. Focus first on the source data, business transformation rules, intermediate results, and validation. Use application code only where it adds something the database and SQL cannot provide.</div>
+
+<h2 data-editable>1. What I Think Went Wrong</h2>
+<p data-editable>The current pipeline did not become messy because Python is inherently wrong. It became messy because too many responsibilities were pushed into Python at once: extraction, transformation, business logic, intermediate-state handling, debugging, logging, QA, file management, and orchestration. AI then accelerated code generation faster than the team established a clear data model and validation model.</p>
+
+<div class="grid">
+<div class="card" data-editable><strong>Data logic is buried</strong>Business rules are spread across functions instead of being visible as clear transformation steps.</div>
+<div class="card" data-editable><strong>Intermediate states are hard to inspect</strong>You often have to run the pipeline and then investigate through logs or generated diagnostics.</div>
+<div class="card" data-editable><strong>AI increased volume, not clarity</strong>Generated code can be syntactically good while still producing a system nobody can reason about end to end.</div>
+</div>
+
+<p data-editable>Austin's point about cyclomatic complexity is valid, but I want to clarify the term. Cyclomatic complexity is not the number of times a function is invoked. It is roughly a measure of the number of independent execution paths through the code — branches, loops, conditions, exception paths, and so on. Large functions with many paths are harder to test and maintain.</p>
+<p data-editable>Reducing cyclomatic complexity is useful, but it is not the root fix here. You can split a 1,788-line pipeline into many smaller functions and still have a system whose <em>data behavior</em> is opaque.</p>
+
+<h2 data-editable>2. Separate Three Different Problems</h2>
+<p data-editable>I would stop treating every failure as a Python debugging problem. There are really three different layers:</p>
+<table><thead><tr><th>Layer</th><th>Question</th><th>Primary Tool</th></tr></thead><tbody>
+<tr data-editable><td><strong>Data</strong></td><td>Is the source data complete, valid, and what we think it is?</td><td>SQL profiling and source queries</td></tr>
+<tr data-editable><td><strong>Transformation</strong></td><td>Did our joins, filters, attribution rules, aggregations, and business rules produce the right result?</td><td>SQL / CTEs / data tests</td></tr>
+<tr data-editable><td><strong>Orchestration</strong></td><td>Did the steps execute in the right order, for the right period, with logging and failure handling?</td><td>Thin Python + scheduler</td></tr>
+</tbody></table>
+<p data-editable>Your current implementation mixes these layers heavily. That makes a responder-count issue look like a software-debugging exercise when it may simply be a join, filter, date-window, mapping, null, or source-data problem.</p>
+
+<h2 data-editable>3. Push the Heavy Transformation Back to IDP / Netezza</h2>
+<p data-editable>Your sources are already in IDP, and you can write results back to IDP. That matters. You have a database platform designed to process large data sets using set-based operations and parallel execution. I would use it.</p>
+<div class="flow" data-editable>Python
+   │
+   │ execute SQL
+   ▼
+IDP / Netezza
+   │
+   ├── joins
+   ├── filters
+   ├── business rules
+   ├── aggregation
+   └── INSERT / CREATE TABLE
+   │
+   ▼
+Output table</div>
+<p data-editable>Avoid pulling millions of rows into Python simply so Polars or Pandas can reproduce operations the database already performs well. That creates unnecessary memory pressure, chunking logic, serialization, file handling, and write-back complexity.</p>
+<div class="callout orange" data-editable><strong>Important technical correction:</strong> <code>pyodbc</code> still uses a database cursor internally. The issue is not “cursor versus no cursor.” The real distinction is <strong>set-based SQL</strong> versus <strong>row-by-row processing</strong>. Let Python submit SQL statements; let the database process the data as sets.</div>
+
+<h2 data-editable>4. Rebuild One Use Case from First Principles</h2>
+<p data-editable>Do not rewrite everything. Pick one output you understand well — for example, the email-channel responder logic — and rebuild it cleanly.</p>
+<div class="quote" data-editable>For customers targeted by an email sales campaign, which customers subsequently acquired the targeted product and therefore count as responders?</div>
+<p data-editable>Then map the data flow explicitly:</p>
+<div class="flow" data-editable>Campaigns
+   │
+   ▼
+Eligible sales campaigns
+   │
+   ▼
+Targeted customers
+   │
+   ▼
+Email deliveries
+   │
+   ▼
+Target product mapping
+   │
+   ▼
+Candidate customer responses
+   │
+   ▼
+Response-window / attribution rules
+   │
+   ▼
+Responder flag
+   │
+   ▼
+email_channel</div>
+<p data-editable>Each box should be something you can independently inspect. Initially, I would represent those steps with CTEs because that is the fastest way to recover understanding.</p>
+<pre class="flow" data-editable><code>WITH eligible_campaigns AS (
+    ...
+),
+targeted_customers AS (
+    ...
+),
+delivered_emails AS (
+    ...
+),
+candidate_responses AS (
+    ...
+),
+attributed_responses AS (
+    ...
+),
+final AS (
+    ...
+)
+SELECT *
+FROM final;</code></pre>
+
+<h2 data-editable>5. Build Observability into the Data Flow</h2>
+<p data-editable>The missing capability is not another HTML diagnostic report. The missing capability is the ability to inspect the data at every meaningful transformation boundary.</p>
+<pre class="flow" data-editable><code>SELECT COUNT(*) FROM targeted_customers;
+
+SELECT COUNT(*) FROM candidate_responses;
+
+SELECT *
+FROM attributed_responses
+WHERE campaign_id = 'XYZ';
+
+SELECT campaign_id,
+       COUNT(*) AS targeted,
+       SUM(responder_flag) AS responders
+FROM final
+GROUP BY campaign_id;</code></pre>
+<p data-editable>When the business says, “This campaign has zero responders and that does not look right,” debug backward through the data:</p>
+<div class="flow" data-editable>Final responder count = 0
+          │
+          ▼
+Did attribution produce responders?
+          │
+          ▼
+Were candidate responses found?
+          │
+          ▼
+Was the target product mapped correctly?
+          │
+          ▼
+Were the right customers targeted?
+          │
+          ▼
+Was the campaign loaded correctly?
+          │
+          ▼
+Source data</div>
+<p data-editable>That is the debugging model I want you to develop. You are debugging the <strong>data lineage and transformation</strong>, not blindly traversing Python functions.</p>
+
+<h2 data-editable>6. A Giant CTE Is a Starting Point, Not the Final Architecture</h2>
+<p data-editable>I suggested using a large CTE because it gives you visibility and lets you reconstruct the logic quickly. I would not leave the entire production system as one enormous SQL statement.</p>
+<div class="flow" data-editable>staging
+  ├── stg_campaign
+  ├── stg_email
+  └── stg_customer_product
+
+intermediate
+  ├── int_campaign_targets
+  ├── int_email_delivery
+  ├── int_response_candidates
+  └── int_response_attribution
+
+output / marts
+  ├── email_channel
+  ├── dm_channel
+  └── campaign_view</div>
+<p data-editable>This is also why I mentioned dbt. The value of dbt is not that we need another fashionable framework. The value is that it formalizes a SQL-first architecture around models, dependencies, tests, documentation, lineage, and materialization. If dbt is practical in your environment, evaluate it. If it is not, we can implement the same core discipline using SQL files and a thin Python runner.</p>
+
+<h2 data-editable>7. Do Not Rewrite the Whole Pipeline at Once</h2>
+<p data-editable>The existing Python pipeline may be messy, but it is valuable as a reference implementation. Use it to validate the replacement.</p>
+<div class="flow" data-editable>Existing Python result
+          │
+          ├──────── compare ────────┐
+          │                         │
+          ▼                         ▼
+row counts                    New SQL result
+distinct customers
+campaign counts
+responder counts
+null rates
+duplicate rates
+aggregates
+record-level differences</div>
+<p data-editable>When the SQL version reproduces the correct behavior — or exposes where the old behavior was wrong — retire that portion of the Python transformation. Then move to the next output. That is safer than another large rewrite.</p>
+
+<h2 data-editable>8. Test the Data, Not Just the Python</h2>
+<p data-editable>Unit tests matter when you have real reusable Python logic. But many of the problems you described are not conventional software-unit-test problems. They are data-quality and business-rule problems.</p>
+<pre class="flow" data-editable><code>-- Key uniqueness
+SELECT campaign_id, customer_id, COUNT(*)
+FROM email_channel
+GROUP BY campaign_id, customer_id
+HAVING COUNT(*) &gt; 1;
+
+-- Required field
+SELECT COUNT(*)
+FROM email_channel
+WHERE customer_id IS NULL;
+
+-- Reconciliation
+SELECT campaign_id,
+       COUNT(*) AS targets,
+       SUM(responder_flag) AS responders
+FROM email_channel
+GROUP BY campaign_id;</code></pre>
+<p data-editable>Also build assertions around expected ranges: record-count changes, null-rate thresholds, responder-rate changes, referential integrity, accepted-value rules, and known campaign examples supplied by the business.</p>
+
+<h2 data-editable>9. How I Want You to Use AI</h2>
+<p data-editable>I am not suggesting that you stop using GitHub Copilot or other LLM tools. I am suggesting that you change the order of operations.</p>
+<div class="grid">
+<div class="card" data-editable><strong>Bad sequence</strong>Ask AI to build the pipeline → code grows → discover incorrect data → ask AI to explain its own generated code.</div>
+<div class="card" data-editable><strong>Better sequence</strong>Understand requirement → inspect source data → validate transformation in SQL → then use AI to automate or refactor.</div>
+<div class="card" data-editable><strong>Best use of AI here</strong>Generate boilerplate, test ideas, SQL drafts, documentation, comparisons, orchestration code, and refactoring suggestions — with you retaining the mental model.</div>
+</div>
+<div class="callout green" data-editable>AI can help write the pipeline. It should not become the only entity that understands the pipeline.</div>
+
+<h2 data-editable>10. Target Architecture</h2>
+<div class="flow" data-editable>                    IDP / NETEZZA
+                          │
+                    source tables
+                          │
+                          ▼
+                    SQL models
+                          │
+             ┌────────────┼────────────┐
+             ▼            ▼            ▼
+          staging    intermediate    output
+             │            │            │
+             └────────────┼────────────┘
+                          │
+                    data-quality tests
+                          │
+                          ▼
+                   production tables
+
+
+                 ORCHESTRATION LAYER
+          ┌────────────────────────────┐
+          │ thin Python runner         │
+          │                            │
+          │ connect                    │
+          │ execute SQL models         │
+          │ record run_id / dates      │
+          │ run validation             │
+          │ log status                 │
+          │ fail or succeed clearly    │
+          └────────────────────────────┘
+                          │
+                          ▼
+                scheduler / enterprise
+                   orchestration</div>
+<p data-editable>The Python runner should be boring. That is a feature. Most of the intelligence should be visible in the SQL models and data-quality rules.</p>
+
+<h2 data-editable>11. What I Would Do Next</h2>
+<ol>
+<li data-editable><strong>Choose one representative table</strong> — preferably one with a known defect such as the responder issue.</li>
+<li data-editable><strong>Document the business rule</strong> in plain English before changing code.</li>
+<li data-editable><strong>Identify every source table</strong> and verify the supplied queries independently in a SQL IDE.</li>
+<li data-editable><strong>Reconstruct the transformation in SQL</strong> using CTEs and a small, representative date range.</li>
+<li data-editable><strong>Validate each intermediate step</strong> with counts, samples, null checks, and known business cases.</li>
+<li data-editable><strong>Get business confirmation</strong> on the resulting output before automating it.</li>
+<li data-editable><strong>Wrap the validated SQL with thin Python</strong> only for parameters, execution, logging, and orchestration.</li>
+<li data-editable><strong>Compare against the existing pipeline</strong> and investigate every material difference.</li>
+<li data-editable><strong>Retire the corresponding old Python transformation</strong> only after the replacement is proven.</li>
+<li data-editable><strong>Repeat one business process at a time.</strong></li>
+</ol>
+
+<h2 data-editable>12. Tooling</h2>
+<p data-editable>DBeaver versus VS Code is not the architectural decision. DBeaver is simply a better environment for spending hours exploring tables, writing SQL, comparing result sets, and inspecting schemas. If SQL becomes your primary development surface for this work, I would use a proper SQL IDE.</p>
+<p data-editable>Scheduling also comes later. Cron, an enterprise scheduler, Prefect, or another orchestrator can all work. Do not spend much effort optimizing the scheduler while you still do not trust the data pipeline itself.</p>
+
+<div class="rule"></div>
+<h2 data-editable>My Bottom Line</h2>
+<p data-editable>Luke, I do not think your main problem is that the current Python needs another round of cleanup. The bigger problem is that the implementation grew faster than the team's understanding of the data flow.</p>
+<p data-editable>Go back to fundamentals: understand the business requirement, understand the source data, express the transformation clearly, inspect every meaningful intermediate state, validate the output, and only then automate it.</p>
+<div class="quote" data-editable>For a data pipeline, optimize first for correctness, transparency, lineage, and debuggability. Optimize the code only after those are under control.</div>
+<p data-editable>If you rebuild one use case this way, I think you will immediately see whether this approach is materially easier to understand and maintain. If it is, use that pattern as the template for the rest of the pipeline.</p>
+<p class="small" data-editable>Architecture note: the recommended pattern assumes the transformations can be executed efficiently in IDP/Netezza and that the team has appropriate read/write permissions. Specialized transformations that genuinely require Python can remain in Python, but they should be isolated and have explicit input/output contracts.</p>
+</article>
+</main>
+<script>
+const KEY='luke-data-pipeline-architecture-advice-v1';let editing=false;
+function setEditable(on){document.body.classList.toggle('editing',on);document.querySelectorAll('[data-editable]').forEach(el=>el.contentEditable=on?'true':'false');document.getElementById('editBtn').textContent=on?'Disable Edit Mode':'Enable Edit Mode';document.getElementById('status').textContent=on?'Editing locally in this browser':'View mode'}
+function toggleEdit(){editing=!editing;setEditable(editing)}
+function saveDraft(){localStorage.setItem(KEY,document.querySelector('.page').innerHTML);document.getElementById('status').textContent='Draft saved in this browser'}
+function resetDraft(){localStorage.removeItem(KEY);location.reload()}
+window.addEventListener('DOMContentLoaded',()=>{const saved=localStorage.getItem(KEY);if(saved){document.querySelector('.page').innerHTML=saved;document.getElementById('status').textContent='Loaded browser-saved draft'}setEditable(false)});
+</script>
+</body>
+</html>
