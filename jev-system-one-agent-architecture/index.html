@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Jev, System One Models, and the missing decision layer in agent architecture. A practical analysis of TypeSafe AI's Jev, LangChain's early evaluations, and implications for enterprise AI.">
+<title>Jev, System One Models & the Missing Layer in Agent Architecture</title>
+<style>
+:root{--bg:#0b0d12;--panel:#121622;--panel2:#171c2a;--text:#f5f7fb;--muted:#aab2c3;--line:#2a3142;--accent:#ff4fc3;--accent2:#9b7bff;--good:#6ee7b7;--warn:#fbbf24;--cyan:#67e8f9;--max:1180px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 12% -10%,rgba(255,79,195,.22),transparent 34%),radial-gradient(circle at 95% 10%,rgba(155,123,255,.14),transparent 30%),var(--bg);color:var(--text);font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:#93c5fd;text-decoration:none}a:hover{text-decoration:underline}.topbar{position:sticky;top:0;z-index:50;background:rgba(11,13,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topbar-inner{max-width:var(--max);margin:auto;padding:10px 18px;display:flex;gap:10px;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}.dot{width:13px;height:13px;border-radius:4px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 24px rgba(255,79,195,.8)}.controls{display:flex;gap:8px;flex-wrap:wrap}button{appearance:none;border:1px solid var(--line);background:#151a27;color:var(--text);padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}button:hover{border-color:#596177}.primary{background:linear-gradient(135deg,var(--accent),#c34dff);border:none;color:#140915}.wrap{max-width:var(--max);margin:auto;padding:42px 18px 90px}.hero{padding:70px 0 34px;display:grid;grid-template-columns:1.2fr .8fr;gap:38px;align-items:center}.kicker{display:inline-flex;gap:8px;align-items:center;padding:7px 11px;border:1px solid #523455;border-radius:999px;color:#ffd0ef;background:rgba(255,79,195,.08);font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}h1{font-size:clamp(2.7rem,6vw,5.8rem);line-height:.98;letter-spacing:-.055em;margin:18px 0 22px;max-width:900px}.gradient{background:linear-gradient(90deg,#fff 0%,#ff9cdf 50%,#b8a5ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font-size:1.22rem;color:#cbd3df;max-width:820px}.hero-card{min-height:360px;border:1px solid #3b2941;border-radius:28px;padding:28px;background:linear-gradient(150deg,rgba(255,79,195,.11),rgba(155,123,255,.06) 55%,rgba(255,255,255,.02));box-shadow:0 30px 80px rgba(0,0,0,.28);display:flex;flex-direction:column;justify-content:space-between}.hero-mark{font-size:5rem;font-weight:950;letter-spacing:-.08em;line-height:1;color:var(--accent)}.hero-formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#e7d9ff;background:#0d1018;border:1px solid #352c43;padding:14px 15px;border-radius:14px}.meta{color:var(--muted);font-size:.92rem}.toc{margin:26px 0 50px;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:rgba(18,22,34,.72)}.toc a{margin-right:15px;white-space:nowrap;color:#c8d1e1}section{margin:76px 0}.section-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:900}h2{font-size:clamp(2rem,4vw,3.2rem);line-height:1.06;letter-spacing:-.035em;margin:8px 0 20px}h3{font-size:1.3rem;margin:0 0 10px}p{margin:0 0 16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{border:1px solid var(--line);border-radius:18px;padding:21px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015))}.card p:last-child{margin-bottom:0}.card .num{font-size:2.3rem;font-weight:900;letter-spacing:-.04em}.magenta{color:var(--accent)}.green{color:var(--good)}.yellow{color:var(--warn)}.cyan{color:var(--cyan)}.callout{border-left:4px solid var(--accent);padding:18px 20px;margin:28px 0;background:rgba(255,79,195,.06);border-radius:0 14px 14px 0}.callout strong{color:#ffd0ef}.quote{font-size:1.45rem;line-height:1.45;font-weight:750;letter-spacing:-.02em}.arch{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch;margin:28px 0}.layer{position:relative;border:1px solid var(--line);border-radius:16px;padding:18px 14px;background:#121722;min-height:165px}.layer:after{content:"→";position:absolute;right:-17px;top:42%;font-size:1.5rem;color:#667085}.layer:last-child:after{display:none}.layer b{display:block;margin-bottom:8px}.tag{display:inline-block;font-size:.72rem;border-radius:999px;padding:3px 8px;margin-bottom:10px;background:#22293a;color:#cbd5e1}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;background:#090c12;border:1px solid #293143;border-radius:16px;padding:18px;color:#dce4f1;overflow:auto}.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;margin:24px 0}.flowbox{border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;background:#121722}.arrow{color:#7c8598;font-size:1.4rem}.metric{font-size:2rem;font-weight:900;letter-spacing:-.035em}.small{font-size:.88rem;color:var(--muted)}.pill{display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid #3a4255;color:#b9c2d3;font-size:.78rem}.compare{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.compare .card{min-height:210px}.compare .head{font-weight:900;font-size:1.08rem;margin-bottom:12px}ul{padding-left:20px}li{margin:7px 0}hr{border:0;border-top:1px solid var(--line);margin:54px 0}.sources .card{margin-bottom:12px}.chinese{font-family:ui-sans-serif,system-ui,"PingFang SC","Microsoft YaHei",sans-serif}footer{margin-top:80px;padding-top:25px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}.edit-note{display:none;padding:8px 12px;background:#3b102f;color:#ffd3ef;border:1px solid #74335f;border-radius:10px}.editing .edit-note{display:inline-block}[contenteditable="true"]{outline:2px dashed rgba(255,79,195,.45);outline-offset:8px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-card{min-height:250px}.arch{grid-template-columns:1fr}.layer:after{content:"↓";right:auto;left:48%;top:auto;bottom:-26px}.grid3,.compare{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}}@media(max-width:620px){.grid,.grid3,.compare{grid-template-columns:1fr}.controls button:nth-child(3){display:none}.wrap{padding-top:20px}.hero{padding-top:38px}}@media print{.topbar,.toc{display:none}body{background:white;color:#111}.card,.layer,.hero-card,.flowbox,.code{border-color:#ddd;background:#fff;color:#111}a{color:#111}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner"><div class="brand"><span class="dot"></span> AI Architecture Notes</div><div class="controls"><span id="editNote" class="edit-note">Editing enabled</span><button class="primary" onclick="toggleEdit()">✎ Edit</button><button onclick="saveLocal()">Save locally</button><button onclick="downloadHTML()">Download HTML</button><button onclick="window.print()">Print / PDF</button></div></div></div>
+<main id="article" class="wrap">
+<div class="hero"><div><div class="kicker">System One Models · Agent Architecture · Sept 20, 2026</div><h1><span class="gradient">Jev and the Missing Layer in Agent Architecture</span></h1><p class="lead">Why a model that cannot chat or write code may matter more than another bigger LLM — and why the real opportunity is not replacing reasoning models, but separating <strong>reasoning, decision-making, deterministic execution, and human control</strong>.</p><p class="meta">Combined analysis of TypeSafe AI's Jev announcement, LangChain's early harness work and evaluator benchmark, plus an architecture view for enterprise AI.</p></div><div class="hero-card"><div class="hero-mark">JEV</div><div class="hero-formula">unstructured state<br>↓<br>typed probabilistic decisions<br>↓<br>software action</div><div class="meta">A useful mental model: <strong>frontier-intelligence function call</strong>, not chatbot.</div></div></div>
+
+<nav class="toc"><a href="#thesis">Thesis</a><a href="#what">What Jev is</a><a href="#why">Why it matters</a><a href="#architecture">Architecture</a><a href="#evals">LangChain evidence</a><a href="#hype">Hype audit</a><a href="#banking">Enterprise use</a><a href="#prototype">Prototype plan</a><a href="#cn">中文总结</a></nav>
+
+<section id="thesis"><div class="section-label">Executive thesis</div><h2>The interesting part is not a faster classifier. It is a new division of labor for AI systems.</h2><div class="grid">
+<div class="card"><h3>1. Jev is not an agent</h3><p>It does not plan, converse, write, or autonomously pursue goals. It evaluates a supplied state and returns bounded, typed probabilistic judgments.</p></div>
+<div class="card"><h3>2. Confidence becomes workflow input</h3><p>The probability is not decorative metadata. Software can use it to auto-execute, escalate to a stronger reasoning model, request more evidence, or send a case to a human.</p></div>
+<div class="card"><h3>3. “No hallucination” needs translation</h3><p>Constrained output can eliminate malformed schemas and invented output categories. It does <em>not</em> make semantic errors impossible. A perfectly typed answer can still be wrong.</p></div>
+<div class="card"><h3>4. The architecture principle</h3><p><strong>Code/rules first → bounded AI judgment → frontier LLM for hard reasoning → human for uncertain high-impact decisions.</strong> Use the least autonomous component that reliably solves the step.</p></div></div>
+<div class="callout quote"><strong>Core idea:</strong> Jev turns AI judgment into something closer to a <em>smart if-statement</em>. That is potentially more important for enterprise automation than yet another general-purpose chat model.</div></section>
+
+<section id="what"><div class="section-label">What TypeSafe launched</div><h2>A model optimized for decisions instead of text generation.</h2><p>TypeSafe AI introduced Jev as the first public example of what it calls a <strong>System One Model</strong>: fast models intended to make structured decisions that software can consume directly. Instead of token-by-token free-form generation, Jev receives state plus explicitly defined questions and returns typed results and probabilities.</p><div class="grid3">
+<div class="card"><span class="pill">Choice</span><h3>Pick among known options</h3><p>Useful for routing, categorization, tool choice, or selecting one policy path from a bounded set.</p></div>
+<div class="card"><span class="pill">Score</span><h3>Rate on an ordered scale</h3><p>Useful for quality, severity, relevance, urgency, or risk-like judgments where an ordered rubric already exists.</p></div>
+<div class="card"><span class="pill">Noul</span><h3>Probability of yes/no</h3><p>Useful for conditions such as “is this urgent?”, “does this satisfy the requirement?”, or “should this action be blocked?”</p></div></div>
+<p>TypeSafe says Jev is trained with <strong>Reinforcement Learning for Calibrated Decisions (RLCD)</strong> and can evaluate multiple questions about the same state in parallel. LangChain's integration exposes the same pattern through a classifier interface rather than a chat-model interface.</p>
+<div class="code">state = transaction + customer context + recent behavior
+
+questions:
+  suspicious?        → probability
+  behavior_type      → {routine, unusual, high-risk}
+  needs_review?      → probability
+  escalation_level   → {none, model, human}
+
+software uses those outputs to decide the next step</div></section>
+
+<section id="why"><div class="section-label">Why it caught attention</div><h2>Agent systems spend an enormous amount of intelligence on small decisions.</h2><p>Most agent diagrams focus on the “reasoning” model. Production systems reveal a different bottleneck: repeated micro-decisions. Should this tool call execute? Is the retrieved context relevant? Did the agent actually finish? Which model should receive this request? Is the output safe enough to continue?</p><p>Using a large autoregressive model for every one of those judgments works, but it creates compounding latency, cost, and variance. Jev's proposition is that many of these steps are not generation problems at all. They are <strong>bounded decision problems</strong>.</p>
+<div class="flow"><div class="flowbox"><strong>Old default</strong><br><span class="small">Every judgment → full LLM call</span></div><div class="arrow">→</div><div class="flowbox"><strong>Decision-first</strong><br><span class="small">Cheap typed judgment → confidence</span></div><div class="arrow">→</div><div class="flowbox"><strong>Escalate selectively</strong><br><span class="small">Reasoning model / human only when needed</span></div></div>
+<div class="callout"><strong>This is the deeper shift:</strong> the LLM stops being the atomic unit of AI software. The system can combine specialized decision models, reasoners, generators, retrieval models, deterministic services, and evaluators.</div></section>
+
+<section id="architecture"><div class="section-label">Architecture</div><h2>Separate what should be deterministic from what actually requires intelligence.</h2>
+<div class="arch">
+<div class="layer"><span class="tag">Layer 1</span><b>Deterministic code</b><span class="small">Rules, calculations, SQL, API calls, validation, permissions, exact checks.</span></div>
+<div class="layer"><span class="tag">Layer 2</span><b>Decision model</b><span class="small">Classify, score, route, judge, filter, confidence. Jev-like component.</span></div>
+<div class="layer"><span class="tag">Layer 3</span><b>Reasoning LLM</b><span class="small">Ambiguous analysis, decomposition, synthesis, explanation, novel reasoning.</span></div>
+<div class="layer"><span class="tag">Layer 4</span><b>Agent loop</b><span class="small">Goal → plan → act → observe → adapt. Only when iteration is genuinely useful.</span></div>
+<div class="layer"><span class="tag">Layer 5</span><b>Human control</b><span class="small">High-impact ambiguity, exceptions, approval, accountability, policy ownership.</span></div></div>
+<h3>Confidence should drive routing — not decorate the response.</h3>
+<div class="code"># illustrative thresholds only — calibrate them on your own data
+
+if decision_confidence >= HIGH_THRESHOLD:
+    execute_bounded_action()
+elif decision_confidence >= REVIEW_THRESHOLD:
+    escalate_to_reasoning_model()
+else:
+    route_to_human_or_collect_more_evidence()</div>
+<p class="small">The exact thresholds should come from calibration against your own loss function. A fraud block, a UI label, and an internal document tag should not use the same confidence policy.</p>
+<div class="compare">
+<div class="card"><div class="head">Deterministic rule</div><p>Best when the condition is explicit, stable, and computable.</p><p class="small">Fastest · cheapest · auditable · brittle outside known rules</p></div>
+<div class="card"><div class="head">Jev-like decision model</div><p>Best for fuzzy but bounded judgments with predefined outputs.</p><p class="small">Probabilistic · structured · cheap enough for high volume</p></div>
+<div class="card"><div class="head">Frontier reasoning LLM</div><p>Best for ambiguous, open-ended, multi-step reasoning or generation.</p><p class="small">More capable · slower · costlier · harder to stabilize</p></div>
+<div class="card"><div class="head">Agent</div><p>Best when the system must pursue a goal across multiple actions and adapt based on results.</p><p class="small">Highest autonomy · highest orchestration and governance burden</p></div></div></section>
+
+<section id="evals"><div class="section-label">Independent signal</div><h2>LangChain's early evaluator test is more interesting than the launch benchmark.</h2><p>On September 20, LangChain published a narrow experiment using Jev as an agent evaluator. The test compared Jev with GPT-5.6 Luna, GPT-5.6 Terra, and Claude Sonnet 4.6 on repeated scoring of five fixed weather-agent responses using human labels as the oracle for the pass/fail decision.</p>
+<div class="grid3"><div class="card"><div class="metric magenta">0.44 s</div><p>Average latency per Jev evaluator call in LangChain's experiment.</p></div><div class="card"><div class="metric green">$0.00035</div><p>Reported cost per Jev judgment in that experiment.</p></div><div class="card"><div class="metric cyan">92–913×</div><p>Lower variance on the continuous quality score than the three LLM judges tested.</p></div></div>
+<p>For the binary <code>does_pass</code> decision, LangChain reports that Jev matched the human oracle on all 500 repeated decisions in this dataset. That is useful evidence because it tests an actual evaluator workflow, not simply TypeSafe's own benchmark.</p>
+<div class="callout"><strong>But do not overgeneralize it.</strong> Five fixed weather examples are a tiny test. Low variance is not the same as universal correctness. A cheap evaluator can also scale a systematic mistake. LangChain explicitly calls the result promising but early.</div></section>
+
+<section id="hype"><div class="section-label">Hype audit</div><h2>Three claims need to be interpreted carefully.</h2><div class="grid">
+<div class="card"><h3>“Can't hallucinate”</h3><p><strong>Reasonable narrow interpretation:</strong> the output space is constrained, so Jev cannot invent arbitrary fields, prose, or unsupported enum values outside the schema.</p><p><strong>Wrong interpretation:</strong> every decision is factually correct. A typed model can still confidently misclassify.</p></div>
+<div class="card"><h3>“193.6× faster / 444.6× cheaper”</h3><p>These are TypeSafe's own workflow results, and TypeSafe says they are likely at the high end of real-world gains. The workflows were created by people on its model-capabilities team, so the company acknowledges potential bias.</p></div>
+<div class="card"><h3>Reference ≠ ground truth</h3><p>TypeSafe's workflow evaluation uses the average predictions of large external models as reference probabilities. That is useful for model agreement, but it is not equivalent to measuring objective business correctness.</p></div>
+<div class="card"><h3>RLHF is not the whole problem</h3><p>The story that chat-oriented training alone explains why automation stalled is too neat. Enterprise automation is also limited by data quality, permissions, integration, evaluation, exception handling, observability, liability, and process redesign.</p></div></div></section>
+
+<section id="banking"><div class="section-label">Enterprise / banking lens</div><h2>Where this pattern is worth testing — and where it is not.</h2><div class="grid">
+<div class="card"><h3>Agent evaluation</h3><p>Judge whether an agent fulfilled the request, followed policy, used appropriate evidence, or actually completed the task. This is the most obvious first enterprise experiment.</p></div>
+<div class="card"><h3>Alert & case triage</h3><p>Classify high-volume operational, fraud, AML, liquidity, data-quality, or support alerts before sending only ambiguous or material cases to a reasoning model or analyst.</p></div>
+<div class="card"><h3>Tool-call guardrails</h3><p>Assess a proposed action before execution: safe vs risky, read vs write, expected vs anomalous, approved tool vs wrong tool. Deterministic policy still owns the final authorization boundary.</p></div>
+<div class="card"><h3>Model routing</h3><p>Send simple requests to a cheaper path and escalate difficult or ambiguous work to a more capable model. Routing should be measured against actual error cost, not merely token savings.</p></div>
+<div class="card"><h3>Behavior classification</h3><p>Use bounded judgments to label customer behavior regimes, outflow patterns, service intents, or anomaly context — while keeping quantitative calculations in deterministic code.</p></div>
+<div class="card"><h3>Document and workflow routing</h3><p>Map messy human input to a known process, queue, control path, or review level. The constrained output space is particularly useful where downstream systems require predictable contracts.</p></div></div>
+<div class="callout"><strong>Wrong abstraction:</strong> “Use Jev to autonomously investigate a complex risk case.”<br><strong>Better abstraction:</strong> “Use Jev repeatedly inside the investigation workflow for bounded judgments, while code, a reasoning model, and humans each own the steps they are best suited for.”</div></section>
+
+<section id="prototype"><div class="section-label">What to prototype first</div><h2>Do not start with the biggest use case. Start where ground truth is measurable.</h2><div class="grid3">
+<div class="card"><div class="num magenta">01</div><h3>Evaluator shadow mode</h3><p>Replay existing agent traces. Define 3–5 narrow judgments such as task completion, evidence sufficiency, policy compliance, and tool appropriateness.</p></div>
+<div class="card"><div class="num magenta">02</div><h3>Compare four baselines</h3><p>Deterministic checks, Jev-like decision model, compact LLM judge, frontier LLM judge. Measure accuracy, calibration, variance, latency, and cost.</p></div>
+<div class="card"><div class="num magenta">03</div><h3>Introduce confidence routing</h3><p>Only after calibration. Auto-resolve easy cases, escalate uncertainty, and track false positives/negatives by business impact.</p></div></div>
+<p>For a production pilot, the key metrics are not “tokens saved.” They are <strong>decision accuracy, calibration, coverage, abstention/escalation rate, false-positive cost, false-negative cost, latency, cost per valid decision, and drift over time.</strong></p></section>
+
+<section><div class="section-label">Bigger implication</div><h2>The LLM may stop being the atomic unit of AI applications.</h2><p>Agent architecture is starting to resemble mature distributed systems: different components optimized for different workloads. The important question becomes less “Which single model should run the application?” and more “Which form of intelligence should own each decision?”</p>
+<div class="code">request / event
+    ↓
+deterministic checks
+    ↓
+bounded decision model ── high confidence ──→ execute
+    │
+    └── uncertain ──→ reasoning LLM / agent
+                           │
+                           ↓
+                     evaluator / guardrail
+                           │
+                 ┌─────────┴─────────┐
+                 ↓                   ↓
+               pass              escalate
+                                     ↓
+                                   human</div>
+<p class="quote">Cheap intelligence everywhere; expensive intelligence selectively.</p><p>That is the architectural idea worth watching. If it holds, System One-style models will matter less as standalone products and more as a new <strong>decision fabric</strong> woven through agents, workflows, APIs, and controls.</p></section>
+
+<section id="cn" class="chinese"><div class="section-label">中文总结</div><h2>Jev 真正值得关注的，不是“更便宜的 LLM”，而是 AI 架构多了一层。</h2><p>Jev 不是 Agent，也不是 GPT/Claude 的替代品。它更像一种<strong>概率化、类型安全的智能判断函数</strong>：输入非结构化状态，输出预先定义好的 Choice / Score / Yes-No 概率，然后由软件决定下一步。</p><div class="grid">
+<div class="card"><h3>核心价值</h3><p><strong>把 confidence 变成 workflow input。</strong> 高置信度可以自动执行，中间置信度升级给更强的 reasoning model，低置信度或高风险场景交给人。</p></div>
+<div class="card"><h3>“零幻觉”要打折理解</h3><p>它可以从结构上避免乱写 JSON、乱造字段、输出 schema 外的选项；但它仍然可能<strong>非常自信地判断错误</strong>。类型正确 ≠ 事实正确 ≠ 业务安全。</p></div>
+<div class="card"><h3>Agent 架构应该分层</h3><p>确定性规则/代码 → bounded judgment → frontier LLM → agent loop → human control。不要把所有模糊判断都塞给一个大模型。</p></div>
+<div class="card"><h3>企业真正的机会</h3><p>Agent eval、告警分流、工具调用 guardrail、model routing、文档路由、高频分类，比“让 Jev 自己跑完整个复杂调查”更合理。</p></div></div>
+<div class="callout quote"><strong>一句话：</strong>未来的企业 AI 可能不是 “Everything → Giant LLM → Everything”，而是让不同类型的智能各司其职。</div></section>
+
+<section class="sources"><div class="section-label">Sources & notes</div><h2>Primary sources</h2>
+<div class="card"><h3>TypeSafe AI — “Introducing System One Models & Jev” (Sep 15, 2026)</h3><p>Primary launch post covering System One Models, RLCD, structured probabilistic decisions, benchmark methodology, and TypeSafe's own caveats.</p><a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" target="_blank" rel="noopener">typesafe.ai/blog/introducing-system-one-models-and-jev ↗</a></div>
+<div class="card"><h3>LangChain — “Building a Harness with Jev” (Sep 17, 2026)</h3><p>Shows Jev integrated as a classifier for model routing, tool-call checks, and other bounded decisions inside an agent harness.</p><a href="https://www.langchain.com/blog/building-a-harness-with-jev" target="_blank" rel="noopener">langchain.com/blog/building-a-harness-with-jev ↗</a></div>
+<div class="card"><h3>LangChain — “Jev-as-a-Judge for Agent Evals” (Sep 20, 2026)</h3><p>Early independent experiment comparing Jev with three LLM judges on latency, cost, agreement with a human oracle, and score variance.</p><a href="https://www.langchain.com/blog/jev-agent-evals-langsmith" target="_blank" rel="noopener">langchain.com/blog/jev-agent-evals-langsmith ↗</a></div>
+<p class="small">Numbers in this article are reported by the cited sources. The LangChain evaluation is narrow and should not be treated as a general benchmark. Architecture recommendations are analysis, not claims made by TypeSafe or LangChain.</p></section>
+
+<footer><strong>AI Architecture Notes</strong> · Combined Jev / System One analysis · September 20, 2026<br>Editable version: use the <strong>Edit</strong> button above. Changes can be saved in this browser or exported as a standalone HTML file.</footer>
+</main>
+<script>
+const KEY='jev-system-one-article-v1';let editing=false;
+function toggleEdit(){editing=!editing;document.body.classList.toggle('editing',editing);document.getElementById('article').contentEditable=editing?'true':'false';if(!editing)document.getElementById('article').removeAttribute('contenteditable')}
+function saveLocal(){localStorage.setItem(KEY,document.getElementById('article').innerHTML);const b=event.currentTarget,old=b.textContent;b.textContent='Saved ✓';setTimeout(()=>b.textContent=old,1200)}
+function downloadHTML(){const clone=document.documentElement.cloneNode(true);const article=clone.querySelector('#article');article.removeAttribute('contenteditable');const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jev-system-one-agent-architecture.html';a.click();URL.revokeObjectURL(a.href)}
+window.addEventListener('DOMContentLoaded',()=>{const saved=localStorage.getItem(KEY);if(saved&&confirm('A locally saved edit exists for this article. Restore it?'))document.getElementById('article').innerHTML=saved});
+</script>
+</body></html>
