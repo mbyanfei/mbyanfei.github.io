@@ -3,61 +3,158 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>California Community Colleges — Official Websites</title>
+<title>Community College Transfer Reference — 20 Colleges + Utah Guide</title>
 <style>
-:root{--bg:#0b1020;--panel:#121a2e;--panel2:#17213a;--text:#eef3ff;--muted:#9aa8c7;--accent:#6ee7b7;--accent2:#7dd3fc;--line:rgba(255,255,255,.09);--shadow:0 18px 50px rgba(0,0,0,.28)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,#182746 0,#0b1020 42%,#070b14 100%);color:var(--text);min-height:100vh}
-.wrap{max-width:1180px;margin:auto;padding:34px 20px 64px}.hero{background:linear-gradient(135deg,rgba(110,231,183,.13),rgba(125,211,252,.08));border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.eyebrow{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800}.hero h1{font-size:clamp(2rem,5vw,4rem);line-height:1.02;margin:.45rem 0 .7rem}.hero p{max-width:800px;color:var(--muted);font-size:1.05rem;line-height:1.65;margin:0}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}.btn.primary{background:var(--accent);color:#062017;border-color:transparent}.btn:hover{transform:translateY(-1px)}
-.note{background:rgba(255,255,255,.045);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:16px;padding:14px 16px;color:#cbd5e1;margin:20px 0 26px;line-height:1.55}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:20px;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 10px 28px rgba(0,0,0,.18)}
-.badge{display:inline-flex;width:max-content;padding:5px 9px;border-radius:999px;background:rgba(110,231,183,.12);color:var(--accent);font-size:.75rem;font-weight:800;letter-spacing:.04em}.card h2{margin:12px 0 5px;font-size:1.25rem}.abbr{color:var(--muted);font-size:.92rem}.link{margin-top:18px;display:inline-flex;align-items:center;gap:8px;color:#08151f;background:linear-gradient(90deg,var(--accent),var(--accent2));text-decoration:none;font-weight:800;padding:10px 13px;border-radius:12px;width:max-content}
-footer{margin-top:30px;color:var(--muted);font-size:.9rem;text-align:center}.editing [data-editable]{outline:1px dashed rgba(125,211,252,.55);outline-offset:3px;border-radius:5px}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid{grid-template-columns:1fr}.hero{padding:24px}.wrap{padding:20px 14px 50px}}
-@media print{body{background:#fff;color:#111}.hero,.card,.note{box-shadow:none;background:#fff;color:#111;border-color:#ddd}.hero p,.abbr,.note,footer{color:#555}.toolbar{display:none}.link{background:#eee;color:#111}}
+:root{--bg:#08111f;--panel:#111c31;--panel2:#15233d;--text:#eff6ff;--muted:#9fb0ca;--mint:#66e3b4;--blue:#79cfff;--gold:#f5d06f;--line:rgba(255,255,255,.09);--danger:#ffb4a9;--shadow:0 18px 55px rgba(0,0,0,.30)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 15% 0,#183053 0,#0b1424 34%,#060b13 100%);color:var(--text);min-height:100vh}
+.wrap{max-width:1220px;margin:auto;padding:30px 18px 68px}.hero{background:linear-gradient(135deg,rgba(102,227,180,.14),rgba(121,207,255,.08));border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow)}
+.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:.76rem;color:var(--mint);font-weight:850}.hero h1{font-size:clamp(2rem,5vw,4rem);line-height:1.04;margin:.5rem 0 .8rem}.hero p{max-width:850px;color:var(--muted);line-height:1.65;margin:0;font-size:1.04rem}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);padding:10px 14px;border-radius:12px;font-weight:760;cursor:pointer}.btn.primary{background:var(--mint);color:#062116;border-color:transparent}.btn:hover{transform:translateY(-1px)}
+.section{margin-top:34px}.section h2{font-size:1.75rem;margin:0 0 7px}.section-intro{color:var(--muted);line-height:1.6;margin:0 0 18px}
+.search{width:100%;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.055);color:var(--text);padding:13px 15px;font-size:1rem;outline:none;margin:0 0 18px}.search:focus{border-color:rgba(102,227,180,.55)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:18px;min-height:175px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 10px 28px rgba(0,0,0,.16)}
+.badges{display:flex;gap:7px;flex-wrap:wrap}.badge{display:inline-flex;width:max-content;padding:5px 9px;border-radius:999px;background:rgba(102,227,180,.12);color:var(--mint);font-size:.72rem;font-weight:850;letter-spacing:.03em}.state{background:rgba(121,207,255,.11);color:var(--blue)}
+.card h3{margin:12px 0 5px;font-size:1.13rem}.meta{color:var(--muted);font-size:.9rem}.link{margin-top:16px;display:inline-flex;align-items:center;gap:7px;color:#06151d;background:linear-gradient(90deg,var(--mint),var(--blue));text-decoration:none;font-weight:850;padding:9px 12px;border-radius:11px;width:max-content}
+.note{background:rgba(255,255,255,.045);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:16px;padding:15px 17px;color:#cbd8e9;line-height:1.58;margin:18px 0}.warning{border-left-color:var(--gold)}
+.utah-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.utah-card{background:linear-gradient(180deg,#172743,#101a2d);border:1px solid var(--line);border-radius:21px;padding:21px;box-shadow:0 10px 30px rgba(0,0,0,.18)}.utah-card h3{margin:8px 0 7px;font-size:1.35rem}.utah-card p{color:#c2cee0;line-height:1.52;font-size:.94rem}.facts{display:grid;gap:9px;margin-top:14px}.fact{padding:10px 11px;background:rgba(255,255,255,.045);border-radius:11px;color:#d9e5f5;font-size:.9rem;line-height:1.45}.fact b{color:#fff}
+.callout{margin-top:18px;background:linear-gradient(135deg,rgba(245,208,111,.13),rgba(102,227,180,.07));border:1px solid var(--line);border-radius:18px;padding:18px;line-height:1.6}.callout strong{color:var(--gold)}
+.sources{font-size:.87rem;color:var(--muted);line-height:1.6;margin-top:18px}.sources a{color:var(--blue)}footer{margin-top:36px;color:var(--muted);font-size:.86rem;text-align:center}
+.editing [data-editable]{outline:1px dashed rgba(121,207,255,.55);outline-offset:3px;border-radius:5px}
+@media(max-width:1020px){.grid{grid-template-columns:repeat(3,1fr)}.utah-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding:23px}.wrap{padding:17px 12px 48px}.hero h1{font-size:2rem}}
+@media print{body{background:#fff;color:#111}.hero,.card,.utah-card,.note,.callout{background:#fff;color:#111;box-shadow:none;border-color:#ddd}.hero p,.meta,.section-intro,.utah-card p,.sources,footer{color:#555}.toolbar,.search{display:none}.grid{grid-template-columns:repeat(2,1fr)}.utah-grid{grid-template-columns:1fr}.link{background:#eee;color:#111}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <section class="hero">
-    <div class="eyebrow" data-editable>College Reference / 社区大学资料</div>
-    <h1 data-editable>California Community Colleges<br/>Official Websites</h1>
-    <p data-editable>美国加州社区大学官网速查。This page lists the 9 colleges visible in the screenshot and links directly to each institution’s official website.</p>
-  </section>
+<section class="hero">
+<div class="eyebrow" data-editable>College Transfer Reference / 社区大学转学资料</div>
+<h1 data-editable>20 Community Colleges<br/>+ Utah International Student Guide</h1>
+<p data-editable>The complete set of 20 colleges shown in the two screenshots, with direct official website links, plus a researched Utah section focused on F-1 international students and two-year-to-university transfer planning.</p>
+</section>
 
-  <div class="toolbar">
-    <button class="btn primary" id="editBtn">✏️ Edit page</button>
-    <button class="btn" id="saveBtn">💾 Save edits</button>
-    <button class="btn" id="resetBtn">↺ Reset</button>
-    <button class="btn" onclick="window.print()">🖨 Print / PDF</button>
-  </div>
-
-  <div class="note" data-editable><strong>Important:</strong> the transfer-rate, tuition, admissions, TAP/TAG and “best pathway” claims shown in the original Chinese graphic are not validated on this page. Use the official college and UC/CSU transfer sources before making an application decision.</div>
-
-  <main class="grid" id="content">
-    <article class="card"><div><span class="badge">SMC</span><h2 data-editable>Santa Monica College</h2><div class="abbr" data-editable>Santa Monica, California</div></div><a class="link" href="https://www.smc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">De Anza</span><h2 data-editable>De Anza College</h2><div class="abbr" data-editable>Cupertino, California</div></div><a class="link" href="https://www.deanza.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">Foothill</span><h2 data-editable>Foothill College</h2><div class="abbr" data-editable>Los Altos Hills, California</div></div><a class="link" href="https://foothill.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">Saddleback</span><h2 data-editable>Saddleback College</h2><div class="abbr" data-editable>Mission Viejo, California</div></div><a class="link" href="https://www.saddleback.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">CSM</span><h2 data-editable>College of San Mateo</h2><div class="abbr" data-editable>San Mateo, California</div></div><a class="link" href="https://collegeofsanmateo.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">SBCC</span><h2 data-editable>Santa Barbara City College</h2><div class="abbr" data-editable>Santa Barbara, California</div></div><a class="link" href="https://www.sbcc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">PCC</span><h2 data-editable>Pasadena City College</h2><div class="abbr" data-editable>Pasadena, California</div></div><a class="link" href="https://pasadena.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">DVC</span><h2 data-editable>Diablo Valley College</h2><div class="abbr" data-editable>Pleasant Hill, California</div></div><a class="link" href="https://www.dvc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-    <article class="card"><div><span class="badge">IVC</span><h2 data-editable>Irvine Valley College</h2><div class="abbr" data-editable>Irvine, California</div></div><a class="link" href="https://www.ivc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
-  </main>
-
-  <footer data-editable>Prepared as a quick-reference page from the supplied screenshot · Updated September 20, 2026</footer>
+<div class="toolbar">
+<button class="btn primary" id="editBtn">✏️ Edit page</button>
+<button class="btn" id="saveBtn">💾 Save edits</button>
+<button class="btn" id="resetBtn">↺ Reset</button>
+<button class="btn" onclick="window.print()">🖨 Print / PDF</button>
+<a class="btn" href="#utah" style="text-decoration:none">Utah guide ↓</a>
 </div>
+
+<section class="section">
+<h2 data-editable>All 20 colleges from the screenshots</h2>
+<p class="section-intro" data-editable>Use the search box to filter by school, abbreviation, state, or city. The buttons below go to the colleges’ official websites.</p>
+<input class="search" id="search" placeholder="Search: UCLA pathway, California, Washington, LACC, Miami…"/>
+<div class="grid" id="collegeGrid">
+<article class="card" data-search="smc santa monica college california santa monica"><div><div class="badges"><span class="badge">SMC</span><span class="badge state">CA</span></div><h3 data-editable>Santa Monica College</h3><div class="meta" data-editable>Santa Monica, California</div></div><a class="link" href="https://www.smc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="de anza college california cupertino"><div><div class="badges"><span class="badge">De Anza</span><span class="badge state">CA</span></div><h3 data-editable>De Anza College</h3><div class="meta" data-editable>Cupertino, California</div></div><a class="link" href="https://www.deanza.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="foothill college california los altos hills"><div><div class="badges"><span class="badge">Foothill</span><span class="badge state">CA</span></div><h3 data-editable>Foothill College</h3><div class="meta" data-editable>Los Altos Hills, California</div></div><a class="link" href="https://foothill.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="saddleback college california mission viejo"><div><div class="badges"><span class="badge">Saddleback</span><span class="badge state">CA</span></div><h3 data-editable>Saddleback College</h3><div class="meta" data-editable>Mission Viejo, California</div></div><a class="link" href="https://www.saddleback.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="csm college of san mateo california"><div><div class="badges"><span class="badge">CSM</span><span class="badge state">CA</span></div><h3 data-editable>College of San Mateo</h3><div class="meta" data-editable>San Mateo, California</div></div><a class="link" href="https://collegeofsanmateo.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="sbcc santa barbara city college california"><div><div class="badges"><span class="badge">SBCC</span><span class="badge state">CA</span></div><h3 data-editable>Santa Barbara City College</h3><div class="meta" data-editable>Santa Barbara, California</div></div><a class="link" href="https://www.sbcc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="pcc pasadena city college california"><div><div class="badges"><span class="badge">PCC</span><span class="badge state">CA</span></div><h3 data-editable>Pasadena City College</h3><div class="meta" data-editable>Pasadena, California</div></div><a class="link" href="https://pasadena.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="dvc diablo valley college california pleasant hill"><div><div class="badges"><span class="badge">DVC</span><span class="badge state">CA</span></div><h3 data-editable>Diablo Valley College</h3><div class="meta" data-editable>Pleasant Hill, California</div></div><a class="link" href="https://www.dvc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="ivc irvine valley college california"><div><div class="badges"><span class="badge">IVC</span><span class="badge state">CA</span></div><h3 data-editable>Irvine Valley College</h3><div class="meta" data-editable>Irvine, California</div></div><a class="link" href="https://www.ivc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="lacc los angeles city college california"><div><div class="badges"><span class="badge">LACC</span><span class="badge state">CA</span></div><h3 data-editable>Los Angeles City College</h3><div class="meta" data-editable>Los Angeles, California</div></div><a class="link" href="https://www.lacitycollege.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="occ orange coast college california costa mesa"><div><div class="badges"><span class="badge">OCC</span><span class="badge state">CA</span></div><h3 data-editable>Orange Coast College</h3><div class="meta" data-editable>Costa Mesa, California</div></div><a class="link" href="https://orangecoastcollege.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="green river college washington auburn"><div><div class="badges"><span class="badge">Green River</span><span class="badge state">WA</span></div><h3 data-editable>Green River College</h3><div class="meta" data-editable>Auburn, Washington</div></div><a class="link" href="https://greenriver.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="bellevue college washington"><div><div class="badges"><span class="badge">Bellevue</span><span class="badge state">WA</span></div><h3 data-editable>Bellevue College</h3><div class="meta" data-editable>Bellevue, Washington</div></div><a class="link" href="https://www.bellevuecollege.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="seattle central college washington"><div><div class="badges"><span class="badge">Seattle Central</span><span class="badge state">WA</span></div><h3 data-editable>Seattle Central College</h3><div class="meta" data-editable>Seattle, Washington</div></div><a class="link" href="https://seattlecentral.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="montgomery college maryland rockville germantown takoma park"><div><div class="badges"><span class="badge">Montgomery</span><span class="badge state">MD</span></div><h3 data-editable>Montgomery College</h3><div class="meta" data-editable>Montgomery County, Maryland</div></div><a class="link" href="https://www.montgomerycollege.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="nova northern virginia community college virginia"><div><div class="badges"><span class="badge">NOVA</span><span class="badge state">VA</span></div><h3 data-editable>Northern Virginia Community College</h3><div class="meta" data-editable>Northern Virginia</div></div><a class="link" href="https://www.nvcc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="valencia college florida orlando"><div><div class="badges"><span class="badge">Valencia</span><span class="badge state">FL</span></div><h3 data-editable>Valencia College</h3><div class="meta" data-editable>Orlando, Florida</div></div><a class="link" href="https://valenciacollege.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="miami dade college florida mdc"><div><div class="badges"><span class="badge">Miami Dade</span><span class="badge state">FL</span></div><h3 data-editable>Miami Dade College</h3><div class="meta" data-editable>Miami, Florida</div></div><a class="link" href="https://www.mdc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="hcc houston community college houston city college texas"><div><div class="badges"><span class="badge">HCC</span><span class="badge state">TX</span></div><h3 data-editable>Houston City College</h3><div class="meta" data-editable>Houston, Texas · formerly Houston Community College</div></div><a class="link" href="https://www.hccs.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+<article class="card" data-search="acc austin community college texas"><div><div class="badges"><span class="badge">ACC</span><span class="badge state">TX</span></div><h3 data-editable>Austin Community College District</h3><div class="meta" data-editable>Austin, Texas</div></div><a class="link" href="https://www.austincc.edu/" target="_blank" rel="noopener">Official website ↗</a></article>
+</div>
+
+<div class="note warning" data-editable><strong>Do not treat the screenshot’s transfer percentages or “best transfer school” claims as verified.</strong> Community-college transfer outcomes depend heavily on major, GPA, prerequisite completion, residency, articulation agreements and the destination university. The official college sites above are the starting point; destination-university transfer rules should be checked separately.</div>
+</section>
+
+<section class="section" id="utah">
+<h2 data-editable>Utah options for international students</h2>
+<p class="section-intro" data-editable>Utah has fewer institutions that fit the classic “community college” model. Salt Lake Community College is the state’s institution literally named a community college. Snow College is a public two-year residential college, while Utah State University Eastern is a regional USU campus with several associate-degree options open to F-1 students.</p>
+
+<div class="utah-grid">
+<article class="utah-card">
+<div class="badges"><span class="badge">SLCC</span><span class="badge state">Salt Lake City area</span></div>
+<h3 data-editable>Salt Lake Community College</h3>
+<p data-editable>Best fit when the goal is a traditional community-college transfer route in Utah, particularly if proximity to the University of Utah matters. SLCC is a commuter college and does not provide on-campus housing.</p>
+<div class="facts">
+<div class="fact"><b>International application fee:</b> $75 non-refundable.</div>
+<div class="fact"><b>2026–27 financial proof / estimated annual budget:</b> at least $28,974 in liquid funds. Published budget includes $15,229 nonresident tuition/fees, $9,000 housing/food, $1,700 personal expenses, $900 books/supplies and $2,145 health insurance.</div>
+<div class="fact"><b>Academic documents:</b> official proof of secondary-school graduation equivalent to a U.S. high-school diploma; English translation may be required; passport biographical page.</div>
+<div class="fact"><b>English:</b> TOEFL/IELTS is not required for admission. Students complete placement after arrival; students needing additional English are placed in Intensive ESL.</div>
+<div class="fact"><b>Deadlines from outside the U.S.:</b> Summer Apr 1 · Fall Jun 1 · Spring Nov 1.</div>
+<div class="fact"><b>Health / visa:</b> F-1 students are enrolled in the college health plan; MMR documentation and TB screening are required before classes.</div>
+<div class="fact"><b>Transfer:</b> AA/AS/APE programs are designed for university transfer. SLCC reports that 69% of students graduating with one of these transfer degrees move to a four-year institution; among those transfers, the University of Utah is the largest destination in its published quick facts.</div>
+</div>
+<p><a class="link" href="https://www.slcc.edu/iss/apply/apply-from-outside.aspx" target="_blank" rel="noopener">International admissions ↗</a></p>
+</article>
+
+<article class="utah-card">
+<div class="badges"><span class="badge">Snow</span><span class="badge state">Ephraim, Utah</span></div>
+<h3 data-editable>Snow College</h3>
+<p data-editable>Public two-year residential college with on-campus housing, an established international office and a clear 2+2 transfer model. It is a strong option when housing, smaller classes and a lower published annual budget matter.</p>
+<div class="facts">
+<div class="fact"><b>International application:</b> online application, passport, financial statement, academic records and proof of high-school completion; records should be certified and translated into English.</div>
+<div class="fact"><b>Application fee:</b> the current international admissions page lists $100 non-refundable.</div>
+<div class="fact"><b>Financial proof:</b> bank statement showing at least $23,000 plus a signed Financial Statement Form.</div>
+<div class="fact"><b>2026–27 estimated annual cost:</b> $23,000 for two semesters — $15,802 tuition/fees, $1,400 required health insurance and $5,798 living expenses. Snow recommends budgeting another $1,000–$4,000 for travel, visa costs, books and personal expenses.</div>
+<div class="fact"><b>English for direct academic entry:</b> current admissions materials list IELTS 6.0; TOEFL iBT 4 on the new 1–6 scale (older 63/15 scale accepted through Jan 2027); Duolingo and other tests are also accepted. Snow also offers a conditional ESL pathway.</div>
+<div class="fact"><b>Important discrepancy:</b> Snow’s current international application page lists Duolingo 110, while the academic catalog still lists 100. Verify the current cutoff with the Center for Global Engagement before applying.</div>
+<div class="fact"><b>Transfer:</b> an AA/AS is built as the first two years of a bachelor’s degree; Snow states students can transfer to universities throughout Utah, including the University of Utah, if destination transfer requirements are met.</div>
+<div class="fact"><b>Scholarship timing:</b> Snow publishes international scholarships; spring deadline is Oct 1 and fall deadline is Mar 1.</div>
+</div>
+<p><a class="link" href="https://snow.edu/international/apply.html" target="_blank" rel="noopener">International admissions ↗</a></p>
+</article>
+
+<article class="utah-card">
+<div class="badges"><span class="badge">USU Eastern</span><span class="badge state">Price, Utah</span></div>
+<h3 data-editable>Utah State University Eastern</h3>
+<p data-editable>A small regional Utah State University campus with selected associate programs authorized for F-1 students. Especially relevant if the long-term destination may be Utah State University.</p>
+<div class="facts">
+<div class="fact"><b>Application fee:</b> $50 non-refundable.</div>
+<div class="fact"><b>Academic records:</b> secondary-school transcripts showing the last three years plus official transcripts from prior colleges/universities. Official records must be sent in sealed form.</div>
+<div class="fact"><b>English:</b> examples include IELTS Academic 6.0 overall with at least 5.0 in each band, Duolingo 105, or TOEFL iBT 71 on the prior scale; USU lists a 4.0 minimum for TOEFL tests using the new scale after Jan 21, 2026.</div>
+<div class="fact"><b>2026–27 estimated annual cost:</b> $28,322 for an associate student, including $14,442 tuition/fees plus estimated living and personal costs.</div>
+<div class="fact"><b>I-20 documents:</b> passport, bank statement / sponsor support, Affidavit of Financial Support, plus visa/I-20 documents when applicable. Proof of finances for one year is required.</div>
+<div class="fact"><b>Deadlines:</b> Fall priority Mar 1 · Spring priority Oct 1. Summer admission is not available for international students.</div>
+<div class="fact"><b>Program restriction:</b> only specified programs are authorized for F-1 students; certificates are not available to international students. The General Studies AS/AA is on the approved list.</div>
+<div class="fact"><b>Class format:</b> international students must take the majority of classes face-to-face to maintain the required physical presence.</div>
+</div>
+<p><a class="link" href="https://eastern.usu.edu/international-students/" target="_blank" rel="noopener">International admissions ↗</a></p>
+</article>
+</div>
+
+<div class="callout" data-editable><strong>Practical selection logic:</strong> For a student aiming at the University of Utah, SLCC is the most straightforward Utah community-college-style route because of location and its established transfer volume into U of U, but the lack of campus housing creates a real logistical burden for a new international student. Snow is the cleaner residential/international-student experience and currently publishes the lowest annual budget of these three, with ESL support and on-campus housing. USU Eastern makes the most sense when the student wants a smaller residential setting and may ultimately stay within the Utah State University system.</div>
+
+<div class="sources">
+<strong>Official-source links:</strong>
+<a href="https://www.slcc.edu/iss/apply/apply-from-outside.aspx" target="_blank">SLCC international admissions</a> ·
+<a href="https://www.slcc.edu/iss/deadlines.aspx" target="_blank">SLCC deadlines</a> ·
+<a href="https://www.slcc.edu/academics/degrees/index.aspx" target="_blank">SLCC transfer degrees</a> ·
+<a href="https://snow.edu/international/apply.html" target="_blank">Snow international admissions</a> ·
+<a href="https://snow.edu/international/cost.html" target="_blank">Snow international costs</a> ·
+<a href="https://snow.edu/international/transfer-to-university.html" target="_blank">Snow transfer pathway</a> ·
+<a href="https://eastern.usu.edu/international-students/" target="_blank">USU Eastern international admissions</a>.
+</div>
+</section>
+
+<footer data-editable>Updated September 20, 2026 · Verify tuition, deadlines and visa requirements again immediately before applying because institutional policies can change.</footer>
+</div>
+
 <script>
-const key='ca-community-colleges-edits-v1';
-const editBtn=document.getElementById('editBtn'), saveBtn=document.getElementById('saveBtn'), resetBtn=document.getElementById('resetBtn');
+const key='community-college-guide-edits-v2';
+const editBtn=document.getElementById('editBtn'),saveBtn=document.getElementById('saveBtn'),resetBtn=document.getElementById('resetBtn');
 let editing=false;
 function setEditing(on){editing=on;document.body.classList.toggle('editing',on);document.querySelectorAll('[data-editable]').forEach(el=>el.contentEditable=on?'true':'false');editBtn.textContent=on?'✅ Finish editing':'✏️ Edit page';}
 editBtn.onclick=()=>setEditing(!editing);
-saveBtn.onclick=()=>{const vals=[...document.querySelectorAll('[data-editable]')].map(el=>el.innerHTML);localStorage.setItem(key,JSON.stringify(vals));saveBtn.textContent='✅ Saved';setTimeout(()=>saveBtn.textContent='💾 Save edits',1200);};
+saveBtn.onclick=()=>{const vals=[...document.querySelectorAll('[data-editable]')].map(el=>el.innerHTML);localStorage.setItem(key,JSON.stringify(vals));saveBtn.textContent='✅ Saved locally';setTimeout(()=>saveBtn.textContent='💾 Save edits',1300);};
 resetBtn.onclick=()=>{localStorage.removeItem(key);location.reload();};
 try{const vals=JSON.parse(localStorage.getItem(key)||'null');if(vals){document.querySelectorAll('[data-editable]').forEach((el,i)=>{if(vals[i]!=null)el.innerHTML=vals[i]});}}catch(e){}
+document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();document.querySelectorAll('#collegeGrid .card').forEach(c=>{c.style.display=!q||c.dataset.search.includes(q)||c.innerText.toLowerCase().includes(q)?'flex':'none'})});
 </script>
 </body>
 </html>
