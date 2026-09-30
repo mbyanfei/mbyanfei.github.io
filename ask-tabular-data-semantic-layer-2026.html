@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ask Questions About Enterprise Tabular Data — 2026 Landscape</title>
+<style>
+:root{
+  --bg:#08111f; --panel:#0f1c2e; --panel2:#13243a; --text:#eaf2ff;
+  --muted:#a8b8cf; --line:#29405e; --accent:#7dd3fc; --accent2:#a78bfa;
+  --good:#34d399; --warn:#fbbf24; --bad:#fb7185;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#07101d 0%,#0a1424 100%);color:var(--text);
+font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+main{max-width:1180px;margin:auto;padding:40px 22px 80px}
+.hero{padding:34px;border:1px solid var(--line);background:linear-gradient(145deg,#0f1d31,#0c1727);
+border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+.kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
+h1{font-size:clamp(2.2rem,5vw,4.5rem);line-height:1.02;margin:.35rem 0 1rem}
+h2{margin-top:3rem;font-size:1.8rem}
+h3{margin-top:2rem;font-size:1.25rem}
+p,li{color:#d8e4f5}.lead{font-size:1.18rem;color:#c9daf0;max-width:900px}
+.callout{border-left:4px solid var(--accent);padding:16px 18px;background:#0d1a2c;border-radius:10px;margin:22px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}
+.card h3{margin-top:0}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{white-space:pre-wrap;background:#07101c;border:1px solid var(--line);border-radius:16px;padding:20px;overflow:auto;color:#dff4ff}
+table{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border-radius:14px;overflow:hidden}
+th,td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#13243a;color:#fff}
+small,.muted{color:var(--muted)}
+.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:.8rem;font-weight:700;margin-right:8px}
+.good{background:rgba(52,211,153,.13);color:#8ff0c6}.warn{background:rgba(251,191,36,.13);color:#ffd974}.bad{background:rgba(251,113,133,.13);color:#ff9bab}
+a{color:var(--accent)}
+footer{margin-top:55px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<main>
+<section class="hero">
+  <div class="kicker">Enterprise Conversational Analytics • 2026</div>
+  <h1>Ask Questions About Enterprise Tabular Data</h1>
+  <p class="lead">How natural-language analytics, semantic layers, context layers, ontologies, and agentic text-to-SQL are converging — and what architecture is appropriate when users expect trustworthy answers about sales, finance, deposits, NII, revenue, forecasts, or other governed metrics.</p>
+  <div class="callout"><strong>Core conclusion:</strong> “Can an LLM generate SQL?” is no longer the hard question. The hard question is whether the system can reliably understand the intended business definition, grain, joins, time logic, security, and approved calculation — and know when not to answer.</div>
+</section>
+
+<h2>1. Where the technology is now</h2>
+<p>Text-to-SQL capability has improved dramatically. Enterprise-focused benchmarks such as Spider 2.0 and BIRD show rapid gains, especially when systems use schema retrieval, tools, query repair, examples, and multi-step planning. But benchmark success does not remove the enterprise semantics problem.</p>
+<pre>User question
+      ↓
+Intent / domain routing
+      ↓
+Business semantics + metadata + context retrieval
+      ↓
+Metric / entity / dimension resolution
+      ↓
+Query planning
+      ↓
+Semantic query OR generated SQL
+      ↓
+Validation / execution
+      ↓
+Result checks
+      ↓
+Natural-language explanation</pre>
+
+<h2>2. Why raw text-to-SQL is dangerous</h2>
+<p>A question like <em>“What was commercial deposit growth last quarter?”</em> hides critical decisions: what counts as commercial, average versus ending balance, gross versus net-of-sweeps, fiscal versus calendar quarter, effective versus posting date, legal entity, FX treatment, customer hierarchy, and denominator logic.</p>
+<div class="callout"><strong>Syntax correctness ≠ analytical correctness.</strong> A system can produce valid SQL and still return a plausible but materially wrong number.</div>
+
+<h2>3. Is a semantic layer required?</h2>
+<div class="grid">
+  <div class="card"><h3>Experiment</h3><p><span class="badge warn">Optional</span> Raw NL→SQL can be acceptable for prototypes and analyst exploration.</p></div>
+  <div class="card"><h3>Enterprise self-service</h3><p><span class="badge good">Strongly recommended</span> Governed metrics, joins, dimensions and definitions materially reduce ambiguity.</p></div>
+  <div class="card"><h3>Finance / risk / regulatory</h3><p><span class="badge good">Treat as mandatory</span> Business definitions should be executable and traceable rather than invented by the model.</p></div>
+</div>
+
+<h2>4. Five kinds of “semantic layer” now in the market</h2>
+<table>
+<tr><th>Type</th><th>What it defines</th><th>Examples</th></tr>
+<tr><td>1. BI semantic model</td><td>Measures, dimensions, joins, hierarchies, calculations, security</td><td>Power BI, Looker, Tableau</td></tr>
+<tr><td>2. Headless / universal metrics layer</td><td>Tool-independent metrics and dimensions</td><td>dbt Semantic Layer / MetricFlow, Cube, AtScale</td></tr>
+<tr><td>3. Warehouse-native semantic layer</td><td>Semantics defined directly in the warehouse/lakehouse platform</td><td>Snowflake Semantic Views, Databricks Metric Views</td></tr>
+<tr><td>4. Enterprise ontology / knowledge model</td><td>Business entities, relationships and cross-domain meaning</td><td>Fabric IQ Ontology and related enterprise knowledge models</td></tr>
+<tr><td>5. Agent / context layer</td><td>Terminology, instructions, verified questions, examples, user and domain context</td><td>Databricks Genie knowledge, Snowflake verified queries, ThoughtSpot Context Layer</td></tr>
+</table>
+
+<h2>5. Power BI semantic models</h2>
+<p>Power BI remains one of the most mature examples of a BI semantic layer, with tables, relationships, measures, calculated columns, hierarchies, descriptions, calculation groups, formatting, and row-level security. Microsoft is increasingly positioning these models as grounding not only for dashboards but also for Copilot and agent experiences.</p>
+<pre>Tables
+Relationships
+Measures
+Calculated columns
+Hierarchies
+Formatting
+Synonyms
+Descriptions
+Calculation groups
+Security</pre>
+
+<h2>6. Headless semantic layers</h2>
+<p>Products such as dbt Semantic Layer / MetricFlow, Cube, and AtScale move business definitions outside a single BI front end. This matters when the same metric must serve Power BI, Python, agents, APIs, notebooks, applications, and other analytics tools.</p>
+<pre>LLM
+ ↓
+Revenue + Region + Q3 2026
+ ↓
+Semantic / metrics layer
+ ↓
+Deterministic query generation
+ ↓
+Warehouse</pre>
+
+<h2>7. Warehouse-native semantics</h2>
+<div class="grid">
+<div class="card"><h3>Snowflake</h3><p>Semantic Views define logical tables, facts, dimensions, metrics, relationships, synonyms and descriptions. Cortex analytics/agent experiences can combine those models with verified queries and custom instructions.</p></div>
+<div class="card"><h3>Databricks</h3><p>Metric Views standardize dimensions and measures in Unity Catalog. Genie-style agents add instructions, example SQL, trusted assets, benchmark sets and domain context.</p></div>
+</div>
+
+<h2>8. Ontology is not the same as a metrics layer</h2>
+<pre>Semantic metric layer
+= HOW DO WE CALCULATE THINGS?
+
+Ontology
+= WHAT THINGS EXIST AND HOW ARE THEY RELATED?</pre>
+<p>A metric layer can define Revenue, Average Balance, NIM, Product and Region. An ontology can represent Customer → Account → Product, Customer → Relationship Manager, Transaction → Account, and relationships spanning deposits, loans, CRM and service cases.</p>
+
+<h2>9. The emerging context layer</h2>
+<p>Modern systems increasingly separate data semantics from analytical and user context.</p>
+<div class="grid">
+<div class="card"><h3>Data semantics</h3><p>Tables, columns, joins, grain, metrics, aggregation rules.</p></div>
+<div class="card"><h3>Analytical context</h3><p>Business rules, default filters, exclusions, approved procedures, terminology, examples.</p></div>
+<div class="card"><h3>User context</h3><p>Role, region, entitlements, conversational state and relevant preferences.</p></div>
+</div>
+
+<h2>10. A catalog is not a semantic layer</h2>
+<p>Catalogs such as Purview, Collibra, Alation, Atlan and Unity Catalog can describe tables, columns, owners, lineage, quality and classifications. That is valuable grounding, but it is not necessarily an executable definition of Revenue, NII, Average Balance, Churn or Liquidity Utilization.</p>
+
+<h2>11. Metrics layer vs. semantic layer vs. ontology</h2>
+<pre>Ontology
+"what the business is"
+        ↓
+Semantic model
+"how analytical concepts relate"
+        ↓
+Metrics layer
+"how KPIs are calculated"
+        ↓
+Physical model
+"where the rows live"</pre>
+
+<h2>12. Recommended architecture: hybrid, not semantic layer versus text-to-SQL</h2>
+<pre>                 User Question
+                       │
+                       ▼
+                Question Router
+                       │
+          ┌────────────┴─────────────┐
+          │                          │
+   Governed question           Exploratory question
+          │                          │
+          ▼                          ▼
+  Semantic Layer              NL → SQL Agent
+          │                          │
+ deterministic query         generated SQL
+          │                          │
+          └────────────┬─────────────┘
+                       ▼
+                  Validation
+                       │
+                       ▼
+                    Result</pre>
+<p>For “What was NII last month?”, use a certified metric. For “Which 20 customers had unusually large wire transfers versus their prior 90-day behavior?”, agentic SQL or an analytical workflow may be more appropriate.</p>
+
+<h2>13. Three answer classes</h2>
+<div class="grid">
+<div class="card"><h3><span class="badge good">Certified</span></h3><p>Entirely derived from governed semantic metrics, with metric identity, source model, time period and filters visible.</p></div>
+<div class="card"><h3><span class="badge warn">Exploratory</span></h3><p>Generated through AI/SQL against approved data assets, with query lineage and reviewability.</p></div>
+<div class="card"><h3><span class="badge bad">Unable to determine</span></h3><p>When the term is ambiguous or no approved definition exists, clarify rather than fabricate.</p></div>
+</div>
+
+<h2>14. Build a golden-question benchmark</h2>
+<p>Before releasing an “Ask Finance” or “Ask Data” capability, collect 100–300 real questions and store the expected interpretation, metric, dimensions, filters, expected SQL/DAX or semantic query, expected result, and tolerance.</p>
+<pre>Question
+Expected interpretation
+Expected metric
+Expected dimensions
+Expected filters
+Expected SQL / DAX / semantic query
+Expected result
+Allowed tolerance</pre>
+<p>This turns evaluation from “the demo looks impressive” into measurable analytical correctness.</p>
+
+<h2>15. Reference architecture for a bank</h2>
+<pre>┌────────────────────────────────────────────┐
+│             Conversational UI              │
+│ Copilot / Web / Teams / custom application │
+└─────────────────────┬──────────────────────┘
+                      │
+┌─────────────────────▼──────────────────────┐
+│              Analytics Agent               │
+│ intent routing / planning / clarification  │
+└─────────────────────┬──────────────────────┘
+                      │
+┌─────────────────────▼──────────────────────┐
+│                Context Layer               │
+│ terminology / instructions / gold queries  │
+│ policies / domain knowledge / examples     │
+└─────────────────────┬──────────────────────┘
+                      │
+          ┌───────────┴────────────┐
+          ▼                        ▼
+┌───────────────────┐       ┌─────────────────┐
+│ Semantic Metrics  │       │  NL→SQL Agent   │
+│ certified KPIs    │       │ exploratory     │
+└─────────┬─────────┘       └────────┬────────┘
+          │                           │
+          └────────────┬──────────────┘
+                       ▼
+             Query validation layer
+                       │
+                       ▼
+             Enterprise data layer</pre>
+
+<div class="callout"><strong>Design rule:</strong> certified metrics first → semantic query → text-to-SQL fallback → clarify or decline when ambiguous.</div>
+
+<h2>16. Market convergence</h2>
+<table>
+<tr><th>Ecosystem</th><th>Conversational / agent layer</th><th>Semantic foundation</th><th>Broader knowledge/context</th></tr>
+<tr><td>Microsoft</td><td>Copilot / Fabric Data Agent</td><td>Power BI Semantic Model</td><td>Fabric IQ / ontology</td></tr>
+<tr><td>Snowflake</td><td>Cortex Agents / Analyst</td><td>Semantic Views</td><td>Verified queries + custom instructions</td></tr>
+<tr><td>Databricks</td><td>Genie Agents</td><td>Metric Views</td><td>Knowledge store, examples, benchmarks</td></tr>
+<tr><td>Google</td><td>Gemini / Conversational Analytics</td><td>LookML</td><td>Business definitions and governed modeling</td></tr>
+<tr><td>Salesforce / Tableau</td><td>Tableau Agent</td><td>Tableau Semantics</td><td>Data 360 context</td></tr>
+<tr><td>Independent</td><td>Custom agents</td><td>dbt / Cube / AtScale</td><td>Custom context / governance layer</td></tr>
+</table>
+
+<h2>17. Bottom line</h2>
+<div class="callout">
+<strong>Do not design an “NL-to-SQL system.” Build a “business question → governed answer system.”</strong><br/><br/>
+SQL should be one execution mechanism underneath the platform, not the architecture itself.
+</div>
+
+<h2>Selected references</h2>
+<ul>
+<li><a href="https://spider2-sql.github.io/">Spider 2.0</a></li>
+<li><a href="https://bird-bench.github.io/">BIRD benchmark</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-semantic-models">Microsoft: Copilot and semantic models</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/semantic-models-third-party">Microsoft: Power BI semantic models and third-party tools</a></li>
+<li><a href="https://learn.microsoft.com/en-us/fabric/iq/overview">Microsoft Fabric IQ</a></li>
+<li><a href="https://docs.getdbt.com/docs/use-dbt-semantic-layer/dbt-sl">dbt Semantic Layer</a></li>
+<li><a href="https://docs.snowflake.com/en/user-guide/views-semantic/overview">Snowflake Semantic Views</a></li>
+<li><a href="https://docs.databricks.com/aws/en/uc-semantics/metric-views/basic-modeling">Databricks Metric Views</a></li>
+<li><a href="https://docs.cloud.google.com/looker/docs/conversational-analytics-overview">Looker Conversational Analytics</a></li>
+</ul>
+
+<footer>
+Published September 30, 2026 • Enterprise data/AI research brief
+</footer>
+</main>
+</body>
+</html>
