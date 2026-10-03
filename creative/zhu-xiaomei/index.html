@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="《猪小妹的幸福生活》第一版电影故事构想：一部关于48岁女性重新定义幸福与自我选择的现实主义剧情片。">
+<title>《猪小妹的幸福生活》— 第一版电影故事构想</title>
+<style>
+:root{--bg:#f6f0e7;--paper:#fffdf8;--ink:#2b2723;--muted:#746d65;--line:#ded3c4;--accent:#9b3f3f;--accent2:#d6a96e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.8 ui-serif,Georgia,"Noto Serif SC","Songti SC",serif}
+a{color:inherit}.wrap{max-width:980px;margin:auto;padding:0 24px}
+.hero{min-height:72vh;display:flex;align-items:flex-end;padding:72px 0 56px;background:linear-gradient(180deg,#2f2b28 0%,#4a3f38 72%,#6a5246 100%);color:#fff}
+.eyebrow{font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#e8cda8}
+h1{font-size:clamp(48px,9vw,92px);line-height:1.02;letter-spacing:-.04em;margin:12px 0 24px}
+.subtitle{max-width:720px;font-size:21px;color:#f3e9dc}.meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.pill{border:1px solid #ffffff55;border-radius:999px;padding:7px 12px;font:600 12px system-ui,sans-serif;color:#f4eadf}
+.notice{margin:30px 0 0;padding:14px 16px;border-left:4px solid var(--accent2);background:#fff7eb;color:#5e4a37;font:14px/1.6 system-ui,sans-serif}
+.toolbar{position:sticky;top:0;z-index:10;background:#f6f0e7ee;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.toolbar .wrap{display:flex;gap:10px;align-items:center;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+button,.btn{font:600 13px system-ui,sans-serif;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:8px;cursor:pointer;text-decoration:none}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}#status{margin-left:auto;font:12px system-ui,sans-serif;color:var(--muted)}
+main{padding:42px 0 70px}.section{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:34px;margin:0 0 24px;box-shadow:0 12px 40px #5c46300b}
+h2{font-size:30px;line-height:1.25;margin:0 0 18px}h3{font-size:21px;margin:28px 0 10px}p{margin:0 0 15px}.lead{font-size:21px;line-height:1.75}.quote{font-size:25px;line-height:1.6;margin:26px 0;padding:8px 0 8px 22px;border-left:4px solid var(--accent);color:#5d3131}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{border:1px solid var(--line);border-radius:14px;padding:20px;background:#fffaf2}.label{font:700 11px system-ui,sans-serif;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+ol{padding-left:24px}li{margin:0 0 10px}.ending{font-size:20px;background:#3a312d;color:#f7eee5;border:none}.ending .label{color:#e9c28f}
+footer{padding:30px 0 55px;color:var(--muted);font:13px/1.6 system-ui,sans-serif;text-align:center}
+[contenteditable="true"]{outline:2px dashed #b88862;outline-offset:6px;background:#fffefb}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.section{padding:24px}.hero{min-height:65vh}#status{width:100%;margin-left:0}}
+@media print{.toolbar{display:none}.hero{min-height:auto}.section{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<div class="eyebrow">电影故事构想 · 第一版</div>
+<h1>《猪小妹的幸福生活》</h1>
+<p class="subtitle">一个48岁的女人，忽然发现：别人眼里的“幸福”，也许只是她把自己放在最后很多年之后形成的秩序。</p>
+<div class="meta"><span class="pill">现实主义剧情片</span><span class="pill">家庭 / 女性 / 黑色幽默</span><span class="pill">主角：猪小妹，48岁</span></div>
+<div class="notice"><strong>创作说明：</strong>本页是电影剧情创作草案，并非对任何真实人物经历的描述。除“猪小妹”这一名字和年龄设定外，人物关系、事件、对白与经历均为虚构，可继续根据真实人物的性格与生活细节重新创作。</div>
+</div>
+</header>
+
+<nav class="toolbar">
+<div class="wrap">
+<a class="btn" href="/">← 返回 Yan's Knowledge Portal</a>
+<button id="editBtn" class="primary">开启编辑</button>
+<button id="saveBtn">保存本机</button>
+<button id="resetBtn">恢复发布版</button>
+<button id="exportBtn">导出 HTML</button>
+<button onclick="window.print()">打印 / PDF</button>
+<span id="status">发布版</span>
+</div>
+</nav>
+
+<main class="wrap" id="story">
+<section class="section">
+<div class="label">Logline</div>
+<h2>一句话故事</h2>
+<p class="lead">48岁的猪小妹，在所有人眼里都过着安稳、体面、令人羡慕的生活。一次整理旧物时，她发现了一张二十多年前没有使用的单程火车票。她突然决定独自去一趟那个自己年轻时本来要去、却最终没有去成的城市。</p>
+<p class="quote">“我不是要离开谁。我只是想知道，如果有一天不先替别人想，我会怎么过一天。”</p>
+</section>
+
+<section class="section">
+<div class="label">Core Idea</div>
+<h2>这部电影真正讲什么</h2>
+<p>它表面上讲一个中年女人突然出走，实际上讲的是一个更难回答的问题：<strong>一个人的生活看起来没有任何问题时，她还有没有资格重新选择？</strong></p>
+<p>猪小妹没有遭遇戏剧化的灾难。她的困境恰恰来自一种“还不错”的生活：家庭完整、日子稳定、身边人也并非坏人。正因为如此，她连“不开心”都显得缺乏理由。</p>
+<p>电影不把“离开家庭”当答案，也不把“回归家庭”当答案。它最终要让猪小妹获得的，是一种以前没有真正拥有过的能力：<strong>她可以自己决定。</strong></p>
+</section>
+
+<section class="section">
+<div class="label">Character</div>
+<h2>主角：猪小妹，48岁</h2>
+<div class="grid">
+<div class="card"><h3>别人眼里的她</h3><p>能干、热心、会照顾人。记得全家的生日、药量、账单、亲戚关系和冰箱里还有什么。大家都说她“命挺好”“挺幸福”。</p></div>
+<div class="card"><h3>她自己不知道的她</h3><p>年轻时好奇心很强，喜欢唱歌、逛陌生街道、坐长途车，曾经认真想过去另一个城市重新开始。后来每一次选择都很合理，只是所有“合理”加在一起，慢慢把她自己挤没了。</p></div>
+</div>
+<h3>人物弧光</h3>
+<p>故事开始时，她习惯回答：“都行，你们决定。”故事结束时，她不需要变成另一个人，也不需要证明自己勇敢。她只需要能够平静地说出一句：“这次我想这样。”</p>
+</section>
+
+<section class="section">
+<div class="label">Act I</div>
+<h2>第一幕：看起来很幸福</h2>
+<p>电影从极普通的早晨开始。猪小妹六点多起床，厨房里同时做三件事：煮粥、回家庭群消息、找一只不知道被谁放错地方的充电器。</p>
+<p>家里每个人都在叫她。奇怪的是，没有人对她不好。甚至每个人都很依赖她。</p>
+<p>某天，她去收拾一箱旧东西，翻出一张二十多年前的火车票。票已经发黄，目的地却很清楚。那是她年轻时买好的单程票。她当年因为一个“很合理”的原因没有上车，后来再也没去。</p>
+<p>她把票放进口袋。当天晚上，家里人照常讨论周末安排，没有人发现她整顿饭几乎没说话。</p>
+</section>
+
+<section class="section">
+<div class="label">Act II</div>
+<h2>第二幕：猪小妹不见了</h2>
+<p>一个星期一，家人醒来，桌上没有早餐。猪小妹不在。手机关机，只留下一张纸：</p>
+<p class="quote">“我出去几天。别担心。冰箱里有饺子。”</p>
+<p>家里瞬间失序。有人先担心她的安全，有人先问钥匙在哪里，有人突然发现自己连洗衣机哪个程序都不知道。</p>
+<p>与此同时，猪小妹坐上了去往旧车票目的地的高铁。她原以为自己会激动，结果第一件事是因为不会改签差点错过车。</p>
+<p>到了城市后，她不断碰到小麻烦：订错酒店、导航走反、手机没电、第一次独自去一家自己喜欢但“家里人都不爱吃”的餐馆。电影在这里保留轻微的喜剧感。自由并不浪漫，自由首先意味着：所有决定都得自己做。</p>
+<h3>一个关键人物</h3>
+<p>她认识了一个二十多岁的年轻女孩。女孩正准备辞职，却每天问所有人“我该不该辞”。两个人形成镜像：一个年轻，却害怕做决定；一个48岁，第一次重新学习做决定。</p>
+<p>女孩问：“阿姨，你来这儿干嘛？”</p>
+<p>猪小妹说：“我年轻的时候，本来要来这里。”</p>
+<p>女孩笑：“那你迟到了二十多年。”</p>
+<p>猪小妹也笑：</p>
+<p class="quote">“还好。没迟到一辈子。”</p>
+</section>
+
+<section class="section">
+<div class="label">Parallel Story</div>
+<h2>另一条线：没有猪小妹的家</h2>
+<p>电影不把家人塑造成反派。相反，他们是在猪小妹离开之后，第一次看见她平时承担的那些几乎不可见的劳动。</p>
+<p>丈夫第一次发现，她并不是“特别喜欢做饭”，而是因为如果她不做，就没人安排。女儿第一次翻到母亲年轻时的照片，发现照片里的人和自己印象里的“妈妈”几乎不是一个人。</p>
+<p>他们最初的问题是：“她为什么突然这样？”后来问题变成：“她以前有没有说过，只是我们没听？”</p>
+</section>
+
+<section class="section">
+<div class="label">Act III</div>
+<h2>第三幕：不是逃走，是回来</h2>
+<p>猪小妹没有在外面找到一个更完美的人生。她甚至有一天晚上特别想家。她发现自己依然爱家人，也依然喜欢某些她原来的生活。</p>
+<p>但最大的变化已经发生：她终于能把“爱别人”和“放弃自己”分开。</p>
+<p>她回家。家人准备了一大堆问题，甚至准备了一场“家庭会议”。她却先去厨房倒了杯水，然后坐下来。</p>
+<p>丈夫问：“你到底想怎么样？”</p>
+<p>以前的猪小妹可能会赶紧解释，尽量让所有人理解她。这一次她没有。</p>
+<p>她说：“我还没全想好。”</p>
+<p>停了一下。</p>
+<p>“但以后我每个星期要有一天，只安排我自己的事。”</p>
+<p>这不是革命性的要求，甚至小得让所有人一时不知道该说什么。但对猪小妹来说，这是她人生第一次把自己正式写进家庭日程表。</p>
+</section>
+
+<section class="section ending">
+<div class="label">Final Scene</div>
+<h2>结尾镜头</h2>
+<p>几个月后。</p>
+<p>一个普通早晨。家里又有人喊：“小妹，我那件衣服呢？”</p>
+<p>猪小妹正在门口换鞋。</p>
+<p>她头也没回：</p>
+<p class="quote" style="color:#fff;border-color:#e9c28f">“不知道。你自己找。”</p>
+<p>她关门出去。</p>
+<p>镜头跟着她走进街上。没有宏大的音乐，没有远方，没有“重新开始”的字幕。</p>
+<p>她只是去上一个自己报名的唱歌课。</p>
+<p><strong>电影结束。</strong></p>
+</section>
+
+<section class="section">
+<div class="label">Next Draft</div>
+<h2>下一步可以往哪里写</h2>
+<ol>
+<li><strong>把真实的猪小妹“放进来”：</strong>加入她真正的性格、口头禅、职业、家庭结构、爱好和生活细节，让人物从“一个中年女性”变成只有她才可能成为的角色。</li>
+<li><strong>决定故事发生在哪里：</strong>旧车票的目的地最好和她的真实人生有某种关系，而不是随便选择一座城市。</li>
+<li><strong>增加一个真正困难的选择：</strong>目前第一版偏温柔。下一稿需要一个会产生代价的决定，让电影从“生活感悟”升级成真正的剧情。</li>
+<li><strong>确定语气：</strong>可以继续走温暖现实主义，也可以更荒诞、更喜剧，甚至做成带一点公路电影气质的故事。</li>
+</ol>
+</section>
+</main>
+
+<footer><div class="wrap">《猪小妹的幸福生活》· 第一版电影故事构想 · 2026年10月3日<br>公开分享页 · 后续版本可继续修改</div></footer>
+
+<script>
+const story=document.getElementById('story'),status=document.getElementById('status'),editBtn=document.getElementById('editBtn');
+const published=story.innerHTML;
+const saved=localStorage.getItem('zhuXiaomeiStoryDraft');
+if(saved){story.innerHTML=saved;status.textContent='已载入本机修改'}
+let editing=false;
+editBtn.onclick=()=>{editing=!editing;story.contentEditable=editing?'true':'false';editBtn.textContent=editing?'结束编辑':'开启编辑';status.textContent=editing?'编辑模式':'浏览模式'};
+document.getElementById('saveBtn').onclick=()=>{localStorage.setItem('zhuXiaomeiStoryDraft',story.innerHTML);status.textContent='已保存到本机浏览器'};
+document.getElementById('resetBtn').onclick=()=>{story.innerHTML=published;localStorage.removeItem('zhuXiaomeiStoryDraft');status.textContent='已恢复发布版'};
+document.getElementById('exportBtn').onclick=()=>{const clone=document.documentElement.cloneNode(true);clone.querySelector('#story').innerHTML=story.innerHTML;const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='zhu-xiaomei-story.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);status.textContent='已导出 HTML'};
+</script>
+</body></html>
