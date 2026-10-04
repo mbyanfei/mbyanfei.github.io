@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prefect Control Plane, Workers & SSO Bypass</title>
+<meta name="description" content="A practical guide to Prefect API server, deployments, work pools, work queues, workers, polling, logging, and SSO-safe machine access.">
+<style>
+:root{
+  --bg:#0b1020;--panel:#121a2e;--panel2:#17213a;--text:#eef3ff;--muted:#aebbd6;
+  --accent:#7fb3ff;--green:#78d8a5;--yellow:#ffd166;--line:#2b395e;--code:#090e1a;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#09101d,#0d1426 45%,#09111f);color:var(--text);
+font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1120px;margin:auto;padding:38px 22px 80px}
+.hero,.card,.callout{background:rgba(18,26,46,.95);border:1px solid var(--line);border-radius:18px}
+.hero{padding:30px}.card,.callout{padding:20px}
+h1{font-size:40px;line-height:1.12;margin:.2em 0 .5em}h2{font-size:25px;margin-top:34px}h3{font-size:18px;margin-top:24px}
+p,li{color:#e3e9f7}.muted{color:var(--muted)}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:700}
+pre{background:var(--code);border:1px solid var(--line);border-radius:12px;padding:15px;overflow:auto;color:#dce7ff}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.diagram{background:#090e19;border:1px solid var(--line);border-radius:12px;padding:17px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#dfe8ff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.good{border-left:4px solid var(--green)}.warn{border-left:4px solid var(--yellow)}
+table{width:100%;border-collapse:collapse;margin:14px 0}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:#bed2ff}
+.tag{display:inline-block;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;margin:3px}
+.toolbar{position:sticky;top:0;z-index:5;background:rgba(8,16,29,.96);border-bottom:1px solid var(--line);padding:10px 0}
+.toolbar .inner{max-width:1120px;margin:auto;padding:0 22px;display:flex;gap:10px;flex-wrap:wrap}
+button{border:1px solid var(--line);background:#17213a;color:#eef3ff;border-radius:10px;padding:9px 12px;cursor:pointer}
+[contenteditable="true"]{outline:2px dashed rgba(127,179,255,.35);outline-offset:4px}
+.small{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="toolbar"><div class="inner">
+  <button onclick="toggleEdit()">Toggle Edit Mode</button>
+  <button onclick="downloadHtml()">Download Edited HTML</button>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div></div>
+
+<main id="article" class="wrap">
+<section class="hero">
+  <div class="eyebrow">Prefect Architecture Guide</div>
+  <h1>Prefect Control Plane, Workers & SSO Bypass</h1>
+  <p class="muted">A practical mental model for Prefect API server, deployments, work pools, work queues, workers, polling, logs, and machine-safe access behind SSO.</p>
+  <div><span class="tag">Prefect</span><span class="tag">Nginx</span><span class="tag">OAuth2 Proxy</span><span class="tag">Entra ID</span><span class="tag">Workers</span><span class="tag">Control Plane</span></div>
+</section>
+
+<h2>1. The simplest mental model</h2>
+<div class="callout good">
+  <p><strong>Prefect server = control plane.</strong> It stores deployments, schedules, flow-run state, orchestration metadata, and logs.</p>
+  <p><strong>Prefect worker = execution agent.</strong> It runs in the environment where your Python code should actually execute.</p>
+</div>
+
+<div class="diagram">                  PREFECT CONTROL PLANE
+                       API Server
+                          |
+        +-----------------+-----------------+
+        |                 |                 |
+   Deployments         Schedules         Flow Runs
+        |                                   |
+        +---------------- Work Pool --------+
+                          |
+                     Work Queue
+                          |
+                          | worker polls
+                          v
+                  EXECUTION ENVIRONMENT
+                        Worker
+                          |
+                     launches job
+                          |
+                          v
+                     Python Flow</div>
+
+<h2>2. Core concepts</h2>
+<table>
+<thead><tr><th>Concept</th><th>What it is</th><th>Where it lives</th></tr></thead>
+<tbody>
+<tr><td><strong>Flow</strong></td><td>Your Python workflow logic.</td><td>Code repository / execution environment</td></tr>
+<tr><td><strong>Deployment</strong></td><td>A runnable configuration of a flow: parameters, schedule, pool/queue, code location, execution settings.</td><td>Prefect server</td></tr>
+<tr><td><strong>Schedule</strong></td><td>Defines when a deployment should create runs.</td><td>Prefect server</td></tr>
+<tr><td><strong>Flow Run</strong></td><td>One concrete execution instance of a deployment.</td><td>Prefect server metadata; code runs on worker side</td></tr>
+<tr><td><strong>Work Pool</strong></td><td>A logical execution target / category for runs.</td><td>Prefect server</td></tr>
+<tr><td><strong>Work Queue</strong></td><td>A queue inside a work pool used for routing and priority.</td><td>Prefect server</td></tr>
+<tr><td><strong>Worker</strong></td><td>A running process that polls Prefect and launches work.</td><td>Execution machine</td></tr>
+</tbody>
+</table>
+
+<h2>3. Why the worker polls</h2>
+<p>The Prefect server knows <em>what</em> should run and <em>when</em>. The worker knows <em>where</em> and <em>how</em> to execute it.</p>
+
+<div class="diagram">Server:
+schedule reached
+    ↓
+create Flow Run
+    ↓
+mark run Scheduled
+    ↓
+place it in logical pool/queue
+
+Worker:
+poll API
+    ↓
+find scheduled run
+    ↓
+claim it
+    ↓
+launch process
+    ↓
+execute Python code</div>
+
+<p>This pull model avoids the server needing inbound administrative access to every execution machine. The worker only needs outbound HTTPS connectivity to the Prefect API.</p>
+
+<div class="callout good">
+  <strong>Key distinction:</strong> the server triggers the orchestration event; the worker performs the physical execution.
+</div>
+
+<h2>4. Why interactive SSO can break workers</h2>
+<p>Putting the Prefect API behind browser-oriented SSO can cause a worker API request to receive an OAuth redirect instead of JSON.</p>
+
+<div class="diagram">Worker
+  ↓
+Prefect API URL
+  ↓
+Nginx
+  ↓
+OAuth2 Proxy
+  ↓
+"Please sign in"
+  ↓
+Worker cannot click / MFA / browser-login
+  ↓
+API call fails</div>
+
+<p>Browser users and machine clients have different authentication needs. A background worker should not be expected to complete a human login flow.</p>
+
+<h2>5. Practical bypass pattern</h2>
+<p>One pragmatic internal pattern is:</p>
+<ul>
+  <li>Keep browser routes protected by OAuth2 / Entra SSO.</li>
+  <li>Keep the raw Prefect backend bound to loopback.</li>
+  <li>Allow only an approved worker source to access <code>/api/</code> without interactive SSO.</li>
+  <li>Make sure the worker connects directly rather than through a shared corporate proxy.</li>
+</ul>
+
+<pre><code>location ^~ /api/ {
+    satisfy any;
+
+    allow &lt;TRUSTED_WORKER_IP&gt;/32;
+    deny all;
+
+    auth_request /oauth2/auth;
+    error_page 401 = @oauth2_signin;
+
+    proxy_pass http://127.0.0.1:4200;
+}</code></pre>
+
+<p>The important directive is:</p>
+<pre><code>satisfy any;</code></pre>
+
+<p>It means the request is allowed when either the network allow rule succeeds or the OAuth authentication succeeds.</p>
+
+<h2>6. Why NO_PROXY matters</h2>
+<p>If the execution host is configured to use a corporate HTTP/HTTPS proxy, Nginx may see the proxy's IP rather than the worker's IP.</p>
+
+<div class="diagram">Without NO_PROXY:
+Worker → Shared Proxy → Nginx
+                       sees proxy IP
+
+With NO_PROXY:
+Worker ───────────────→ Nginx
+                       sees worker IP</div>
+
+<p><code>NO_PROXY</code> does not itself disable authentication. It changes the network path so the trusted source identity can be evaluated correctly.</p>
+
+<pre><code>NO_PROXY=prefect.example.internal,10.0.0.10</code></pre>
+
+<h2>7. Where logs live</h2>
+<p>The flow/task code executes on the worker machine, but Prefect-native logs and state are sent back through the Prefect API and stored with orchestration metadata on the server side.</p>
+
+<div class="diagram">Worker machine
+  |
+  | flow executes
+  | log.info(...)
+  v
+Prefect client
+  |
+  | API calls
+  v
+Prefect server
+  |
+  +--> flow/task logs
+  +--> run state
+  +--> orchestration metadata
+  |
+  v
+Prefect UI</div>
+
+<p>Separate from this, the worker process also has local console/service logs, and the Prefect server/Nginx/OAuth proxy each have their own infrastructure logs.</p>
+
+<h2>8. Container persistence lesson</h2>
+<p>If self-hosted Prefect uses SQLite inside a container, stopping the container does not delete the database. Deleting and recreating the container can.</p>
+
+<p>Persist Prefect's home directory outside the container:</p>
+<pre><code>-v /persistent/prefect-data:/root/.prefect:Z</code></pre>
+
+<div class="callout warn">
+  For production-grade resilience or higher concurrency, PostgreSQL is generally a better metadata database than container-local SQLite.
+</div>
+
+<h2>9. Better machine-auth options</h2>
+<table>
+<thead><tr><th>Mechanism</th><th>Strength</th><th>Complexity</th><th>Use case</th></tr></thead>
+<tbody>
+<tr><td>Source IP + direct routing</td><td>Good internally</td><td>Low</td><td>Simple controlled environments</td></tr>
+<tr><td>Shared machine secret</td><td>Better than IP alone</td><td>Low–Medium</td><td>Small internal deployments</td></tr>
+<tr><td>mTLS client certificate</td><td>Strong</td><td>Medium</td><td>Certificate-managed enterprise infrastructure</td></tr>
+<tr><td>Entra client credentials / workload identity</td><td>Strong</td><td>High</td><td>Enterprise application-to-application authentication</td></tr>
+</tbody>
+</table>
+
+<h2>10. The architecture rule worth remembering</h2>
+<div class="callout good">
+<p><strong>Browser SSO asks: “Who is this human?”</strong></p>
+<p><strong>Machine authentication asks: “Which approved workload is making this request?”</strong></p>
+</div>
+
+<p class="small">Public learning version. Internal hostnames, IP addresses, account names, and organization-specific details have intentionally been removed.</p>
+</main>
+
+<script>
+let editing=false;
+function toggleEdit(){
+  editing=!editing;
+  document.getElementById('article').contentEditable=editing?'true':'false';
+}
+function downloadHtml(){
+  const clone=document.documentElement.cloneNode(true);
+  clone.querySelector('#article').contentEditable='false';
+  const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='prefect-control-plane-worker-sso-bypass.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+</body>
+</html>
