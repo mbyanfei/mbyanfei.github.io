@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Summary and analysis of the September 2026 CASP/GovAI working paper on whether automating AI R&D could trigger an intelligence explosion.">
+<title>What If Automating AI R&D Triggers an Intelligence Explosion? — Summary & Analysis</title>
+<style>
+:root{--bg:#f5f7f5;--paper:#fff;--ink:#122b38;--muted:#61727b;--line:#dce5e8;--accent:#14685c;--soft:#e4f0eb;--warn:#fff4d8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:var(--accent)}.wrap{max-width:980px;margin:auto;padding:0 24px}
+header{background:#12303b;color:#fff;padding:26px 0 60px}.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:#a9c8c8}
+h1{font-size:clamp(38px,7vw,72px);line-height:1.04;letter-spacing:-.045em;max-width:900px;margin:28px 0 20px}
+.lead{font-size:20px;max-width:760px;color:#c5d7da}.meta{margin-top:24px;font-size:13px;color:#a9c8c8}
+main{margin-top:-28px;padding-bottom:70px}.card{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:30px;margin:0 0 20px;box-shadow:0 10px 35px #0f2c3710}
+h2{font-size:27px;line-height:1.2;margin:0 0 16px;letter-spacing:-.02em}h3{font-size:19px;margin:26px 0 8px}
+p{margin:0 0 16px}.kicker{font-weight:800;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.big{font-size:23px;line-height:1.45;font-weight:720}.flow{background:var(--soft);padding:22px;border-radius:12px;font-size:18px;font-weight:700;text-align:center}
+.arrow{color:var(--accent);padding:0 4px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mini{border:1px solid var(--line);border-radius:11px;padding:18px;background:#fafcfb}
+.stat{font-size:31px;font-weight:800;letter-spacing:-.03em;color:var(--accent)}.label{font-size:13px;color:var(--muted)}
+ul{padding-left:21px;margin:10px 0 0}li{margin:9px 0}.note{background:var(--warn);border-radius:12px;padding:18px 20px}
+.quote{font-size:25px;line-height:1.4;border-left:5px solid var(--accent);padding-left:20px;margin:5px 0}
+footer{border-top:1px solid var(--line);padding:28px 0 50px;color:var(--muted);font-size:13px}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-bottom:28px;font-size:13px}.nav a{text-decoration:none}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.card{padding:22px}h1{font-size:42px}.lead{font-size:18px}.flow{text-align:left}.nav{flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="nav"><a href="/">← Yan's Knowledge Portal</a><span>Reading / AI Strategy</span></div>
+    <div class="eyebrow">Paper Summary & Analysis · September 2026</div>
+    <h1>What If Automating AI R&D Triggers an Intelligence Explosion?</h1>
+    <p class="lead">The important transition is not merely that AI becomes smarter. It is that AI becomes good enough at the process that produces smarter AI.</p>
+    <div class="meta">Based on Frontier AI Working Paper Series No. 2/2026 by Alan Chan, Christoph Winter, Andrew Barto, Jakub Pachocki, Geoffrey Hinton, Yoshua Bengio, Dawn Song, Jack Clark, and collaborators.</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <div class="kicker">Executive takeaway</div>
+    <p class="big">The paper argues that the most consequential near-term route to an “intelligence explosion” may be AI automating AI research itself—not simply bigger models or faster chips.</p>
+    <p>An intelligence explosion means AI progress accelerating so sharply that advances that would ordinarily take years occur in months or less. The authors do not claim this is inevitable. They argue that the mechanism is now plausible enough, and the downside large enough, that governments and frontier labs should prepare before the feedback loop begins.</p>
+  </section>
+
+  <section class="card">
+    <div class="kicker">The core mechanism</div>
+    <h2>AI becomes part of the machine that builds better AI</h2>
+    <div class="flow">AI performs more R&D <span class="arrow">→</span> improves the next AI generation <span class="arrow">→</span> that generation performs even more R&D <span class="arrow">→</span> repeat</div>
+    <p style="margin-top:18px">This is different from normal software automation. As AI substitutes for humans across coding, evaluation, experiment design, research management, synthetic data generation and post-training, each improvement can speed up a growing fraction of the entire R&D pipeline.</p>
+    <p>Software is especially important because improved systems can be redeployed into the research loop almost immediately, while hardware improvements still face fabrication, manufacturing and construction timelines.</p>
+  </section>
+
+  <section class="card">
+    <div class="kicker">Evidence the paper highlights</div>
+    <h2>AI R&D automation is already moving quickly</h2>
+    <div class="grid">
+      <div class="mini"><div class="stat">80%+</div><div class="label">Share of approved Anthropic code reportedly written by AI by May 2026, up from low single digits in January 2025.</div></div>
+      <div class="mini"><div class="stat">1% → 26%</div><div class="label">Reported increase in R&D work autonomously completed under high-level supervision between March and August 2026.</div></div>
+      <div class="mini"><div class="stat">Hours → days</div><div class="label">Frontier systems can now complete some AI-R&D tasks that take human experts hours or days; in 2023 the comparable horizon was seconds.</div></div>
+      <div class="mini"><div class="stat">~2028</div><div class="label">Some tentative extrapolations cited by the authors suggest months-long AI R&D projects could become automatable around mid-2028.</div></div>
+    </div>
+    <div class="note" style="margin-top:18px"><strong>Important:</strong> the paper repeatedly treats these trends as preliminary evidence, not proof of an imminent intelligence explosion.</div>
+  </section>
+
+  <section class="card">
+    <div class="kicker">What could stop the loop?</div>
+    <h2>The explosion is far from guaranteed</h2>
+    <ul>
+      <li><strong>Diminishing returns:</strong> more researchers do not necessarily create proportionally more breakthroughs.</li>
+      <li><strong>Compute:</strong> experiments and frontier training may demand more compute than automated research can economically supply.</li>
+      <li><strong>Data:</strong> internet and expert-generated data may become limiting; synthetic data works well in some verifiable domains but may not generalize everywhere.</li>
+      <li><strong>Hard-to-automate tasks:</strong> some bottlenecks may remain human or physical for much longer.</li>
+      <li><strong>Time-intensive processes:</strong> long training runs and physical experiments cannot be parallelized without limit.</li>
+    </ul>
+    <p style="margin-top:18px">The strongest quantitative argument uses estimates of “returns to research effort.” The paper cites central estimates around 1.2–1.9 in several AI subfields. Under strong assumptions, values above 1 imply accelerating progress, but the authors stress that the estimates and modeling assumptions are uncertain.</p>
+  </section>
+
+  <section class="card">
+    <div class="kicker">Potential impact</div>
+    <h2>Huge upside, unusually asymmetric downside</h2>
+    <p><strong>Upside:</strong> AI could pull medical discoveries, scientific advances and transformative technologies forward by years or decades.</p>
+    <p><strong>Downside:</strong> the authors group the major risks into three categories:</p>
+    <ul>
+      <li><strong>Capability growth outruns society's ability to adapt:</strong> cyber, biological, labor-market and geopolitical risks could arrive faster than institutions can respond.</li>
+      <li><strong>Loss of oversight and control:</strong> as humans leave the R&D loop, they may lose the visibility and expertise needed to detect and correct failures.</li>
+      <li><strong>Erosion of checks on power:</strong> a state, company or small group with privileged access to dramatically more capable systems could out-think and out-execute rivals and institutions.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <div class="kicker">Policy recommendations</div>
+    <h2>Prepare before the feedback loop starts</h2>
+    <h3>1. Gain visibility into AI-R&D automation</h3>
+    <p>Track standardized indicators, require reporting where appropriate, improve independent measurement and consider third-party auditing of frontier internal deployments.</p>
+    <h3>2. Build mechanisms to steer or constrain dangerous scale-ups</h3>
+    <p>Potential tools include safety gates, monitoring automated research pipelines, oversight of relevant data centers, workload-pause mechanisms, isolated environments for high-risk evaluations, and verification mechanisms for domestic or international agreements.</p>
+    <h3>3. Prepare institutions to adapt much faster</h3>
+    <p>The paper recommends emergency planning, AI-assisted government operations, safeguards on government AI use, defenses against malicious non-state actors, international confidence-building measures and “war-game” exercises for extreme AI progress.</p>
+  </section>
+
+  <section class="card">
+    <div class="kicker">My read</div>
+    <h2>The mechanism matters more than the sci-fi label</h2>
+    <p>The strongest part of the paper is the empirical trend toward automating AI R&D. You do not need to believe in a literal runaway superintelligence to see the significance: replacing a few thousand scarce human AI researchers with potentially vast numbers of inexpensive digital researchers would change the economics and speed of innovation.</p>
+    <p>The weakest step is moving from “AI automates much of AI R&D” to “therefore progress explodes.” Research is not perfectly parallelizable. Coordination, experiment latency, GPU availability, genuinely novel insight, engineering integration, data and diminishing returns may dominate.</p>
+    <div class="quote">The actionable risk is that the bottleneck shifts from producing intelligence to absorbing, governing and controlling it.</div>
+    <p style="margin-top:20px">Even a 5–10× acceleration—not an infinite recursive loop—would be enough to make model capabilities, agent architectures and AI engineering practices evolve faster than many enterprises can govern, procure, train for and redesign around.</p>
+  </section>
+</main>
+
+<footer><div class="wrap">Source: <em>What if automating AI R&D triggers an intelligence explosion?</em>, Frontier AI Working Paper Series No. 2/2026, September 2026. This page is a summary and analysis, not a reproduction of the paper.</div></footer>
+</body>
+</html>
