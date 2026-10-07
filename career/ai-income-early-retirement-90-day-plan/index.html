@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A 90-day operating plan for building AI-enabled independent income through fractional AI/data advisory, authority content, prospect outreach, and repeatable services.">
+<title>AI Income & Early-Retirement Strategy — 90-Day Operating Plan</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1d2433; --muted:#657084; --line:#dfe4ec;
+    --accent:#2f5bea; --accent2:#0f9d78; --warn:#b96a00; --danger:#b42318;
+    --soft:#eef3ff; --soft2:#eefaf6; --shadow:0 8px 28px rgba(23,34,56,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    line-height:1.55;
+  }
+  .topbar{
+    position:sticky;top:0;z-index:30;
+    display:flex;gap:10px;align-items:center;justify-content:space-between;
+    padding:12px 18px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)
+  }
+  .brand{font-weight:750;letter-spacing:.2px}
+  .actions{display:flex;flex-wrap:wrap;gap:8px}
+  button{
+    border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:8px 11px;border-radius:10px;cursor:pointer;font-weight:650
+  }
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  button:hover{transform:translateY(-1px)}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 56px}
+  .hero{
+    background:linear-gradient(135deg,#172554,#213f8f 55%,#2f5bea);
+    color:white;border-radius:22px;padding:32px;box-shadow:var(--shadow);margin-bottom:22px
+  }
+  .hero h1{margin:0 0 10px;font-size:clamp(30px,5vw,54px);line-height:1.04}
+  .hero p{max-width:850px;margin:8px 0;color:#e8edff;font-size:18px}
+  .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:7px 10px;border-radius:999px;font-size:13px}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+  .card{
+    grid-column:span 12;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:22px;box-shadow:var(--shadow)
+  }
+  .half{grid-column:span 6}.third{grid-column:span 4}.twoThird{grid-column:span 8}
+  h2{font-size:24px;margin:0 0 12px}
+  h3{font-size:18px;margin:18px 0 8px}
+  p{margin:8px 0}
+  .muted{color:var(--muted)}
+  .callout{
+    border-left:4px solid var(--accent);background:var(--soft);
+    padding:14px 16px;border-radius:10px;margin:14px 0
+  }
+  .success{border-left-color:var(--accent2);background:var(--soft2)}
+  .warn{border-left-color:var(--warn);background:#fff7ea}
+  .danger{border-left-color:var(--danger);background:#fff0ee}
+  .kpi{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px
+  }
+  .kpi div{background:#fafbfe;border:1px solid var(--line);border-radius:14px;padding:14px}
+  .kpi b{display:block;font-size:22px}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:#fafbfe;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#556176}
+  ul,ol{padding-left:22px}
+  li{margin:6px 0}
+  .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .phase{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+  .phase strong{display:block;color:var(--accent);margin-bottom:4px}
+  .funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px}
+  .funnel div{padding:12px;border-radius:12px;background:#f7f9fc;border:1px solid var(--line);text-align:center;font-size:13px}
+  .editable[contenteditable="true"]{outline:2px dashed #9fb3ff;outline-offset:4px;background:#fff}
+  .note{font-size:12px;color:var(--muted)}
+  .footer{margin-top:28px;color:var(--muted);font-size:12px;text-align:center}
+  .tag{display:inline-block;padding:3px 7px;border-radius:999px;background:#eef2f7;color:#3e4a5d;font-size:12px;margin:2px}
+  .priority{font-weight:750;color:var(--accent)}
+  .script{background:#0e1525;color:#eaf0ff;padding:14px 16px;border-radius:12px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+  @media(max-width:860px){
+    .half,.third,.twoThird{grid-column:span 12}
+    .kpi{grid-template-columns:repeat(2,1fr)}
+    .timeline{grid-template-columns:1fr}
+    .funnel{grid-template-columns:1fr 1fr}
+  }
+  @media print{
+    .topbar{display:none}
+    body{background:#fff}
+    .wrap{max-width:none;padding:0}
+    .card,.hero{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">AI Income Strategy — Working Plan</div>
+  <div class="actions">
+    <button id="editBtn" class="primary">Enable Edit Mode</button>
+    <button id="saveBtn">Save Locally</button>
+    <button id="resetBtn">Reset Saved Copy</button>
+    <button onclick="window.print()">Print / Save PDF</button>
+    <button id="exportBtn">Export HTML</button>
+  </div>
+</div>
+
+<div class="wrap editable" id="content">
+  <section class="hero">
+    <div class="note" style="color:#dbe4ff">PERSONAL STRATEGY • 90-DAY EXPERIMENT</div>
+    <h1>AI Income & Early-Retirement Operating Plan</h1>
+    <p>
+      Build economic optionality by converting senior data/AI expertise into paid advisory, consulting,
+      and eventually repeatable products — while using content as credibility and distribution rather than as the primary business.
+    </p>
+    <div class="pillrow">
+      <span class="pill">Goal: 1 paying customer in 90 days</span>
+      <span class="pill">Primary channel: LinkedIn + public research pages</span>
+      <span class="pill">Business model: expertise → service → repeatable service → product</span>
+      <span class="pill">Risk posture: keep salary while validating demand</span>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card twoThird">
+      <h2>1. Strategic Thesis</h2>
+      <div class="callout">
+        <strong>Do not try to monetize “AI” directly.</strong><br>
+        Monetize expensive business problems you already understand unusually well, then use AI to solve them faster, better, and with fewer people.
+      </div>
+      <p>
+        The highest-probability path is not ad revenue, generic content creation, or low-end prompt work.
+        The strongest path is a senior expert model: fractional AI/data advisor, fixed-scope diagnostic engagements,
+        architecture and implementation support, and later productized services.
+      </p>
+      <p>
+        Content matters, but only as a <strong>trust engine</strong>. The commercial sequence is:
+      </p>
+      <div class="funnel">
+        <div>Useful public artifact</div><div>Credibility</div><div>Conversation</div><div>Paid engagement</div><div>Repeatable offer</div>
+      </div>
+    </section>
+
+    <section class="card third">
+      <h2>North-Star Question</h2>
+      <p><strong>Will an external client pay meaningful money for my AI/data judgment?</strong></p>
+      <p class="muted">Everything in the first 90 days exists to answer that question with evidence.</p>
+      <div class="callout success">
+        <strong>Success is not followers.</strong><br>
+        Success is a real buyer conversation, proposal, and paid work.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Primary Offer to Test</h2>
+      <h3>AI & Data Opportunity Sprint</h3>
+      <p><strong>Positioning:</strong> Help mid-sized companies identify high-value AI opportunities, determine whether their data and architecture can support them, and produce a practical implementation roadmap without requiring a full internal AI team.</p>
+      <table>
+        <thead><tr><th>Component</th><th>Deliverable</th></tr></thead>
+        <tbody>
+          <tr><td>Discovery</td><td>1–2 stakeholder interviews and current-state workflow review</td></tr>
+          <tr><td>Opportunity scan</td><td>3–5 ranked AI / automation use cases</td></tr>
+          <tr><td>Readiness</td><td>Data, architecture, security, integration, governance assessment</td></tr>
+          <tr><td>Recommendation</td><td>Target architecture and practical design options</td></tr>
+          <tr><td>Execution</td><td>30/60/90-day roadmap with risks, dependencies, and owners</td></tr>
+          <tr><td>Executive readout</td><td>Concise management presentation with decisions required</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn"><strong>Initial pricing hypothesis:</strong> $4,000–$6,000 fixed fee. This is a test assumption, not a universal market rate.</div>
+    </section>
+
+    <section class="card half">
+      <h2>3. Ideal Buyer</h2>
+      <p><span class="tag">100–2,000 employees</span><span class="tag">Data-rich</span><span class="tag">AI interest</span><span class="tag">Limited internal AI capacity</span></p>
+      <h3>Likely economic buyers</h3>
+      <ul>
+        <li>CIO / CTO</li>
+        <li>Head of Data / Analytics</li>
+        <li>COO / Operations leader</li>
+        <li>CFO with automation or reporting pain</li>
+        <li>Business-unit leader sponsoring AI adoption</li>
+      </ul>
+      <h3>Signals of pain</h3>
+      <ul>
+        <li>Too many manual workflows and spreadsheet-heavy processes</li>
+        <li>AI pilots that never reached production</li>
+        <li>Unclear architecture, security, or governance</li>
+        <li>Weak data quality or fragmented systems</li>
+        <li>Pressure to “do AI” without a realistic execution plan</li>
+      </ul>
+    </section>
+
+    <section class="card half">
+      <h2>4. Secondary Offer</h2>
+      <h3>Fractional AI / Data Advisor</h3>
+      <p>Small, recurring advisory relationships can become the bridge between full-time corporate work and partial retirement.</p>
+      <ul>
+        <li>Architecture decisions</li>
+        <li>AI vendor / platform evaluation</li>
+        <li>RAG / agent design reviews</li>
+        <li>Data strategy and operating model</li>
+        <li>Technical due diligence</li>
+        <li>Review of vendor proposals and implementation plans</li>
+        <li>Mentoring internal data/AI leaders</li>
+      </ul>
+      <div class="callout success">
+        The long-term value is <strong>recurring, low-hour, high-judgment income</strong>, not simply another full-time job under a different label.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5. Online Presence Strategy</h2>
+      <p>
+        You do need an online presence, but you do <strong>not</strong> need a large audience. You need enough credible public work
+        that a prospective client can quickly answer: “Does this person understand the problem I have?”
+      </p>
+
+      <div class="grid">
+        <div class="card half" style="box-shadow:none">
+          <h3>Primary channel: LinkedIn</h3>
+          <ul>
+            <li>Best fit for enterprise buyers and professional credibility</li>
+            <li>Post insight, diagrams, frameworks, and lessons — not generic AI news</li>
+            <li>Use comments strategically on posts from CIOs, data leaders, and AI practitioners</li>
+            <li>Drive deeper readers to public research pages / GitHub Pages</li>
+          </ul>
+        </div>
+        <div class="card half" style="box-shadow:none">
+          <h3>Owned channel: Public research pages</h3>
+          <ul>
+            <li>Long-form explainers</li>
+            <li>Architecture decision frameworks</li>
+            <li>Case-style examples using only public / sanitized material</li>
+            <li>Reusable tools, scorecards, diagrams, and templates</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>What to publish</h3>
+      <ol>
+        <li><strong>Why Enterprise AI Pilots Fail After the Demo</strong></li>
+        <li><strong>RAG vs Agents vs Traditional Automation: A Decision Framework</strong></li>
+        <li><strong>A Practical AI-Readiness Scorecard for Mid-Sized Companies</strong></li>
+        <li><strong>Where AI Actually Saves Money in Data & Analytics Workflows</strong></li>
+        <li><strong>From POC to Production: The Hidden Architecture Work AI Demos Ignore</strong></li>
+      </ol>
+
+      <div class="callout">
+        <strong>Rule:</strong> Every article should support your commercial positioning. If a piece does not increase buyer trust, generate conversations, or demonstrate useful judgment, it is probably not worth publishing.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>6. Weekly Content Cadence — Minimal but Consistent</h2>
+      <table>
+        <thead><tr><th>Activity</th><th>Cadence</th><th>Time budget</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>LinkedIn insight post</td><td>2× / week</td><td>20–30 min each</td><td>Visibility + signal expertise</td></tr>
+          <tr><td>Thoughtful comments</td><td>3× / week</td><td>10 min each</td><td>Join buyer conversations</td></tr>
+          <tr><td>Long-form public artifact</td><td>1 every 2 weeks</td><td>60–90 min with AI assistance</td><td>Deep credibility</td></tr>
+          <tr><td>Direct outreach</td><td>5 people / week</td><td>30–45 min</td><td>Create buyer conversations</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn"><strong>Cap the effort.</strong> Do not let “building a brand” consume the time that should be spent talking to potential customers.</div>
+    </section>
+
+    <section class="card">
+      <h2>7. 90-Day Execution Plan</h2>
+      <div class="timeline">
+        <div class="phase">
+          <strong>Days 1–30</strong>
+          <h3>Package the offer</h3>
+          <ul>
+            <li>Create one landing page</li>
+            <li>Publish 2–3 authority pieces</li>
+            <li>Build a 30-person prospect list</li>
+            <li>Prepare discovery questions</li>
+            <li>Draft one-page proposal template</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <strong>Days 31–60</strong>
+          <h3>Sell before overbuilding</h3>
+          <ul>
+            <li>10–15 real buyer conversations</li>
+            <li>Identify repeated pain</li>
+            <li>Write 2 proposals</li>
+            <li>Refine positioning based on objections</li>
+            <li>Aim for first paid engagement</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <strong>Days 61–90</strong>
+          <h3>Deliver + productize</h3>
+          <ul>
+            <li>Complete first paid engagement</li>
+            <li>Capture reusable templates</li>
+            <li>Automate repetitive analysis with AI</li>
+            <li>Create sanitized case study</li>
+            <li>Test recurring advisory offer</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card half">
+      <h2>8. Buyer Conversation Questions</h2>
+      <ul>
+        <li>Where is your company actually trying to use AI?</li>
+        <li>Which workflows consume disproportionate manual effort?</li>
+        <li>What has prevented AI pilots from reaching production?</li>
+        <li>Is the blocker data, security, architecture, skills, governance, or unclear ROI?</li>
+        <li>Who owns the budget if this problem is worth solving?</li>
+        <li>What would a successful 90-day outcome look like?</li>
+      </ul>
+    </section>
+
+    <section class="card half">
+      <h2>9. Sample Outreach Message</h2>
+      <div class="script">I’m testing a focused advisory offering for mid-sized companies that are trying to move from AI experimentation to practical implementation.
+
+I help identify the highest-value use cases, assess data/architecture readiness, and turn that into a realistic 30/60/90-day roadmap.
+
+I’m speaking with a small number of technology and business leaders to understand where AI initiatives are getting stuck. No pitch required — I’m interested in the real problems companies are seeing.
+
+Would you be open to a 20-minute conversation?</div>
+    </section>
+
+    <section class="card">
+      <h2>10. 90-Day Scorecard</h2>
+      <div class="kpi">
+        <div><span class="muted">Public authority pieces</span><b>3–5</b></div>
+        <div><span class="muted">Target prospects</span><b>30–50</b></div>
+        <div><span class="muted">Buyer conversations</span><b>10–15</b></div>
+        <div><span class="muted">Paying clients</span><b>≥1</b></div>
+      </div>
+      <table>
+        <thead><tr><th>Metric</th><th>90-Day Target</th></tr></thead>
+        <tbody>
+          <tr><td>Qualified opportunities</td><td>3–5</td></tr>
+          <tr><td>Proposals</td><td>2–3</td></tr>
+          <tr><td>Revenue</td><td>$5K–$10K</td></tr>
+          <tr><td>Reusable methodology</td><td>1</td></tr>
+          <tr><td>Sanitized case study</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card twoThird">
+      <h2>11. What Not to Do</h2>
+      <div class="callout danger">
+        Do not simultaneously launch a YouTube channel, Substack, podcast, course, SaaS product, community, and consulting practice.
+      </div>
+      <p class="priority">For 90 days: one offer, one target customer, one primary channel, one paying customer.</p>
+      <ul>
+        <li>Do not optimize for followers before validating willingness to pay.</li>
+        <li>Do not publish confidential workplace material or recognizable internal details.</li>
+        <li>Do not quit a stable job because the job is frustrating.</li>
+        <li>Do not build software before repeated customer pain is proven.</li>
+        <li>Do not confuse AI productivity with market demand.</li>
+      </ul>
+    </section>
+
+    <section class="card third">
+      <h2>12. Bridge Strategy</h2>
+      <p><strong>Corporate salary → salary + consulting → recurring advisory → reduced corporate hours → optional employment.</strong></p>
+      <p class="muted">
+        The target is not necessarily “retire completely.” It is to reduce dependency on a single source of earned income while preserving financial safety.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>13. What to Do This Week</h2>
+      <ol>
+        <li><strong>Define the offer:</strong> finalize the AI & Data Opportunity Sprint in one page.</li>
+        <li><strong>Build the landing page:</strong> use this positioning and make the call to action simple.</li>
+        <li><strong>Publish one authority article:</strong> start with “Why Enterprise AI Pilots Fail After the Demo.”</li>
+        <li><strong>Update LinkedIn:</strong> headline and About section should reflect AI/data advisory capability, not just job title.</li>
+        <li><strong>Create a 30-person prospect list:</strong> former colleagues, vendors, consultants, second-degree executives.</li>
+        <li><strong>Contact five people:</strong> ask for discovery conversations, not business.</li>
+      </ol>
+      <div class="callout success">
+        <strong>The first milestone is not revenue.</strong> The first milestone is five real conversations with people who can describe problems companies will actually pay to solve.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>14. Working Principle</h2>
+      <p style="font-size:22px;font-weight:750;line-height:1.35">
+        “What expensive problem do I understand unusually well, and can AI let me solve it 5–10× more efficiently than I could five years ago?”
+      </p>
+    </section>
+  </div>
+
+  <div class="footer">
+    Editable working document. Changes can be saved in the browser using Local Storage or exported as a new HTML file.
+  </div>
+</div>
+
+<script>
+(function(){
+  const content = document.getElementById('content');
+  const editBtn = document.getElementById('editBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const exportBtn = document.getElementById('exportBtn');
+  const KEY = 'ai-income-strategy-html-v1';
+  let editing = false;
+
+  const saved = localStorage.getItem(KEY);
+  if(saved){ content.innerHTML = saved; }
+
+  editBtn.addEventListener('click', () => {
+    editing = !editing;
+    content.setAttribute('contenteditable', editing ? 'true' : 'false');
+    editBtn.textContent = editing ? 'Disable Edit Mode' : 'Enable Edit Mode';
+  });
+
+  saveBtn.addEventListener('click', () => {
+    localStorage.setItem(KEY, content.innerHTML);
+    const old = saveBtn.textContent;
+    saveBtn.textContent = 'Saved';
+    setTimeout(()=>saveBtn.textContent=old,1200);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    localStorage.removeItem(KEY);
+    location.reload();
+  });
+
+  exportBtn.addEventListener('click', () => {
+    const clone = document.documentElement.cloneNode(true);
+    const blob = new Blob(['<!doctype html>\n' + clone.outerHTML], {type:'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ai-income-early-retirement-90-day-plan.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+})();
+</script>
+</body>
+</html>
