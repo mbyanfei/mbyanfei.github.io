@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Physical Infrastructure Investment Map — 2026</title>
+<meta name="description" content="A public-ready investment research map of AI power, grid, cooling, generation, utilities, nuclear fuel and construction beneficiaries." />
+<style>
+:root{--bg:#07111f;--panel:#0d1b2d;--panel2:#12243a;--text:#eaf2ff;--muted:#9db0c7;--line:#203650;--accent:#6ee7ff;--green:#6ee7a5;--yellow:#ffd166;--red:#ff7b7b;--purple:#c3a6ff;--blue:#7aa7ff;--shadow:0 10px 35px rgba(0,0,0,.24)}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:linear-gradient(180deg,#06101c,#081522 45%,#07111f);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55}.wrap{max-width:1240px;margin:auto;padding:28px}.hero{padding:52px 0 28px}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-weight:800;font-size:.78rem}.hero h1{font-size:clamp(2.2rem,5vw,4.8rem);line-height:1.02;margin:.35rem 0 1rem;max-width:1100px}.hero p{font-size:1.15rem;color:var(--muted);max-width:920px}.toolbar{position:sticky;top:0;z-index:20;background:rgba(7,17,31,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.toolbar .wrap{padding-top:10px;padding-bottom:10px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}.btn{border:1px solid var(--line);background:#0d1b2d;color:var(--text);padding:9px 13px;border-radius:10px;cursor:pointer;font-weight:700}.btn:hover{border-color:var(--accent)}.btn.primary{background:var(--accent);color:#032032;border-color:transparent}.status{color:var(--muted);font-size:.9rem;margin-left:auto}.grid{display:grid;gap:18px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}.status{width:100%;margin-left:0}}
+.card{background:linear-gradient(180deg,var(--panel),#0b1828);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.card h3,.card h4{margin-top:0}.muted{color:var(--muted)}.kpi{font-size:2rem;font-weight:850}.chip{display:inline-flex;align-items:center;padding:4px 9px;border:1px solid var(--line);border-radius:999px;font-size:.78rem;font-weight:750;margin:2px 4px 2px 0}.chip.green{color:var(--green)}.chip.yellow{color:var(--yellow)}.chip.red{color:var(--red)}.chip.blue{color:var(--blue)}.chip.purple{color:var(--purple)}section{padding:26px 0}section h2{font-size:2rem;margin-bottom:10px}.lede{color:var(--muted);max-width:930px;margin-top:0}.callout{border-left:4px solid var(--accent);background:#0b1b2d;padding:18px 20px;border-radius:0 14px 14px 0;font-size:1.08rem}.callout strong{color:white}.stack{display:grid;gap:10px}.layer{display:grid;grid-template-columns:190px 1fr auto;gap:16px;align-items:center;border:1px solid var(--line);background:#0c1b2c;padding:14px 16px;border-radius:14px}.layer .name{font-weight:850}.layer .tickers{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent)}@media(max-width:720px){.layer{grid-template-columns:1fr}.layer .tickers{justify-self:start}}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}table{width:100%;border-collapse:collapse;min-width:980px;background:#091726}th,td{padding:12px 13px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}th{background:#10223a;position:sticky;top:0;color:#cfe2fa;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}tr:hover td{background:#0d1e31}.rank{font-size:1.15rem;font-weight:900}.score{font-weight:900;color:var(--green)}.valuation{white-space:nowrap}.ticker{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:900;color:var(--accent)}.thesis{max-width:460px}.meter{height:8px;background:#152b43;border-radius:999px;overflow:hidden}.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:inherit}.company{border-top:3px solid var(--blue)}.company.top{border-top-color:var(--green)}.company.spec{border-top-color:var(--yellow)}.company.highrisk{border-top-color:var(--red)}.big{font-size:1.25rem;font-weight:820}.red{color:var(--red)}.green{color:var(--green)}.yellow{color:var(--yellow)}.small{font-size:.88rem}.source-list{padding-left:20px}.source-list li{margin:8px 0}.source-list a{color:var(--accent);word-break:break-word}.footer{border-top:1px solid var(--line);margin-top:30px;padding:30px 0 60px;color:var(--muted)}.editable-on [data-editable]{outline:1px dashed var(--accent);outline-offset:4px;border-radius:5px}.note{font-size:.9rem;color:var(--muted)}.bar{display:flex;gap:9px;align-items:center;margin:7px 0}.bar label{width:130px;color:var(--muted);font-size:.88rem}.bar .meter{flex:1}.warning{background:#2a1b12;border-color:#624321}.good{background:#0d251e;border-color:#275644}.bad{background:#2a1518;border-color:#613039}.toc a{color:#cfe2fa;text-decoration:none}.toc a:hover{color:var(--accent)}
+
+section{scroll-margin-top:110px}.toc{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0}.toc a{padding:7px 11px;border:1px solid var(--line);border-radius:9px;font-size:.9rem}.toc a:hover{border-color:var(--accent)}a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.layer>*{min-width:0}.layer .tickers{overflow-wrap:anywhere}.btn{font:inherit;font-weight:700}
+@media(max-width:600px){.wrap{padding:18px}.hero{padding-top:28px}.hero h1{font-size:clamp(2rem,10vw,3rem);overflow-wrap:anywhere}section{scroll-margin-top:210px}.toolbar .wrap{gap:7px}.btn{padding:8px 10px;font-size:.82rem}.toc a{font-size:.82rem}.layer{padding:12px}.card{padding:17px}section h2{font-size:1.65rem}}
+@media print{.toolbar,.toc{display:none}body{background:white;color:#142c3b}.wrap{max-width:none;padding:0}.card,.layer,.callout,table,th{background:white;color:#142c3b;box-shadow:none}.muted,.note,.lede,.footer{color:#465666}.tablewrap{overflow:visible}table{min-width:0;font-size:8pt}th,td{padding:5px}.card,.layer{break-inside:avoid}.source-list a,.ticker,.score,.green,.yellow,.red{color:#142c3b}.hero{padding-top:0}}
+</style>
+<link rel="canonical" href="https://mbyanfei.github.io/markets/ai-physical-infrastructure-investment-map-2026/" />
+</head>
+<body>
+<div class="toolbar"><div class="wrap">
+<button class="btn primary" id="edit-toggle" aria-pressed="false" onclick="toggleEdit()">✎ Toggle edit mode</button>
+<button class="btn" onclick="saveLocal()">Save locally</button>
+<button class="btn" onclick="restoreLocal()">Restore saved edits</button>
+<button class="btn" onclick="downloadHTML()">Export edited HTML</button>
+<button class="btn" onclick="window.print()">Print / PDF</button>
+<span class="status" id="status" role="status" aria-live="polite">Public-ready • Last updated Oct 7, 2026</span>
+</div></div>
+<main class="wrap" id="document">
+<header class="hero">
+<div class="eyebrow">AI Infrastructure Investment Research • October 2026</div>
+<h1 data-editable>AI Physical Infrastructure Investment Map</h1>
+<p data-editable><strong>Who captures the next dollar of AI capex after the GPU?</strong> A research framework for power generation, grid equipment, electrical distribution, cooling, utilities, nuclear fuel and construction — extending the “AI power stocks” thesis beyond a five-stock YouTube list.</p>
+<div class="grid g4" style="margin-top:28px">
+<div class="card"><div class="muted small">2030 U.S. data-center electricity share</div><div class="kpi">11.8%</div><div class="note">LBNL reference case; range 9.5%–15.3%</div></div>
+<div class="card"><div class="muted small">2030 LBNL reference demand</div><div class="kpi">649 TWh</div><div class="note">Potential range 521–843 TWh</div></div>
+<div class="card"><div class="muted small">Global data-center demand by 2030</div><div class="kpi">~950 TWh</div><div class="note">IEA central outlook</div></div>
+<div class="card"><div class="muted small">Core conclusion</div><div class="kpi" style="font-size:1.45rem">Power is becoming compute infrastructure</div></div>
+</div>
+<p class="note" data-editable><strong>Valuation snapshot: October 6, 2026.</strong> Company operating figures and announced projects below are attributed to the linked public disclosures; announcements and forecasts are not completed capacity or guaranteed results. Rankings, scores, theses, stock preferences and baskets are analytical judgments, not company disclosures. The 0–100 scores are qualitative research assessments, not calibrated probabilities or expected-return forecasts.</p>
+<nav class="toc" aria-label="Research sections"><a href="/">← Research portal</a><a href="#thesis">Thesis</a><a href="#stack">Infrastructure stack</a><a href="#ranking">Ranking & valuation</a><a href="#quality-vs-price">Quality vs. price</a><a href="#company-cards">Companies</a><a href="#video">Video review</a><a href="#baskets">Investment baskets</a><a href="#signals">Ranking indicators</a><a href="#sources">Sources</a></nav>
+</header>
+
+<section id="thesis">
+<h2 data-editable>1. The thesis in one sentence</h2>
+<div class="callout" data-editable><strong>AI’s marginal bottleneck is moving outward:</strong> from accelerator availability toward electricity, interconnection, transformers/switchgear, cooling, transmission construction and firm generation. That does not mean every “AI power” stock is attractive; it means the profit pool is broadening into physical infrastructure.</div>
+<p class="lede" data-editable>The strongest part of the original video is the causal chain: <strong>AI needs compute → compute needs data centers → data centers need enormous reliable power → the grid cannot add capacity quickly enough → scarce equipment, generation and interconnection capacity become economically valuable.</strong> The weak part is treating celebrity/institutional buying as an investment thesis. The business case should stand without Pelosi, Peter Thiel, or any other investor name.</p>
+</section>
+
+<section id="stack">
+<h2 data-editable>2. The AI physical-infrastructure stack</h2>
+<div class="stack">
+<div class="layer"><div class="name">1. Compute</div><div>Accelerators, networking, memory — the original AI capex winners.</div><div class="tickers">NVDA · TSM · AVGO</div></div>
+<div class="layer"><div class="name">2. Data-center power & cooling</div><div>UPS, switchgear, busway, thermal management, liquid cooling, rack-level power.</div><div class="tickers">VRT · ETN</div></div>
+<div class="layer"><div class="name">3. Generation equipment</div><div>Gas turbines, generators, grid hardware and electrification equipment.</div><div class="tickers">GEV</div></div>
+<div class="layer"><div class="name">4. Fast on-site generation</div><div>Power that can be deployed without waiting years for full utility interconnection.</div><div class="tickers">BE</div></div>
+<div class="layer"><div class="name">5. Firm generation / utilities</div><div>Nuclear, natural gas, renewables and transmission capacity that monetize rising load.</div><div class="tickers">CEG · VST · TLN · NEE · AEP</div></div>
+<div class="layer"><div class="name">6. Grid buildout</div><div>Transmission, substations, distribution and skilled construction capacity.</div><div class="tickers">PWR</div></div>
+<div class="layer"><div class="name">7. Nuclear fuel</div><div>Uranium, enrichment and HALEU optionality if nuclear growth accelerates.</div><div class="tickers">CCJ · LEU</div></div>
+</div>
+</section>
+
+<section id="ranking">
+<h2 data-editable>3. Ranking: stock attractiveness today, not company quality</h2>
+<p class="lede" data-editable>This is deliberately a <strong>risk-adjusted ranking as of October 6, 2026</strong>. It rewards direct AI exposure, scarcity/moat, growth visibility and valuation, while penalizing concentration, execution, financing and regulatory risk. A lower-ranked company can still be an exceptional business; price matters.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Rank</th><th>Ticker</th><th>Stock attractiveness</th><th>Forward P/E*</th><th>Role in stack</th><th>Why it ranks here</th><th>Main risk</th></tr></thead>
+<tbody>
+<tr><td class="rank">1</td><td class="ticker">CEG</td><td><span class="score">91/100</span></td><td class="valuation">24.3×</td><td>Nuclear / firm power</td><td class="thesis">Scarce existing nuclear fleet + long-duration hyperscaler contracts + uprate potential. Google’s Oct. 6 agreement adds 890 MW of new capacity plus a 2.7 GW supply agreement.</td><td>Capital intensity, regulation, nuclear execution.</td></tr>
+<tr><td class="rank">2</td><td class="ticker">VST</td><td><span class="score">90/100</span></td><td class="valuation">15.7×</td><td>Merchant generation / nuclear</td><td class="thesis">~3.8 GW of nuclear PPAs with AWS/Meta, diversified generation, strong cash generation and a materially cheaper multiple than most AI-infrastructure peers.</td><td>Merchant power exposure, leverage, commodity/hedging complexity.</td></tr>
+<tr><td class="rank">3</td><td class="ticker">ETN</td><td><span class="score">88/100</span></td><td class="valuation">29.5×</td><td>Electrical distribution</td><td class="thesis">A high-quality “toll road” on electrification. Electrical Americas rolling orders +41% and electrical-sector backlog +43% YoY in Q2 2026.</td><td>Premium multiple; broad industrial exposure dilutes AI purity.</td></tr>
+<tr><td class="rank">4</td><td class="ticker">VRT</td><td><span class="score">87/100</span></td><td class="valuation">32.1×</td><td>Power + cooling inside data center</td><td class="thesis">One of the purest AI-physical-infrastructure plays. Q2 sales +24%, adjusted operating profit +51%; liquid cooling and high-density power are structural bottlenecks.</td><td>High expectations, hyperscaler capex sensitivity, valuation compression.</td></tr>
+<tr><td class="rank">5</td><td class="ticker">AEP</td><td><span class="score">86/100</span></td><td class="valuation">18.4×</td><td>Regulated grid / transmission</td><td class="thesis">A less-hyped way to monetize load growth. AEP expanded new load additions to 69 GW through 2030 and has one of the largest transmission footprints in the U.S.</td><td>Regulatory lag, financing needs, ratepayer politics.</td></tr>
+<tr><td class="rank">6</td><td class="ticker">TLN</td><td><span class="score">84/100</span></td><td class="valuation">12.5×</td><td>Nuclear + merchant power</td><td class="thesis">AWS contract up to 1.92 GW plus ~4 GW development/data-center pipeline; valuation is attractive versus peers.</td><td>Concentrated assets/customers, leverage, merchant exposure.</td></tr>
+<tr><td class="rank">7</td><td class="ticker">NEE</td><td><span class="score">82/100</span></td><td class="valuation">19.0×</td><td>Utility + generation developer</td><td class="thesis">Diversified generation and project-development platform. Project Star alone targets 6.47 GW of gas generation supporting an adjacent 5 GW digital campus.</td><td>Capital intensity, rates, development execution.</td></tr>
+<tr><td class="rank">8</td><td class="ticker">GEV</td><td><span class="score">81/100</span></td><td class="valuation">49.2×</td><td>Generation + grid equipment</td><td class="thesis">Arguably the best operating momentum in the group: $176B backlog, 116 GW gas-power backlog/slot reservations and >$5B YTD data-center electrification orders.</td><td>The stock already prices in extraordinary execution.</td></tr>
+<tr><td class="rank">9</td><td class="ticker">PWR</td><td><span class="score">80/100</span></td><td class="valuation">~37–39×</td><td>Transmission / construction</td><td class="thesis">Critical skilled-labor and execution capacity. Q2 revenue $9.6B; total backlog $53.4B. Benefits regardless of which generator or utility wins.</td><td>Very rich construction multiple; labor/project execution.</td></tr>
+<tr><td class="rank">10</td><td class="ticker">CCJ</td><td><span class="score">72/100</span></td><td class="valuation">64.5×</td><td>Uranium / nuclear fuel cycle</td><td class="thesis">High-quality strategic exposure to a nuclear renaissance, including uranium, fuel services and Westinghouse.</td><td>Long-duration thesis already heavily capitalized; uranium-price volatility.</td></tr>
+<tr><td class="rank">11</td><td class="ticker">BE</td><td><span class="score">70/100</span></td><td class="valuation">83.4×</td><td>On-site fuel cells</td><td class="thesis">The strongest “time-to-power” concept: Oracle framework up to 2.8 GW; Q2 revenue +166%. Business momentum is real.</td><td>At ~$87B market cap and ~28× sales, the stock requires near-perfect execution; share count also rose materially.</td></tr>
+<tr><td class="rank">12</td><td class="ticker">LEU</td><td><span class="score">68/100</span></td><td class="valuation">62.9×</td><td>Enrichment / HALEU</td><td class="thesis">Strategically scarce U.S. enrichment capability and significant policy/HALEU optionality.</td><td>Small scale, policy dependence, lumpy economics and substantial equity dilution risk.</td></tr>
+</tbody></table></div>
+<p class="note">*Forward P/E is a market-data snapshot and is not perfectly comparable across utilities, merchant generators, industrials and commodity-linked companies. Use it as a rough valuation flag, not a complete valuation model.</p>
+</section>
+
+<section id="quality-vs-price">
+<h2 data-editable>4. The critical distinction: great company vs. great stock</h2>
+<div class="grid g3">
+<div class="card good"><h3>Best blend of business + price</h3><p class="big">CEG · VST · ETN · AEP</p><p class="muted">These currently offer the cleanest combination of structural demand, visible monetization and a valuation that does not require a flawless future.</p></div>
+<div class="card"><h3>Excellent businesses, premium stocks</h3><p class="big">VRT · GEV · PWR</p><p class="muted">The operating thesis is strong. The investment question is entry price and whether earnings can outrun already elevated expectations.</p></div>
+<div class="card bad"><h3>High-upside / high-expectation optionality</h3><p class="big">BE · CCJ · LEU</p><p class="muted">Each can outperform dramatically if its scenario plays out, but present valuations and execution/policy risk make them poor candidates for lazy “buy the theme” investing.</p></div>
+</div>
+</section>
+
+<section id="company-cards">
+<h2 data-editable>5. Company-by-company: thesis, catalyst, risk</h2>
+<div class="grid g2">
+<div class="card company top"><h3>CEG — Constellation Energy</h3><div class="chip green">Top conviction</div><div class="chip purple">Nuclear scarcity</div><p><strong>Thesis:</strong> Existing nuclear is one of the hardest assets in the entire AI stack to replicate. CEG can monetize reliability, clean-energy attributes and scarcity through long-duration hyperscaler contracts.</p><p><strong>Catalysts:</strong> Google 890 MW uprates; 2.7 GW 15-year supply agreement; additional data-center contracts; Crane restart execution.</p><p><strong>Watch:</strong> capex discipline, project delays, contract economics, incremental debt/equity needs.</p></div>
+<div class="card company top"><h3>VST — Vistra</h3><div class="chip green">Value + AI load</div><div class="chip blue">Diversified fleet</div><p><strong>Thesis:</strong> One of the least-expensive direct beneficiaries among major power names, with large nuclear PPAs and a diversified fleet that can monetize tighter power markets.</p><p><strong>Catalysts:</strong> AWS/Meta contracts, PJM pricing, nuclear license extensions and uprates.</p><p><strong>Watch:</strong> debt, hedging, commodity volatility and merchant-power cyclicality.</p></div>
+<div class="card company top"><h3>ETN — Eaton</h3><div class="chip green">Picks & shovels</div><p><strong>Thesis:</strong> AI facilities cannot bypass breakers, switchgear, distribution gear and power-quality equipment. Eaton has deep installed relationships and benefits from electrification well beyond AI.</p><p><strong>Catalysts:</strong> data-center orders, Boyd Thermal integration, backlog conversion, capacity expansion.</p><p><strong>Watch:</strong> multiple expansion and whether order growth normalizes.</p></div>
+<div class="card company top"><h3>VRT — Vertiv</h3><div class="chip green">AI infrastructure pure play</div><div class="chip blue">Liquid cooling</div><p><strong>Thesis:</strong> Higher rack density converts AI demand into more power distribution and far more thermal complexity. Vertiv monetizes both.</p><p><strong>Catalysts:</strong> liquid-cooling adoption, new AI platforms, hyperscaler buildouts, margin expansion.</p><p><strong>Watch:</strong> hyperscaler capex digestion, competition, execution on rapid capacity expansion.</p></div>
+<div class="card company"><h3>AEP — American Electric Power</h3><div class="chip green">Under-hyped</div><div class="chip blue">Regulated grid</div><p><strong>Thesis:</strong> Data-center demand is converting directly into rate-base growth, transmission capex and contracted large-load economics. AEP’s service territories sit in major growth corridors.</p><p><strong>Catalysts:</strong> 69 GW of new load additions through 2030, new tariffs, 765-kV transmission projects, gas capacity procurement.</p><p><strong>Watch:</strong> regulator pushback, affordability politics and financing dilution.</p></div>
+<div class="card company spec"><h3>TLN — Talen Energy</h3><div class="chip yellow">Concentrated upside</div><p><strong>Thesis:</strong> Susquehanna + AWS created a template for pairing nuclear output with AI load. The company has meaningful powered-land optionality.</p><p><strong>Catalysts:</strong> AWS ramp toward 1.92 GW, ~4 GW development pipeline, asset optimization and buybacks.</p><p><strong>Watch:</strong> customer concentration, leverage and regulatory/market structure changes.</p></div>
+<div class="card company"><h3>NEE — NextEra Energy</h3><div class="chip blue">Portfolio approach</div><p><strong>Thesis:</strong> Instead of betting on one generation technology, NEE can build integrated energy campuses using gas, renewables, batteries, nuclear and transmission.</p><p><strong>Catalysts:</strong> Project Star (6.47 GW generation / 5 GW digital campus), hyperscaler partnerships, nuclear restart projects.</p><p><strong>Watch:</strong> capital costs and project economics.</p></div>
+<div class="card company"><h3>GEV — GE Vernova</h3><div class="chip green">Operating quality</div><div class="chip red">Valuation risk</div><p><strong>Thesis:</strong> One of the clearest “sell the equipment everyone needs” plays: gas turbines plus grid/electrification equipment.</p><p><strong>Catalysts:</strong> $176B backlog, 116 GW gas backlog/slots, >$5B YTD data-center electrification orders.</p><p><strong>Watch:</strong> the price assumes sustained exceptional growth and margin expansion.</p></div>
+<div class="card company"><h3>PWR — Quanta Services</h3><div class="chip blue">Grid labor scarcity</div><p><strong>Thesis:</strong> The grid buildout requires not only equipment but specialized people who can engineer and construct transmission, substations and load-center infrastructure.</p><p><strong>Catalysts:</strong> record $53.4B backlog and accelerating utility/data-center infrastructure.</p><p><strong>Watch:</strong> very high valuation for an engineering/construction business.</p></div>
+<div class="card company spec"><h3>CCJ — Cameco</h3><div class="chip yellow">Nuclear optionality</div><p><strong>Thesis:</strong> A broad nuclear-fuel-cycle exposure, with uranium plus fuel services and Westinghouse participation.</p><p><strong>Catalysts:</strong> long-term contracting, reactor restarts/new builds, higher uranium prices.</p><p><strong>Watch:</strong> commodity cycle and a valuation that already embeds substantial nuclear optimism.</p></div>
+<div class="card company highrisk"><h3>BE — Bloom Energy</h3><div class="chip green">Exceptional growth</div><div class="chip red">Extreme valuation</div><p><strong>Thesis:</strong> “Time-to-power” may become a product category. Fuel cells can put substantial generation behind/near the meter faster than many utility upgrades.</p><p><strong>Catalysts:</strong> Oracle up to 2.8 GW; initial 1.2 GW deploying; Q2 revenue $1.065B (+166% YoY).</p><p><strong>Watch:</strong> valuation, customer concentration, manufacturing scale, fuel economics and dilution.</p></div>
+<div class="card company highrisk"><h3>LEU — Centrus Energy</h3><div class="chip yellow">Strategic scarcity</div><div class="chip red">Policy dependent</div><p><strong>Thesis:</strong> Domestic enrichment and HALEU capability could be strategically critical if U.S. advanced nuclear scales.</p><p><strong>Catalysts:</strong> DOE awards, HALEU contracts, centrifuge expansion and advanced-reactor customer wins.</p><p><strong>Watch:</strong> commercialization timing, government dependency, small revenue base and capital raises.</p></div>
+</div>
+</section>
+
+<section id="video">
+<h2 data-editable>6. What the original video got right — and where to be skeptical</h2>
+<p class="lede">Original discussion: <a href="https://youtu.be/1EJKCZwZYbg" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">AI power-stock video on YouTube ↗</a>. The assessments below are this page’s analysis of the thesis.</p>
+<div class="grid g2">
+<div class="card good"><h3>What it got right</h3><ul><li>Electricity is becoming an AI scaling constraint, not merely a utility-sector side story.</li><li>“Time-to-power” has economic value; a MW available sooner can be worth more than a cheaper MW years later.</li><li>Nuclear’s 24×7 reliability gives existing fleets strategic scarcity value.</li><li>Power delivery and cooling can capture AI economics even if GPU winners change.</li><li>The opportunity is a <em>stack</em>, not a single technology bet.</li></ul></div>
+<div class="card bad"><h3>Where to be skeptical</h3><ul><li>Celebrity-investor positioning is marketing, not fundamental analysis.</li><li>Theme validity does not imply stock attractiveness at any price.</li><li>Announced GW pipelines are not the same as revenue, earnings or free cash flow.</li><li>Utility load queues can include projects that never reach operation.</li><li>Nuclear and grid projects remain capital-intensive, slow and regulator-dependent.</li><li>AI efficiency gains or weaker AI ROI could reduce the high-end demand scenarios.</li></ul></div>
+</div>
+</section>
+
+<section id="baskets">
+<h2 data-editable>7. Better ways to express the theme</h2>
+<p class="lede">These are illustrative research baskets, not personalized portfolio advice. They show how different beliefs map to different securities.</p>
+<div class="grid g3">
+<div class="card"><h3>Core / risk-adjusted</h3><p class="big">CEG · VST · ETN · AEP · VRT</p><p class="muted">Focus: scarce assets, electrical bottlenecks, contracted load and reasonable-to-premium valuations.</p></div>
+<div class="card"><h3>Growth / execution</h3><p class="big">VRT · GEV · PWR · BE</p><p class="muted">Focus: orders/backlog and the fastest capex transmission into revenue. Highest valuation sensitivity.</p></div>
+<div class="card"><h3>Nuclear renaissance</h3><p class="big">CEG · VST · TLN · CCJ · LEU</p><p class="muted">Focus: existing reactor scarcity first; fuel/enrichment optionality second.</p></div>
+</div>
+</section>
+
+<section id="signals">
+<h2 data-editable>8. What would change the ranking?</h2>
+<div class="grid g2">
+<div class="card"><h3>Signals that strengthen the thesis</h3><ul><li>More 10–20 year hyperscaler PPAs at attractive economics.</li><li>Backlog converting to revenue without margin degradation.</li><li>Data-center projects moving from announcements to energized load.</li><li>Transmission/turbine lead times staying constrained.</li><li>Higher rack density increasing cooling and power-management spend per MW.</li><li>Nuclear uprates/restarts delivered on time and on budget.</li></ul></div>
+<div class="card"><h3>Signals that weaken the thesis</h3><ul><li>Hyperscalers materially cut AI capex because inference economics disappoint.</li><li>Large-load interconnection queues see widespread cancellations.</li><li>AI efficiency improves faster than deployment volume grows.</li><li>Natural-gas constraints or local permitting materially delay new generation.</li><li>Ratepayer backlash shifts more project risk to data-center developers.</li><li>Valuations rise faster than earnings revisions.</li></ul></div>
+</div>
+</section>
+
+<section id="decision">
+<h2 data-editable>9. Bottom line</h2>
+<div class="callout" data-editable>The investable insight is not “buy electricity stocks.” It is: <strong>follow the bottleneck and distinguish scarce capacity from commodity capacity.</strong> Existing nuclear capacity, electrical distribution gear, cooling, gas turbines, interconnection and skilled transmission construction are scarce. Scarcity can create pricing power. But the best business can still be a bad purchase if the market has already capitalized ten years of success.</div>
+<p class="big" data-editable style="margin-top:22px">Current preference: <span class="green">CEG / VST / ETN / AEP</span> for risk-adjusted exposure; <span style="color:var(--accent)">VRT</span> for higher-growth AI infrastructure; wait for better entry points or earnings catch-up in <span class="yellow">GEV / PWR</span>; treat <span class="red">BE / LEU</span> as high-volatility optionality rather than core exposure.</p>
+</section>
+
+<section id="sources">
+<h2>Sources & data notes</h2>
+<p class="lede">Primary company disclosures are preferred for operating claims. Market multiples are snapshot data as of Oct. 6, 2026 and can change rapidly.</p>
+<ol class="source-list">
+<li><a href="https://bies.lbl.gov/publications/united-states-data-center-energy-2025" target="_blank" rel="noopener noreferrer">Lawrence Berkeley National Laboratory — U.S. Data Center Energy Usage Report: 2025 Update</a></li>
+<li><a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai" target="_blank" rel="noopener noreferrer">IEA — Energy and AI: Energy demand from AI</a></li>
+<li><a href="https://www.gevernova.com/news/press-releases/ge-vernova-reports-second-quarter-2026-financial-results-raises-2026-financial" target="_blank" rel="noopener noreferrer">GE Vernova — Q2 2026 results</a></li>
+<li><a href="https://investor.bloomenergy.com/press-releases/press-release-details/2026/Bloom-Energy-and-Oracle-Expand-Strategic-Partnership-to-Deploy-up-to-2-8-GW-to-Accelerate-AI-Infrastructure-Build-Out/default.aspx" target="_blank" rel="noopener noreferrer">Bloom Energy — Oracle partnership up to 2.8 GW</a></li>
+<li><a href="https://investor.bloomenergy.com/press-releases/press-release-details/2026/Bloom-Energy-Reports-Record-Second-Quarter-2026-Financial-Results-and-Raises-Full-Year-2026-Guidance/default.aspx" target="_blank" rel="noopener noreferrer">Bloom Energy — Q2 2026 results</a></li>
+<li><a href="https://www.constellationenergy.com/news/2026/10/google-and-constellation-announce-landmark-agreement-to-bring-890-mw-of-new-nuclear-capacity-to-pjm-grid.html" target="_blank" rel="noopener noreferrer">Constellation Energy — Google 890 MW uprate / 2.7 GW agreement</a></li>
+<li><a href="https://investor.vistracorp.com/2026-02-26-Vistra-Reports-Fourth-Quarter-and-Full-Year-2025-Results" target="_blank" rel="noopener noreferrer">Vistra — 2025 results / nuclear PPAs</a></li>
+<li><a href="https://www.eaton.com/cr/en-us/company/news-insights/news-releases/2026/eaton-reports-record-second-quarter-2026-results.html" target="_blank" rel="noopener noreferrer">Eaton — Q2 2026 results</a></li>
+<li><a href="https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-Second-Quarter-2026-with-Diluted-EPS-Growth-of-53-Adjusted-Diluted-EPS-Growth-of-60-Raises-Full-Year-2026-Guidance-Across-All-Key-Metrics/default.aspx" target="_blank" rel="noopener noreferrer">Vertiv — Q2 2026 results</a></li>
+<li><a href="https://www.aep.com/news/stories/view/12135/" target="_blank" rel="noopener noreferrer">AEP — Q2 2026 results / 69 GW new load additions</a></li>
+<li><a href="https://ir.talenenergy.com/news-releases/news-release-details/talen-energy-expands-nuclear-energy-relationship-amazon" target="_blank" rel="noopener noreferrer">Talen — AWS 1.92 GW nuclear PPA</a></li>
+<li><a href="https://ir.talenenergy.com/news-releases/news-release-details/talen-energy-reports-second-quarter-2026-results-raises-2026" target="_blank" rel="noopener noreferrer">Talen — Q2 2026 results</a></li>
+<li><a href="https://www.investor.nexteraenergy.com/news-and-events/news-releases/2026/09-30-2026-231920318" target="_blank" rel="noopener noreferrer">NextEra — Project Star, 6.47 GW generation / 5 GW digital campus</a></li>
+<li><a href="https://investors.quantaservices.com/news-events/press-releases/detail/402/quanta-services-reports-second-quarter-2026-results" target="_blank" rel="noopener noreferrer">Quanta Services — Q2 2026 results / $53.4B backlog</a></li>
+<li><a href="https://www.cameco.com/media/news/cameco-reports-2026-second-quarter-results" target="_blank" rel="noopener noreferrer">Cameco — Q2 2026 results</a></li>
+<li><a href="https://investors.centrusenergy.com/" target="_blank" rel="noopener noreferrer">Centrus Energy — investor relations / HALEU and enrichment</a></li>
+<li><a href="https://stockanalysis.com/stocks/gev/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — GEV valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/be/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — BE valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/ceg/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — CEG valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/nee/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — NEE valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/vrt/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — VRT valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/vst/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — VST valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/etn/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — ETN valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/pwr/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — PWR valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/ccj/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — CCJ valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/leu/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — LEU valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/tln/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — TLN valuation snapshot</a></li>
+<li><a href="https://stockanalysis.com/stocks/aep/statistics/" target="_blank" rel="noopener noreferrer">StockAnalysis — AEP valuation snapshot</a></li>
+</ol>
+<p class="note">Research only. This page is not individualized financial advice and does not account for any reader’s objectives, tax situation, time horizon or risk tolerance. Forward estimates and project announcements can change.</p>
+</section>
+
+<footer class="footer"><strong>AI Physical Infrastructure Investment Map</strong><br/>Public-ready research artifact • Updated October 7, 2026</footer>
+</main>
+<script>
+let edit=false;
+const storageKey='aiInfraResearchHTML';
+function syncEdit(){document.body.classList.toggle('editable-on',edit);document.querySelectorAll('[data-editable]').forEach(el=>el.contentEditable=edit?'true':'false');document.getElementById('edit-toggle').setAttribute('aria-pressed',String(edit));}
+function toggleEdit(){edit=!edit;syncEdit();setStatus(edit?'Edit mode ON — click text to change it':'Edit mode OFF');}
+function setStatus(t){document.getElementById('status').textContent=t;}
+function saveLocal(){try{const clone=document.getElementById('document').cloneNode(true);clone.querySelectorAll('[contenteditable]').forEach(e=>e.removeAttribute('contenteditable'));localStorage.setItem(storageKey,clone.innerHTML);setStatus('Edits saved in this browser');}catch{setStatus('Browser storage unavailable — use Export edited HTML to keep your edits');}}
+function restoreLocal(){try{const v=localStorage.getItem(storageKey);if(v){document.getElementById('document').innerHTML=v;syncEdit();setStatus('Saved edits restored');}else setStatus('No saved edits found');}catch{setStatus('Browser storage unavailable — local edits could not be restored');}}
+function downloadHTML(){const clone=document.documentElement.cloneNode(true);clone.querySelectorAll('[contenteditable]').forEach(e=>e.removeAttribute('contenteditable'));clone.querySelector('body').classList.remove('editable-on');clone.querySelector('#edit-toggle').setAttribute('aria-pressed','false');clone.querySelector('#status').textContent='Exported research copy • Valuation snapshot Oct 6, 2026';const blob=new Blob(['<!DOCTYPE html>\n'+clone.outerHTML],{type:'text/html'});const a=document.createElement('a');const url=URL.createObjectURL(blob);a.href=url;a.download='ai-physical-infrastructure-investment-map-2026-edited.html';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus('Edited HTML exported');}
+</script>
+</body>
+</html>
